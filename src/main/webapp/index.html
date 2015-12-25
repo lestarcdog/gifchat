@@ -2,9 +2,20 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<link rel="stylesheet" type="text/css" href="css/main.css">
+<title>Giphy - POC</title>
 </head>
-<body>
-<h1>Hello there</h1>
+<body ng-app="GifApp">
+	<div ng-controller="MainController">
+		<div id="chatBox"></div>
+		<form ng-submit="search()">
+			<input ng-disabled="sending" type="text" ng-model="txt">
+			<button ng-disabled="sending" type="submit">Send</button>
+		</form>
+	</div>
+	<script type="text/javascript" src="js/jquery-2.1.4.js"></script>
+	<script type="text/javascript" src="js/angular.js"></script>
+	<script type="text/javascript" src="src/app.js"></script>
+	<script type="text/javascript" src="src/giphyService.js"></script>
 </body>
 </html>

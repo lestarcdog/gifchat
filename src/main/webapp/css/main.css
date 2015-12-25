@@ -1,0 +1,11 @@
+#chatBox {
+	width: 250px;
+	clear:both;
+}
+
+#chatBox .item {
+	float: left;
+	width: 250px;
+	height: 250px;
+	clear: both;
+}
