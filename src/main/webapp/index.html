@@ -1,21 +1,64 @@
 <!DOCTYPE html>
 <html>
 <head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <meta charset="UTF-8">
+<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="css/bootstrap-theme.min.css">
 <link rel="stylesheet" type="text/css" href="css/main.css">
 <title>Giphy - POC</title>
+<!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
 </head>
-<body ng-app="GifApp">
-	<div ng-controller="MainController">
-		<div id="chatBox"></div>
-		<form ng-submit="search()">
-			<input ng-disabled="sending" type="text" ng-model="txt">
-			<button ng-disabled="sending" type="submit">Send</button>
-		</form>
+<body ng-app="GifApp" ng-cloak>
+	<div id="main-container">
+		<div ng-controller="LoginController">
+			<div ng-hide="loggedIn" class="container">
+				<form class="form-signin" ng-submit="signin()">
+					<h2 class="form-signin-heading">Choose a name</h2>
+					<input type="text" id="username" class="form-control" placeholder="Username" pattern=".{3,10}"
+						title="Name must be between 3 and 10 characters" ng-model="username" required autofocus>
+					<button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+				</form>
+			</div>
+		</div>
+		<div ng-controller="MainController">
+			<div ng-hide="!loggedIn" class="container">
+				<div class="row">
+					<div class="col-sm-3">
+						<h4>Hello {{username}} !</h4>
+						<form ng-submit="search()">
+							<div class="form-group">
+								<input class="form-control" ng-disabled="sending" type="text" ng-model="txt">
+							</div>
+							<div class="checkbox">
+								<label><input type="checkbox" ng-model="overwrite"> Overwrite text </label>
+							</div>
+							<div class="form-group">
+								<button ng-disabled="sending" type="submit">Send</button>
+							</div>
+						</form>
+					</div>
+					<div class="col-sm-6">
+						<div id="chatBox">aaa</div>
+					</div>
+				</div>
+			</div>
+		</div>
 	</div>
+	<!-- libraries -->
 	<script type="text/javascript" src="js/jquery-2.1.4.js"></script>
 	<script type="text/javascript" src="js/angular.js"></script>
+	<script type="text/javascript" src="js/bootstrap.min.js"></script>
+	<!-- application -->
 	<script type="text/javascript" src="src/app.js"></script>
-	<script type="text/javascript" src="src/giphyService.js"></script>
+	<script type="text/javascript" src="src/service/ServerService.js"></script>
+	<script type="text/javascript" src="src/model/GifModel.js"></script>
+	<!-- controllers -->
+	<script type="text/javascript" src="src/LoginController.js"></script>
+	<script type="text/javascript" src="src/MainController.js"></script>
 </body>
 </html>
