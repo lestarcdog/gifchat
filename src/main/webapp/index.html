@@ -17,8 +17,8 @@
 	<div id="main-container">
 		<div ng-controller="LoginController">
 			<div ng-hide="loggedIn" class="container">
-				<form class="form-signin" ng-submit="signin()">
-					<h2 class="form-signin-heading">Choose a name</h2>
+				<form cng-submit="signin()">
+					<h2>Choose a name</h2>
 					<input type="text" id="username" class="form-control" placeholder="Username" pattern=".{3,10}"
 						title="Name must be between 3 and 10 characters" ng-model="username" required autofocus>
 					<button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
