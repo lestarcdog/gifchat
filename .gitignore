@@ -7,3 +7,6 @@ target
 !.settings/.jsdtscope
 .project
 .classpath
+/.externalToolBuilders/
+/.openshift/
+/.tern-project
