@@ -5,11 +5,14 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.apache.http.HttpStatus;
@@ -43,12 +46,14 @@ public class MessageController {
 
 	@GET
 	@Path("/all")
+	@Produces(MediaType.APPLICATION_JSON)
 	public List<GifMessage> all() {
 		return chatService.getAll();
 	}
 
 	@GET
 	@Path("/from")
+	@Produces(MediaType.APPLICATION_JSON)
 	public List<GifMessage> newMessages(@QueryParam(value = "usertime") Long userTime) {
 		return chatService.getNewMessages(userTime);
 
@@ -56,7 +61,8 @@ public class MessageController {
 
 	@POST
 	@Path("/new")
-	public Response newMessage(@QueryParam(value = "msg") String message) {
+	@Consumes(MediaType.TEXT_PLAIN)
+	public Response newMessage(String message) {
 		String username = (String) request.getSession().getAttribute(USERNAME);
 		if (username == null) {
 			return Response.status(HttpStatus.SC_BAD_REQUEST).build();

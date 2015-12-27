@@ -30,7 +30,6 @@ public class GifGenerator {
 	@PostConstruct
 	public void init() {
 		client = ClientBuilder.newClient();
-
 	}
 
 	@PreDestroy
@@ -60,11 +59,9 @@ public class GifGenerator {
 		}
 		for (int i = 0; i < 5; i++) {
 			returnUrl = gipyData.getData().get(random.nextInt(DEFAULT_RANDOM)).getImages().getDownsized().getUrl();
-
 			if (!gifUrls.contains(returnUrl)) {
 				break;
 			}
-
 		}
 		return returnUrl;
 
