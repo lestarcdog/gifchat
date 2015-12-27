@@ -17,7 +17,7 @@ import javax.ws.rs.core.Response;
 
 import org.apache.http.HttpStatus;
 
-import hu.cdog.gifchat.model.GifMessage;
+import hu.cdog.gifchat.model.GifMessageDto;
 import hu.cdog.gifchat.service.ChatService;
 
 @Path("/messages")
@@ -47,14 +47,14 @@ public class MessageController {
 	@GET
 	@Path("/all")
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<GifMessage> all() {
+	public List<GifMessageDto> all() {
 		return chatService.getAll();
 	}
 
 	@GET
 	@Path("/from")
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<GifMessage> newMessages(@QueryParam(value = "usertime") Long userTime) {
+	public List<GifMessageDto> newMessages(@QueryParam(value = "usertime") Long userTime) {
 		return chatService.getNewMessages(userTime);
 
 	}

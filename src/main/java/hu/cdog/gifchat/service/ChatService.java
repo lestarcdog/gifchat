@@ -16,6 +16,7 @@ import hu.cdog.gifchat.gifgenerator.GifGenerator;
 import hu.cdog.gifchat.gifgenerator.MessageTokinezer;
 import hu.cdog.gifchat.memdb.MemDb;
 import hu.cdog.gifchat.model.GifMessage;
+import hu.cdog.gifchat.model.GifMessageDto;
 
 @Stateless
 public class ChatService {
@@ -28,15 +29,15 @@ public class ChatService {
 	@Inject
 	GifGenerator gifGenerator;
 
-	public List<GifMessage> getAll() {
-		return memDb.getAll();
+	public List<GifMessageDto> getAll() {
+		return map2Dto(memDb.getAll());
 	}
 
-	public List<GifMessage> getNewMessages(Long userTime) {
+	public List<GifMessageDto> getNewMessages(Long userTime) {
 		LocalDateTime userTimeLd = LocalDateTime.ofInstant(Instant.ofEpochMilli(userTime), GifChatConstants.UTC_ZONE);
 		List<GifMessage> filtered = memDb.getAll().stream().filter(l -> l.getSentTime().isAfter(userTimeLd))
 				.collect(Collectors.toList());
-		return filtered;
+		return map2Dto(filtered);
 	}
 
 	public void newMessage(String message, String username) {
@@ -55,5 +56,9 @@ public class ChatService {
 		GifMessage gifMessage = new GifMessage(username, message, gifUrl);
 		memDb.add(gifMessage);
 
+	}
+
+	private List<GifMessageDto> map2Dto(List<GifMessage> messages) {
+		return messages.stream().map(l -> new GifMessageDto(l)).collect(Collectors.toList());
 	}
 }
