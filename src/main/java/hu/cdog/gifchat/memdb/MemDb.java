@@ -16,16 +16,24 @@ public class MemDb {
 	private static final int MAX_SIZE = 100;
 
 	private final List<GifMessage> messages = new LinkedList<>();
+	private final List<String> gifUrls = new LinkedList<>();
 
 	public void add(GifMessage message) {
 		if (messages.size() > MAX_SIZE) {
 			messages.remove(0);
+			gifUrls.remove(0);
 		}
 		messages.add(message);
+		gifUrls.add(message.getGifUrl());
 	}
 
 	@Lock(LockType.READ)
 	public List<GifMessage> getAll() {
 		return Collections.unmodifiableList(messages);
+	}
+
+	@Lock(LockType.READ)
+	public List<String> getGifUrls() {
+		return gifUrls;
 	}
 }

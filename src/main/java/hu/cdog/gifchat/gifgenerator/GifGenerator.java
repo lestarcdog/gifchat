@@ -1,14 +1,12 @@
 package hu.cdog.gifchat.gifgenerator;
 
-import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.net.URL;
+import java.util.List;
+import java.util.Random;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.ejb.Singleton;
-import javax.imageio.ImageIO;
-import javax.imageio.ImageReader;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.core.Response;
@@ -22,19 +20,17 @@ import hu.cdog.gifchat.model.giphy.GiphyData;
 @Singleton
 public class GifGenerator {
 
-	private static final String GIPHY_URL = "http://api.giphy.com/v1/gifs/search?q=<<key>>&api_key=dc6zaTOxFJmzC";
-	private static final String OPENSHIFT_DATA_DIR = "OPENSHIFT_DATA_DIR";
-	private String outputDir;
+	private static final String GIPHY_SEARCH_URL = "http://api.giphy.com/v1/gifs/search?q=<<key>>&api_key=dc6zaTOxFJmzC";
+	private static final String GIPHY_TRENDING_URL = "http://api.giphy.com/v1/stickers/trending?api_key=dc6zaTOxFJmzC";
+	private static final Integer DEFAULT_RANDOM = 25;
+	private final Random random = new Random();
 
 	private Client client;
 
 	@PostConstruct
 	public void init() {
 		client = ClientBuilder.newClient();
-		String outputDir = System.getenv(OPENSHIFT_DATA_DIR);
-		if (outputDir == null || outputDir.isEmpty()) {
-			outputDir = "/tmp/";
-		}
+
 	}
 
 	@PreDestroy
@@ -42,21 +38,48 @@ public class GifGenerator {
 		client.close();
 	}
 
-	public void downloadFirst(String keyword) throws JsonParseException, JsonMappingException, IOException {
-		String url = GIPHY_URL.replace("<<key>>", keyword);
+	public String randomGifForKeyword(String keyword, List<String> gifUrls)
+			throws JsonParseException, JsonMappingException, IOException {
+		String url = null;
+		if (keyword == null) {
+			url = trendingUrl();
+		} else {
+			url = giphySearchUrl(keyword);
+		}
 		Response result = client.target(url).request().get();
 		String rawContent = result.readEntity(String.class);
 		result.close();
 
 		ObjectMapper mapper = new ObjectMapper();
 		GiphyData gipyData = mapper.readValue(rawContent, GiphyData.class);
-		URL gifUrl = new URL(gipyData.getData().get(0).getImages().getDownsized().getUrl());
-		BufferedImage gif = ImageIO.read(gifUrl);
-		ImageReader reader = ImageIO.getImageReadersBySuffix("gif").next();
+		String returnUrl = null;
 
-		// reader.
-		// System.out.println(gipyData.getData().get(0).getImages().getDownsized().getUrl());
+		// nothing has found for the keyword
+		if (gipyData.getData().isEmpty()) {
+			return null;
+		}
+		for (int i = 0; i < 5; i++) {
+			returnUrl = gipyData.getData().get(random.nextInt(DEFAULT_RANDOM)).getImages().getDownsized().getUrl();
 
+			if (!gifUrls.contains(returnUrl)) {
+				break;
+			}
+
+		}
+		return returnUrl;
+
+	}
+
+	private String trendingUrl() {
+		return GIPHY_TRENDING_URL;
+	}
+
+	private static String getGiphyUrl(String keyword, Integer limit) {
+		throw new UnsupportedOperationException();
+	}
+
+	private static String giphySearchUrl(String keyword) {
+		return GIPHY_SEARCH_URL.replace("<<key>>", keyword);
 	}
 
 }
