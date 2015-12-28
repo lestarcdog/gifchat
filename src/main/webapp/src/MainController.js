@@ -1,13 +1,10 @@
 app.controller("MainController", function($scope, ServerService) {
-	var chatBox = angular.element("#chatBox");
+	var chatBox = $("#chatBox");
 	$scope.sending = false;
 	$scope.messages = [];
 	$scope.textMaxLength = 100;
+	$scope.message = null;
 	$scope.remainingChars = $scope.textMaxLength;
-	$scope.search = function() {
-		$scope.sending = true;
-
-	};
 
 	$scope.sendMessage = function() {
 		$scope.sending = true;
@@ -19,12 +16,15 @@ app.controller("MainController", function($scope, ServerService) {
 	};
 
 	$scope.typeing = function() {
-		$scope.remainingChars = $scope.textMaxLength - $scope.message.length;
+		if ($scope.message != null) {
+			$scope.remainingChars = $scope.textMaxLength - $scope.message.length;
+		} else {
+			$scope.remainingChars = $scope.textMaxLength;
+		}
 	};
 
 	function refresh() {
 		ServerService.all().success(function(data, status, headers, config) {
-			console.log(data);
 			$scope.messages = data;
 		});
 	}
