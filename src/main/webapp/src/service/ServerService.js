@@ -1,9 +1,27 @@
 app.factory("ServerService", function($http, AppConstants) {
-	function get(keyword) {
-		return $http.get("http://api.giphy.com/v1/gifs/search?q=" + keyword + AppConstants.api);
+	function all() {
+		return $http.get("/gifchat/api/messages/all");
+	}
+
+	function login(username, password) {
+		var cred = {
+			"username" : username,
+			"password" : password
+		};
+		return $http.post("/gifchat/api/messages/login", cred);
+	}
+
+	function newMessage(message) {
+		var data = {
+			"message" : message
+		};
+		return $http.post("/gifchat/api/messages/new", data);
 	}
 
 	return {
-		get : get
+		all : all,
+		login : login,
+		newMessage : newMessage
+
 	};
 });

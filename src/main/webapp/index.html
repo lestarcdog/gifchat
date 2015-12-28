@@ -30,9 +30,9 @@
 				<div class="row">
 					<div class="col-sm-3">
 						<h4>Hello {{username}} !</h4>
-						<form ng-submit="search()">
+						<form ng-submit="sendMessage()">
 							<div class="form-group">
-								<input class="form-control" ng-disabled="sending" type="text" ng-model="txt">
+								<input class="form-control" ng-disabled="sending" type="text" ng-model="message">
 							</div>
 							<div class="checkbox">
 								<label><input type="checkbox" ng-model="overwrite"> Overwrite text </label>
@@ -44,7 +44,14 @@
 					</div>
 					<div class="col-sm-6">
 						<div id="chatBox">
-							<chat-message message="dummy" ></chat-message>
+							<div class="message-item" 
+							ng-class="{ 'message-right' : msg.username == username, 'message-left' : msg.username != username}" 
+							ng-repeat="msg in messages">
+								<p>{{msg.username}}</p>
+								<p>{{msg.userText}}</p>
+								<img ng-src="{{msg.gifUrl}}" />
+								<p>{{msg.sentTime}}</p>
+							</div>
 						</div>
 					</div>
 				</div>

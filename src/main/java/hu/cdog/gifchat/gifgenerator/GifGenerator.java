@@ -6,6 +6,8 @@ import java.util.Random;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import javax.ejb.Lock;
+import javax.ejb.LockType;
 import javax.ejb.Singleton;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
@@ -37,6 +39,7 @@ public class GifGenerator {
 		client.close();
 	}
 
+	@Lock(LockType.READ)
 	public String randomGifForKeyword(String keyword, List<String> gifUrls)
 			throws JsonParseException, JsonMappingException, IOException {
 		String url = null;
@@ -57,8 +60,9 @@ public class GifGenerator {
 		if (gipyData.getData().isEmpty()) {
 			return null;
 		}
+		int maxrand = gipyData.getData().size();
 		for (int i = 0; i < 5; i++) {
-			returnUrl = gipyData.getData().get(random.nextInt(DEFAULT_RANDOM)).getImages().getDownsized().getUrl();
+			returnUrl = gipyData.getData().get(random.nextInt(maxrand)).getImages().getDownsized().getUrl();
 			if (!gifUrls.contains(returnUrl)) {
 				break;
 			}

@@ -18,6 +18,8 @@ import javax.ws.rs.core.Response;
 import org.apache.http.HttpStatus;
 
 import hu.cdog.gifchat.model.GifMessageDto;
+import hu.cdog.gifchat.model.dto.UserCredentialDto;
+import hu.cdog.gifchat.model.dto.UserMessageDto;
 import hu.cdog.gifchat.service.ChatService;
 
 @Path("/messages")
@@ -36,11 +38,12 @@ public class MessageController {
 
 	@POST
 	@Path("/login")
-	public Response login(@QueryParam(USERNAME) String username) {
-		if (username == null || username.isEmpty()) {
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response login(UserCredentialDto credentials) {
+		if (credentials.getUsername() == null || credentials.getUsername().isEmpty()) {
 			return Response.status(HttpStatus.SC_BAD_REQUEST).build();
 		}
-		request.getSession().setAttribute(USERNAME, username);
+		request.getSession().setAttribute(USERNAME, credentials.getUsername());
 		return Response.ok().build();
 	}
 
@@ -61,13 +64,14 @@ public class MessageController {
 
 	@POST
 	@Path("/new")
-	@Consumes(MediaType.TEXT_PLAIN)
-	public Response newMessage(String message) {
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response newMessage(UserMessageDto message) {
 		String username = (String) request.getSession().getAttribute(USERNAME);
+		username = "Niki";
 		if (username == null) {
 			return Response.status(HttpStatus.SC_BAD_REQUEST).build();
 		}
-		chatService.newMessage(message, username);
+		chatService.newMessage(message.getMessage(), username);
 		return Response.ok().build();
 	}
 }

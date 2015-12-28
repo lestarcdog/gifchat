@@ -7,6 +7,7 @@ app.constant("AppConstants", {
 app.run(function($rootScope) {
 	$rootScope.loggedIn = false;
 
+	// delete me
 	$rootScope.loggedIn = true;
-	$rootScope.username = "Jóska";
+	$rootScope.username = "Niki";
 });
