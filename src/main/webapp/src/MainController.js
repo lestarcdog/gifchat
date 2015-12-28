@@ -2,6 +2,8 @@ app.controller("MainController", function($scope, ServerService) {
 	var chatBox = angular.element("#chatBox");
 	$scope.sending = false;
 	$scope.messages = [];
+	$scope.textMaxLength = 100;
+	$scope.remainingChars = $scope.textMaxLength;
 	$scope.search = function() {
 		$scope.sending = true;
 
@@ -14,6 +16,10 @@ app.controller("MainController", function($scope, ServerService) {
 			refresh();
 			$scope.sending = false;
 		});
+	};
+
+	$scope.typeing = function() {
+		$scope.remainingChars = $scope.textMaxLength - $scope.message.length;
 	};
 
 	function refresh() {

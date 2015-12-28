@@ -44,7 +44,7 @@ public class ChatService {
 		MessageTokinezer possibleKeywords = new MessageTokinezer(message);
 		String gifUrl = null;
 		int iteration = 0;
-		while (gifUrl == null || iteration < 15) {
+		while (gifUrl == null && iteration < 5) {
 			String keyword = possibleKeywords.getNextToken();
 			try {
 				gifUrl = gifGenerator.randomGifForKeyword(keyword, memDb.getGifUrls());

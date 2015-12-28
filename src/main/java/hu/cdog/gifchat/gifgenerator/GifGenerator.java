@@ -13,6 +13,9 @@ import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.core.Response;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -21,6 +24,8 @@ import hu.cdog.gifchat.model.giphy.GiphyData;
 
 @Singleton
 public class GifGenerator {
+
+	private static final Logger log = LoggerFactory.getLogger(GifGenerator.class);
 
 	private static final String GIPHY_SEARCH_URL = "http://api.giphy.com/v1/gifs/search?q=<<key>>&api_key=dc6zaTOxFJmzC";
 	private static final String GIPHY_TRENDING_URL = "http://api.giphy.com/v1/stickers/trending?api_key=dc6zaTOxFJmzC";
@@ -44,8 +49,10 @@ public class GifGenerator {
 			throws JsonParseException, JsonMappingException, IOException {
 		String url = null;
 		if (keyword == null) {
+			log.debug("Searching trending gif because null keyword");
 			url = trendingUrl();
 		} else {
+			log.debug("Searching gif for keyword: {}", keyword);
 			url = giphySearchUrl(keyword);
 		}
 		Response result = client.target(url).request().get();

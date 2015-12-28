@@ -32,7 +32,9 @@
 						<h4>Hello {{username}} !</h4>
 						<form ng-submit="sendMessage()">
 							<div class="form-group">
-								<input class="form-control" ng-disabled="sending" type="text" ng-model="message">
+								<input class="form-control" ng-disabled="sending" type="text" ng-keydown="typeing()" ng-model="message" 
+								maxlength="{{textMaxLength}}">
+								<div id="remaining-chars">{{ remainingChars }}</div>
 							</div>
 							<div class="checkbox">
 								<label><input type="checkbox" ng-model="overwrite"> Overwrite text </label>
@@ -44,13 +46,14 @@
 					</div>
 					<div class="col-sm-6">
 						<div id="chatBox">
-							<div class="message-item" 
-							ng-class="{ 'message-right' : msg.username == username, 'message-left' : msg.username != username}" 
-							ng-repeat="msg in messages">
-								<p>{{msg.username}}</p>
-								<p>{{msg.userText}}</p>
-								<img ng-src="{{msg.gifUrl}}" />
-								<p>{{msg.sentTime}}</p>
+							<div class="message-item" ng-class="{ 'message-right' : msg.username == username, 'message-left' : msg.username != username}"
+								ng-repeat="msg in messages">
+								<div class="username">{{msg.username}}</div>
+								<div class="message-content">
+									<img class="img-responsive gif" ng-src="{{msg.gifUrl}}" ng-cloak />
+									<div class="usertext">{{msg.userText}}</div>
+								</div>
+								<div class="senttime">{{msg.sentTime | date : 'yyyy-MM-dd HH:mm:ss'}}</div>
 							</div>
 						</div>
 					</div>
