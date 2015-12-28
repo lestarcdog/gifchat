@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import hu.cdog.gifchat.GifChatConstants;
 import hu.cdog.gifchat.gifgenerator.GifGenerator;
 import hu.cdog.gifchat.gifgenerator.MessageTokinezer;
+import hu.cdog.gifchat.gifgenerator.strategies.LongestWordFirst;
 import hu.cdog.gifchat.memdb.MemDb;
 import hu.cdog.gifchat.model.GifMessage;
 import hu.cdog.gifchat.model.GifMessageDto;
@@ -41,7 +42,7 @@ public class ChatService {
 	}
 
 	public void newMessage(String message, String username) {
-		MessageTokinezer possibleKeywords = new MessageTokinezer(message);
+		MessageTokinezer possibleKeywords = new MessageTokinezer(message, LongestWordFirst.get());
 		String gifUrl = null;
 		int iteration = 0;
 		while (gifUrl == null && iteration < 5) {

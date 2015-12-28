@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import hu.cdog.gifchat.GifChatConstants;
+import hu.cdog.gifchat.gifgenerator.strategies.IWordOrder;
 
 public class MessageTokinezer {
 
@@ -16,7 +17,7 @@ public class MessageTokinezer {
 	private int idx = 0;
 	private final String message;
 
-	public MessageTokinezer(String message) {
+	public MessageTokinezer(String message, IWordOrder orderStrategy) {
 		this.message = message;
 		String noSpace = message.replaceAll("\\s+", " ");
 		tokens = new ArrayList<>(Arrays.asList(noSpace.split(" ")));
@@ -25,6 +26,7 @@ public class MessageTokinezer {
 			tokens = Arrays.asList(noSpace.toLowerCase());
 		} else {
 			tokens = tokenizeSentence(tokens);
+			orderStrategy.order(tokens);
 		}
 	}
 

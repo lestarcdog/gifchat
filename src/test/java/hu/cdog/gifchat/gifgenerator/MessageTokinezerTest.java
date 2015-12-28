@@ -4,11 +4,13 @@ import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
 import org.junit.Test;
 
+import hu.cdog.gifchat.gifgenerator.strategies.LongestWordFirst;
+
 public class MessageTokinezerTest {
 
 	@Test
 	public void tokenizeWords() {
-		MessageTokinezer tokinezer = new MessageTokinezer("This is a     TEst SenTENCE!");
+		MessageTokinezer tokinezer = new MessageTokinezer("This is a     TEst SenTENCE!", LongestWordFirst.get());
 		int count = 0;
 		String result = null;
 		do {
