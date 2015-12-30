@@ -1,4 +1,4 @@
-app.factory("ServerService", function($http, AppConstants) {
+app.factory("ServerService", function($http) {
 	function all() {
 		return $http.get("/gifchat/api/messages/all");
 	}

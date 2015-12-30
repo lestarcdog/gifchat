@@ -1,4 +1,4 @@
-app.controller("MainController", function($scope, ServerService) {
+app.controller("MainController", function($scope, $rootScope, ServerService) {
 	var chatBox = $("#chatBox");
 	$scope.sending = false;
 	$scope.messages = [];
@@ -26,8 +26,13 @@ app.controller("MainController", function($scope, ServerService) {
 	function refresh() {
 		ServerService.all().success(function(data, status, headers, config) {
 			$scope.messages = data;
+			$scope.message = null;
+			$scope.typeing();
 		});
+
 	}
 
-	refresh();
+	if ($rootScope.loggedIn) {
+		refresh();
+	}
 });

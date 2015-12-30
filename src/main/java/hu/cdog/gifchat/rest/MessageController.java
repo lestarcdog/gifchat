@@ -17,15 +17,16 @@ import javax.ws.rs.core.Response;
 
 import org.apache.http.HttpStatus;
 
+import hu.cdog.gifchat.GifChatConstants;
+import hu.cdog.gifchat.exception.GifChatException;
 import hu.cdog.gifchat.model.GifMessageDto;
 import hu.cdog.gifchat.model.dto.UserCredentialDto;
 import hu.cdog.gifchat.model.dto.UserMessageDto;
 import hu.cdog.gifchat.service.ChatService;
+import hu.cdog.gifchat.service.listener.CurrentLoggedUsers;
 
 @Path("/messages")
 public class MessageController {
-
-	private static final String USERNAME = "username";
 
 	@Inject
 	ChatService chatService;
@@ -39,12 +40,17 @@ public class MessageController {
 	@POST
 	@Path("/login")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response login(UserCredentialDto credentials) {
+	public Response login(UserCredentialDto credentials) throws GifChatException {
 		if (credentials.getUsername() == null || credentials.getUsername().isEmpty()) {
 			return Response.status(HttpStatus.SC_BAD_REQUEST).build();
 		}
-		request.getSession().setAttribute(USERNAME, credentials.getUsername());
-		return Response.ok().build();
+		if (CurrentLoggedUsers.addUser(credentials.getUsername())) {
+			request.getSession().setAttribute(GifChatConstants.SESSION_USERNAME_ATT, credentials.getUsername());
+			return Response.ok().build();
+		} else {
+			throw new GifChatException("Username taken");
+		}
+
 	}
 
 	@GET
@@ -66,8 +72,7 @@ public class MessageController {
 	@Path("/new")
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response newMessage(UserMessageDto message) {
-		String username = (String) request.getSession().getAttribute(USERNAME);
-		username = "Niki";
+		String username = (String) request.getSession().getAttribute(GifChatConstants.SESSION_USERNAME_ATT);
 		if (username == null) {
 			return Response.status(HttpStatus.SC_BAD_REQUEST).build();
 		}
