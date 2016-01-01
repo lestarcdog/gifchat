@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+<base href="${baseUrl}">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta charset="UTF-8">
@@ -14,64 +15,26 @@
     <![endif]-->
 </head>
 <body ng-app="GifApp">
-	<div id="main-container" ng-controller="MainController">
-		<div >
-			<div ng-hide="loggedIn" class="container">
-				<div class="row">
-					<div class="col-lg-4 col-lg-offset-4">
-						<form ng-submit="signin()">
-							<h2>Choose a name</h2>
-							<input type="text" id="username" class="form-control" placeholder="Username"
-								ng-model="user.username" required autofocus>
-							<button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
-						</form>
-					</div>
-				</div>
-			</div>
-		</div>
-		<div ng-controller="ChatController">
-			<div ng-hide="!loggedIn" class="container">
-				<div class="row">
-					<div class="col-sm-3">
-						<h4>Hello {{username}} !</h4>
-						<form ng-submit="sendMessage()">
-							<div class="form-group">
-								<input class="form-control" ng-disabled="sending" type="text" ng-keydown="typeing()" ng-model="message"
-									maxlength="{{textMaxLength}}">
-								<div id="remaining-chars">{{ remainingChars }}</div>
-							</div>
-						</form>
-					</div>
-					<div class="col-sm-6">
-						<div id="chatBox">
-							<div class="message-item" ng-class="{ 'message-right' : msg.username == username, 'message-left' : msg.username != username}"
-								ng-repeat="msg in messages" chat-message-scroll>
-								<div class="username">{{msg.username}}</div>
-								<div class="message-content">
-									<img class="img-responsive gif" ng-src="{{msg.gifUrl}}" ng-cloak />
-									<div class="usertext">{{msg.userText}}</div>
-								</div>
-								<div class="senttime">{{msg.sentTime | date : 'yyyy-MM-dd HH:mm:ss'}}</div>
-							</div>
-							<a id="lastAnchor"></a>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
+	<div id="main-container">
+		<ng-view></ng-view>
 	</div>
 	<!-- libraries -->
 	<script type="text/javascript" src="js/jquery-2.1.4.js"></script>
 	<script type="text/javascript" src="js/angular.js"></script>
+	<script type="text/javascript" src="js/angular-route.js"></script>
 	<script type="text/javascript" src="js/bootstrap.min.js"></script>
 	<script type="text/javascript" src="js/moment-with-locales.js"></script>
+	<script type="text/javascript" src="js/underscore.js"></script>
 	<!-- application -->
 	<script type="text/javascript" src="src/app.js"></script>
 	<script type="text/javascript" src="src/service/ServerService.js"></script>
+	<script type="text/javascript" src="src/service/SessionStorageService.js"></script>
+	<script type="text/javascript" src="src/filters/agoFilter.js"></script>
 	<!-- directives -->
 	<script type="text/javascript" src="src/directive/ChatMessageScroll.js"></script>
 	<!-- controllers -->
-	<script type="text/javascript" src="src/ChatController.js"></script>
-	<script type="text/javascript" src="src/MainController.js"></script>
+	<script type="text/javascript" src="src/controller/ChatController.js"></script>
+	<script type="text/javascript" src="src/controller/LoginController.js"></script>
+	<script type="text/javascript" src="src/controller/ChatUserController.js"></script>
 </body>
 </html>

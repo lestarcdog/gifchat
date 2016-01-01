@@ -1,21 +1,39 @@
+html,body {
+	height: 100%;
+}
+
 #main-container {
 	margin-top: 20px;
 }
 
 #chatBox {
-	overflow: auto; min-height: 500px; max-height: 500px;
+	overflow: auto;
+	min-height: 100%;
+	height: 100%;
+	position: relative;
 }
 
 #remaining-chars {
-	margin-top: 5px; font-size: 11px; color: #CCC;
+	margin-top: 5px;
+	font-size: 11px;
+	color: #CCC;
+}
+
+#lastAnchor {
+	float: right;
+	clear: both;
+	color: white;
 }
 
 .message-item {
-	width: 50%; margin: 5px 0;
+	width: 50%;
+	margin: 20px 0 0 0;
 }
 
 .message-item .username {
-	color: gray; font-size: 10px;
+	color: #242424;
+	background: #EEE;
+	font-size: 10px;
 }
 
 .message-content {
@@ -23,32 +41,61 @@
 }
 
 .message-content .gif {
-	position: relative; z-index: 100;
+	position: relative;
+	z-index: 100;
 }
 
 .message-content .usertext {
-	position: relative; z-index: 101; color: black; background: white; padding: 5px; margin-top: -50px;
-	border-top: 1px black solid; border-bottom: 1px black solid; width: 98%;
+	position: relative;
+	z-index: 101;
+	color: black;
+	background: white;
+	padding: 5px;
+	margin-top: -50px;
+	border-top: 1px black solid;
+	border-bottom: 1px black solid;
+	width: 98%;
 }
 
 .message-item .senttime {
 	position: relative;
+	font-size: 8px;
+	color: #AAA;
 }
 
 .message-right {
-	float: right;
-	clear: both;
+	float:right;
+	clear:both;
 }
 
 .message-left {
 	float:left;
-	clear: both;
+	clear:both;
 }
 
-.message-right .usertext {
-	border-radius: 0 5px 5px 0; border-right: 1px black solid;
+.message-left .message-content {
+	float:left;
+}
+
+.message-right .message-content {
+	float: right;
 }
 
 .message-left .usertext {
-	border-radius: 5px 0 0 5px; border-left: 1px black solid;
+	border-radius: 0 5px 5px 0;
+	border-right: 1px black solid;
+	float:left;
+}
+
+.message-right .usertext {
+	float:right;
+	border-radius: 5px 0 0 5px;
+	border-left: 1px black solid;
+}
+
+.message-right .message-item .username {
+	text-align: right;
+}
+.message-left .message-item .username {
+	text-align: left;
 }

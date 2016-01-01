@@ -1,6 +1,6 @@
-app.factory("ServerService", function($http) {
+app.factory("ServerService", function($http,BaseUrlConst) {
 	function all() {
-		return $http.get("/gifchat/api/messages/all");
+		return $http.get(BaseUrlConst + "/api/messages/all");
 	}
 
 	function login(username, password) {
@@ -8,20 +8,25 @@ app.factory("ServerService", function($http) {
 			"username" : username,
 			"password" : password
 		};
-		return $http.post("/gifchat/api/messages/login", cred);
+		return $http.post(BaseUrlConst + "/api/messages/login", cred);
 	}
 
 	function newMessage(message) {
 		var data = {
 			"message" : message
 		};
-		return $http.post("/gifchat/api/messages/new", data);
+		return $http.post(BaseUrlConst + "/api/messages/new", data);
+	}
+	
+	function currentUsers() {
+		return $http.get(BaseUrlConst + "/api/messages/currentUsers");
 	}
 
 	return {
 		all : all,
 		login : login,
-		newMessage : newMessage
+		newMessage : newMessage,
+		currentUsers : currentUsers
 
 	};
 });

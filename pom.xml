@@ -9,6 +9,10 @@
 	<description>A proof of concept chat program. Contains everything on the first run.</description>
 	<packaging>war</packaging>
 
+	<properties>
+		<baseUrl>gifchat</baseUrl>
+	</properties>
+
 	<dependencies>
 		<dependency>
 			<groupId>org.jboss.spec</groupId>
@@ -46,10 +50,6 @@
 			<artifactId>slf4j-api</artifactId>
 			<version>1.7.13</version>
 		</dependency>
-
-
-
-
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
@@ -66,12 +66,45 @@
 
 	</dependencies>
 
+
 	<build>
+		<resources>
+			<resource>
+				<directory>src/main/java</directory>
+				<filtering>true</filtering>
+			</resource>
+		</resources>
+		<testResources>
+			<testResource>
+				<directory>src/test/java</directory>
+				<filtering>true</filtering>
+			</testResource>
+		</testResources>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-war-plugin</artifactId>
 				<version>2.6</version>
+				<configuration>
+					<webResources>
+						<webResource>
+							<directory>src/main/webapp</directory>
+							<includes>
+								<include>**/index.html</include>
+								<include>**/app.js</include>
+							</includes>
+							<filtering>true</filtering>
+						</webResource>
+					</webResources>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>2.7</version>
+				<configuration>
+					<encoding>UTF-8</encoding>
+				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -80,6 +113,7 @@
 				<configuration>
 					<source>1.8</source>
 					<target>1.8</target>
+					<encoding>UTF-8</encoding>
 				</configuration>
 			</plugin>
 		</plugins>
@@ -88,7 +122,11 @@
 	<profiles>
 		<profile>
 			<id>openshift</id>
+			<properties>
+				<baseUrl>/</baseUrl>
+			</properties>
 			<build>
+
 				<finalName>gifchat</finalName>
 				<plugins>
 					<plugin>

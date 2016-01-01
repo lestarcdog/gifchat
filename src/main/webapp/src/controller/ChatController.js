@@ -1,11 +1,11 @@
-app.controller("ChatController", function($scope, $rootScope, ServerService) {
+app.controller("ChatController", function($scope, $rootScope, $location, ServerService) {
 	var chatBox = $("#chatBox");
+	var chatBoxMargin = 100;
 	$scope.sending = false;
 	$scope.messages = [];
 	$scope.textMaxLength = 100;
 	$scope.message = null;
 	$scope.remainingChars = $scope.textMaxLength;
-
 	$scope.sendMessage = function() {
 		$scope.sending = true;
 		var msg = $scope.message;
@@ -24,6 +24,11 @@ app.controller("ChatController", function($scope, $rootScope, ServerService) {
 	};
 
 	function refresh() {
+		if(!$rootScope.loggedIn) {
+			$location.path("/");
+		}
+		
+		sizeChatbox();
 		ServerService.all().success(function(data, status, headers, config) {
 			$scope.messages = data;
 			$scope.message = null;
@@ -32,7 +37,13 @@ app.controller("ChatController", function($scope, $rootScope, ServerService) {
 
 	}
 
-	if ($rootScope.loggedIn) {
-		refresh();
+	function sizeChatbox() {
+		chatBox.height(window.innerHeight - chatBoxMargin);
 	}
+
+	$(window).resize(function(event) {
+		sizeChatbox();
+	})
+
+	refresh();
 });

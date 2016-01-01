@@ -1,6 +1,7 @@
 package hu.cdog.gifchat.rest;
 
 import java.util.List;
+import java.util.Set;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
@@ -14,8 +15,6 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-
-import org.apache.http.HttpStatus;
 
 import hu.cdog.gifchat.GifChatConstants;
 import hu.cdog.gifchat.exception.GifChatException;
@@ -42,7 +41,7 @@ public class MessageController {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response login(UserCredentialDto credentials) throws GifChatException {
 		if (credentials.getUsername() == null || credentials.getUsername().isEmpty()) {
-			return Response.status(HttpStatus.SC_BAD_REQUEST).build();
+			return Response.status(Response.Status.UNAUTHORIZED).build();
 		}
 		if (CurrentLoggedUsers.addUser(credentials.getUsername())) {
 			request.getSession().setAttribute(GifChatConstants.SESSION_USERNAME_ATT, credentials.getUsername());
@@ -68,15 +67,26 @@ public class MessageController {
 
 	}
 
+	@GET
+	@Path("/currentUsers")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Set<String> getCurrentUsers() {
+		return CurrentLoggedUsers.currentUsers();
+	}
+
 	@POST
 	@Path("/new")
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response newMessage(UserMessageDto message) {
-		String username = (String) request.getSession().getAttribute(GifChatConstants.SESSION_USERNAME_ATT);
+		String username = getLoggedInUser();
 		if (username == null) {
-			return Response.status(HttpStatus.SC_BAD_REQUEST).build();
+			return Response.status(Response.Status.UNAUTHORIZED).build();
 		}
 		chatService.newMessage(message.getMessage(), username);
 		return Response.ok().build();
+	}
+
+	private String getLoggedInUser() {
+		return (String) request.getSession().getAttribute(GifChatConstants.SESSION_USERNAME_ATT);
 	}
 }
