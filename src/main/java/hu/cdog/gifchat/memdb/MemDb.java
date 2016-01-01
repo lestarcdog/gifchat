@@ -8,18 +8,17 @@ import javax.ejb.Lock;
 import javax.ejb.LockType;
 import javax.ejb.Singleton;
 
+import hu.cdog.gifchat.GifChatConstants;
 import hu.cdog.gifchat.model.GifMessage;
 
 @Singleton
 public class MemDb {
 
-	private static final int MAX_SIZE = 100;
-
 	private final List<GifMessage> messages = new LinkedList<>();
 	private final List<String> gifUrls = new LinkedList<>();
 
 	public void add(GifMessage message) {
-		if (messages.size() > MAX_SIZE) {
+		if (messages.size() >= GifChatConstants.MAX_SIZE) {
 			messages.remove(0);
 			gifUrls.remove(0);
 		}

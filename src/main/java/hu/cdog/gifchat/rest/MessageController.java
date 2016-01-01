@@ -48,7 +48,7 @@ public class MessageController {
 			request.getSession().setAttribute(GifChatConstants.SESSION_USERNAME_ATT, credentials.getUsername());
 			return Response.ok().build();
 		} else {
-			throw new GifChatException("Username taken");
+			throw new GifChatException("Username already taken");
 		}
 
 	}

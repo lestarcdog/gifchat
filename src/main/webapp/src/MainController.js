@@ -1,38 +1,35 @@
-app.controller("MainController", function($scope, $rootScope, ServerService) {
-	var chatBox = $("#chatBox");
-	$scope.sending = false;
-	$scope.messages = [];
-	$scope.textMaxLength = 100;
-	$scope.message = null;
-	$scope.remainingChars = $scope.textMaxLength;
+app.controller("MainController", function($scope, ServerService) {
+	$scope.loggedIn = false;
+	$scope.username = null;
+	$scope.user = {};
+	var usernameField = $("#username");
 
-	$scope.sendMessage = function() {
-		$scope.sending = true;
-		var msg = $scope.message;
-		ServerService.newMessage(msg).success(function(data, status, headers, config) {
-			refresh();
-			$scope.sending = false;
-		});
-	};
-
-	$scope.typeing = function() {
-		if ($scope.message != null) {
-			$scope.remainingChars = $scope.textMaxLength - $scope.message.length;
-		} else {
-			$scope.remainingChars = $scope.textMaxLength;
+	$scope.signin = function() {
+		var name = $scope.user.username;
+		if (name == null || name.trim().length < 3 || name.trim().length > 10) {
+			showPopOverWithContent("Username must be between 3 and 10 characters");
+			return;
 		}
+
+		ServerService.login($scope.user.username, "dummy").success(function(data, status, headers, config) {
+			$scope.username = $scope.user.username;
+			$scope.loggedIn = true;
+			usernameField.popover("hide");
+		}).error(function(data, status, headers, config) {
+			showPopOverWithContent("Username already taken");
+		});
 	};
 
-	function refresh() {
-		ServerService.all().success(function(data, status, headers, config) {
-			$scope.messages = data;
-			$scope.message = null;
-			$scope.typeing();
-		});
-
-	}
-
-	if ($rootScope.loggedIn) {
-		refresh();
+	function showPopOverWithContent(content) {
+		//initialize
+		if (usernameField.data("bs.popover") == null) {
+			usernameField.popover({
+				"container" : "body",
+				"title" : "Ooopss...",
+			});
+		}
+		//add content
+		usernameField.data("bs.popover").options.content = content;
+		usernameField.popover('show');
 	}
 });
