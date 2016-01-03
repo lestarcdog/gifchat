@@ -10,8 +10,8 @@
 	<packaging>war</packaging>
 
 	<properties>
-		<baseUrl>gifchat</baseUrl>
-		<baseUrlConst>/${baseUrl}</baseUrlConst>
+		<baseUrl></baseUrl>
+		<baseUrlConst></baseUrlConst>
 	</properties>
 
 	<dependencies>
@@ -97,6 +97,7 @@
 							<filtering>true</filtering>
 						</webResource>
 					</webResources>
+					<warName>ROOT</warName>
 				</configuration>
 			</plugin>
 			<plugin>

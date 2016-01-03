@@ -39,7 +39,7 @@ public class ChatUsersService {
 		}
 		ChatUser remove = users.remove(username);
 		try {
-			if (remove != null && remove.getSession().isOpen()) {
+			if (remove != null && remove.getSession() != null && remove.getSession().isOpen()) {
 				remove.getSession().close();
 			}
 
