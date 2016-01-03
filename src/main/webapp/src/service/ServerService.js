@@ -17,7 +17,11 @@ app.factory("ServerService", function($http, $location, $q, BaseUrlConst) {
 		return $http.get(BaseUrlConst + "/api/messages/currentTopUsers");
 	}
 
-	var url = "ws://" + $location.host() + ":" + $location.port() + BaseUrlConst + "/ws";
+	var port = $location.port();
+	if(port == 80) {
+		port = 8000;
+	}
+	var url = "ws://" + $location.host() + ":" + port + BaseUrlConst + "/ws";
 	var ws = null;
 
 	function initWebSocketConnection() {
