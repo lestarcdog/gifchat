@@ -22,37 +22,38 @@ public class ChatUsersService {
 	private final Map<String, ChatUser> users = new HashMap<>();
 
 	public void removeUser(String username) {
-		Objects.requireNonNull(username);
+		if (username == null) {
+			return;
+		}
 		ChatUser remove = users.remove(username);
 		try {
-			remove.getSession().close();
+			if (remove != null && remove.getSession().isOpen()) {
+				remove.getSession().close();
+			}
 		} catch (IOException e) {
 			log.warn(e.getMessage(), e);
 		}
 
 	}
 
-	public boolean addUser(String username) {
+	public boolean containsUser(String username) {
+		return users.containsKey(username);
+	}
+
+	public void addUser(String username) {
 		Objects.requireNonNull(username);
 
-		if (users.containsKey(username)) {
-			return false;
-		}
-		ChatUser chatUser = new ChatUser();
-		chatUser.setUsername(username);
-
+		ChatUser chatUser = new ChatUser(username);
 		users.put(username, chatUser);
-		return true;
-
 	}
 
 	public void updateUserMessageSentTimeWithNow(String username) {
 		users.get(username).setLastSentMessage(LocalDateTime.now());
 	}
 
-	public void addSessionToUser(String username, Session session) {
+	public void addSessionToUserOrCreateNew(String username, Session session) {
 		Objects.requireNonNull(username);
-		ChatUser chatUser = users.get(username);
+		ChatUser chatUser = users.getOrDefault(username, new ChatUser(username));
 		chatUser.setSession(session);
 
 		users.put(username, chatUser);
@@ -74,8 +75,12 @@ public class ChatUsersService {
 
 	private static class ChatUser {
 		private Session session;
-		private String username;
+		private final String username;
 		private LocalDateTime lastSentMessage;
+
+		public ChatUser(String username) {
+			this.username = username;
+		}
 
 		public Session getSession() {
 			return session;
@@ -87,10 +92,6 @@ public class ChatUsersService {
 
 		public String getUsername() {
 			return username;
-		}
-
-		public void setUsername(String username) {
-			this.username = username;
 		}
 
 		public LocalDateTime getLastSentMessage() {

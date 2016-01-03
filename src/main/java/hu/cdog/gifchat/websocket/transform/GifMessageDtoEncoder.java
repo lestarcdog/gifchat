@@ -7,7 +7,7 @@ import javax.websocket.EndpointConfig;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import hu.cdog.gifchat.model.GifMessageDto;
+import hu.cdog.gifchat.model.dto.GifMessageDto;
 
 public class GifMessageDtoEncoder implements Text<GifMessageDto> {
 

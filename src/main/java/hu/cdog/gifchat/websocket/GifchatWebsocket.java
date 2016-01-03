@@ -9,6 +9,9 @@ import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import hu.cdog.gifchat.GifChatConstants;
 import hu.cdog.gifchat.model.websocket.WsActionDto;
 import hu.cdog.gifchat.service.ChatUsersService;
@@ -26,18 +29,22 @@ import hu.cdog.gifchat.websocket.transform.WsActionEncoder;
 		GifMessageDtoEncoder.class }, configurator = GifChatWebSocketConfig.class)
 public class GifchatWebsocket {
 
+	private static final Logger log = LoggerFactory.getLogger(GifchatWebsocket.class);
+
 	@Inject
 	ChatUsersService chatUsersService;
 
 	@OnOpen
 	public void onOpen(Session session, EndpointConfig config) {
 		String username = (String) config.getUserProperties().get(GifChatConstants.SESSION_USERNAME_ATT);
-		chatUsersService.addSessionToUser(username, session);
+		log.info("Open session for {} with session {}", username, session.toString());
+		chatUsersService.addSessionToUserOrCreateNew(username, session);
 	}
 
 	@OnClose
 	public void onClose(Session session, CloseReason closeReason) {
 		String username = (String) session.getUserProperties().get(GifChatConstants.SESSION_USERNAME_ATT);
+		log.info("Remove user {} with session {}", username, session.toString());
 		chatUsersService.removeUser(username);
 	}
 

@@ -1,6 +1,7 @@
 package hu.cdog.gifchat.model.dto;
 
-public class UserCredentialDto {
+public class UserCredentialDto extends BaseDto {
+
 	private String username;
 	private String password;
 

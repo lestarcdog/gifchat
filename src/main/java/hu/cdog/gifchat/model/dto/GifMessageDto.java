@@ -1,8 +1,10 @@
-package hu.cdog.gifchat.model;
+package hu.cdog.gifchat.model.dto;
 
 import java.time.ZoneOffset;
 
-public class GifMessageDto {
+import hu.cdog.gifchat.model.GifMessage;
+
+public class GifMessageDto extends BaseDto {
 	private String username;
 	private String userText;
 	private String gifUrl;
@@ -48,6 +50,12 @@ public class GifMessageDto {
 
 	public void setSentTime(Long sentTime) {
 		this.sentTime = sentTime;
+	}
+
+	@Override
+	public String toString() {
+		return "GifMessageDto [username=" + username + ", userText=" + userText + ", gifUrl=" + gifUrl + ", sentTime="
+				+ sentTime + "]";
 	}
 
 }

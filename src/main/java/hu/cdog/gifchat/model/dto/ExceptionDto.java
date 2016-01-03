@@ -2,7 +2,12 @@ package hu.cdog.gifchat.model.dto;
 
 import hu.cdog.gifchat.exception.GifChatException;
 
-public class ExceptionDto {
+public class ExceptionDto extends BaseDto {
+
+	@Override
+	public String toString() {
+		return "ExceptionDto [message=" + message + "]";
+	}
 
 	private String message;
 

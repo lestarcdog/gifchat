@@ -18,7 +18,7 @@ import javax.ws.rs.core.Response;
 
 import hu.cdog.gifchat.GifChatConstants;
 import hu.cdog.gifchat.exception.GifChatException;
-import hu.cdog.gifchat.model.GifMessageDto;
+import hu.cdog.gifchat.model.dto.GifMessageDto;
 import hu.cdog.gifchat.model.dto.UserCredentialDto;
 import hu.cdog.gifchat.model.dto.UserMessageDto;
 import hu.cdog.gifchat.service.ChatService;
@@ -46,7 +46,8 @@ public class MessageController {
 		if (credentials.getUsername() == null || credentials.getUsername().isEmpty()) {
 			return Response.status(Response.Status.UNAUTHORIZED).build();
 		}
-		if (userService.addUser(credentials.getUsername())) {
+		if (!userService.containsUser(credentials.getUsername())) {
+			userService.addUser(credentials.getUsername());
 			request.getSession().setAttribute(GifChatConstants.SESSION_USERNAME_ATT, credentials.getUsername());
 			return Response.ok().build();
 		} else {

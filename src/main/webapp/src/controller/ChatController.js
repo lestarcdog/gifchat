@@ -6,12 +6,16 @@ app.controller("ChatController", function($scope, $rootScope, $location, ServerS
 	$scope.textMaxLength = 100;
 	$scope.message = null;
 	$scope.remainingChars = $scope.textMaxLength;
+	
 	$scope.sendMessage = function() {
 		$scope.sending = true;
 		var msg = $scope.message;
-		ServerService.newMessage(msg).success(function(data, status, headers, config) {
-			refresh();
+		ServerService.newMessage(msg).then(function(data) {
 			$scope.sending = false;
+			$scope.message = null;
+		},function(data) {
+			$scope.sending= false;
+			$scope.message = null;
 		});
 	};
 
@@ -41,9 +45,17 @@ app.controller("ChatController", function($scope, $rootScope, $location, ServerS
 		chatBox.height(window.innerHeight - chatBoxMargin);
 	}
 
+	//chatbox on resize
 	$(window).resize(function(event) {
 		sizeChatbox();
 	})
 
 	refresh();
+	
+	// on new message listener
+	var onNewMessage = function(gifMessage) {
+		$scope.messages.push(gifMessage);
+	}
+	
+	ServerService.addListeners(onNewMessage);
 });

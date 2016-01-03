@@ -20,7 +20,7 @@ import hu.cdog.gifchat.gifgenerator.MessageTokinezer;
 import hu.cdog.gifchat.gifgenerator.strategies.LongestWordFirst;
 import hu.cdog.gifchat.memdb.MemDb;
 import hu.cdog.gifchat.model.GifMessage;
-import hu.cdog.gifchat.model.GifMessageDto;
+import hu.cdog.gifchat.model.dto.GifMessageDto;
 
 @Stateless
 public class ChatService {
