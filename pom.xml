@@ -123,7 +123,7 @@
 		<profile>
 			<id>openshift</id>
 			<properties>
-				<baseUrl></baseUrl>
+				<baseUrl>/</baseUrl>
 			</properties>
 			<build>
 
