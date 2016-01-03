@@ -28,7 +28,9 @@ app.factory("ServerService", function($http, $location, $q, BaseUrlConst) {
 
 	function addListeners(newMessageListener) {
 		if (ws == null) {
-			initWebSocketConnection();
+			//initWebSocketConnection();
+			console.log("web socket is not initialized yet. exiting");
+			return;
 		}
 		var listener = function onMessageListener(event) {
 			console.log("WS received: " + event.data);
@@ -45,6 +47,7 @@ app.factory("ServerService", function($http, $location, $q, BaseUrlConst) {
 		login : login,
 		newMessage : newMessage,
 		currentUsers : currentUsers,
+		initWebSocketConnection: initWebSocketConnection,
 		addListeners: addListeners
 
 	};

@@ -7,6 +7,7 @@ app.controller("LoginController", function($scope, $rootScope, $location, Server
 		$rootScope.username = $scope.user.username;
 		$rootScope.loggedIn = true;
 		SessionStorageService.addCurrentUser($rootScope.username);
+		ServerService.initWebSocketConnection();
 		usernameField.popover("hide");
 		$location.path("/chat");
 	}
