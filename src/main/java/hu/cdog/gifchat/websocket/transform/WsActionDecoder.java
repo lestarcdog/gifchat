@@ -1,12 +1,18 @@
 package hu.cdog.gifchat.websocket.transform;
 
+import java.io.IOException;
+
 import javax.websocket.DecodeException;
 import javax.websocket.Decoder.Text;
 import javax.websocket.EndpointConfig;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import hu.cdog.gifchat.model.websocket.WsActionDto;
 
 public class WsActionDecoder implements Text<WsActionDto> {
+
+	private static final ObjectMapper mapper = new ObjectMapper();
 
 	@Override
 	public void init(EndpointConfig config) {
@@ -21,14 +27,16 @@ public class WsActionDecoder implements Text<WsActionDto> {
 
 	@Override
 	public WsActionDto decode(String s) throws DecodeException {
-		// TODO Auto-generated method stub
-		return null;
+		try {
+			return mapper.readValue(s, WsActionDto.class);
+		} catch (IOException e) {
+			throw new DecodeException(s, e.getMessage());
+		}
 	}
 
 	@Override
 	public boolean willDecode(String s) {
-		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 }

@@ -1,5 +1,6 @@
 package hu.cdog.gifchat.service;
 
+import java.io.IOException;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -7,6 +8,8 @@ import java.util.stream.Collectors;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import javax.websocket.EncodeException;
+import javax.websocket.Session;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,6 +33,9 @@ public class ChatService {
 	@Inject
 	GifGenerator gifGenerator;
 
+	@Inject
+	ChatUsersService chatUsersService;
+
 	public List<GifMessageDto> getAll() {
 		return map2Dto(memDb.getAll());
 	}
@@ -42,6 +48,28 @@ public class ChatService {
 	}
 
 	public void newMessage(String message, String username) {
+		GifMessage newMessage = saveNewMessage(message, username);
+		chatUsersService.updateUserMessageSentTimeWithNow(username);
+		sendNewMessageToEveryone(newMessage);
+
+	}
+
+	private void sendNewMessageToEveryone(GifMessage message) {
+		GifMessageDto dto = new GifMessageDto(message);
+		for (Session session : chatUsersService.getAllSessions()) {
+			sendMessage(session, dto);
+		}
+	}
+
+	private void sendMessage(Session s, GifMessageDto msg) {
+		try {
+			s.getBasicRemote().sendObject(msg);
+		} catch (IOException | EncodeException e) {
+			log.error(e.getMessage(), e);
+		}
+	}
+
+	private GifMessage saveNewMessage(String message, String username) {
 		MessageTokinezer possibleKeywords = new MessageTokinezer(message, LongestWordFirst.get());
 		String gifUrl = null;
 		int iteration = 0;
@@ -56,7 +84,7 @@ public class ChatService {
 		}
 		GifMessage gifMessage = new GifMessage(username, message, gifUrl);
 		memDb.add(gifMessage);
-
+		return gifMessage;
 	}
 
 	private List<GifMessageDto> map2Dto(List<GifMessage> messages) {

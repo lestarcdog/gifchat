@@ -22,13 +22,16 @@ import hu.cdog.gifchat.model.GifMessageDto;
 import hu.cdog.gifchat.model.dto.UserCredentialDto;
 import hu.cdog.gifchat.model.dto.UserMessageDto;
 import hu.cdog.gifchat.service.ChatService;
-import hu.cdog.gifchat.service.listener.CurrentLoggedUsers;
+import hu.cdog.gifchat.service.ChatUsersService;
 
 @Path("/messages")
 public class MessageController {
 
 	@Inject
 	ChatService chatService;
+
+	@Inject
+	ChatUsersService userService;
 
 	@Context
 	HttpServletRequest request;
@@ -43,7 +46,7 @@ public class MessageController {
 		if (credentials.getUsername() == null || credentials.getUsername().isEmpty()) {
 			return Response.status(Response.Status.UNAUTHORIZED).build();
 		}
-		if (CurrentLoggedUsers.addUser(credentials.getUsername())) {
+		if (userService.addUser(credentials.getUsername())) {
 			request.getSession().setAttribute(GifChatConstants.SESSION_USERNAME_ATT, credentials.getUsername());
 			return Response.ok().build();
 		} else {
@@ -71,7 +74,7 @@ public class MessageController {
 	@Path("/currentUsers")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Set<String> getCurrentUsers() {
-		return CurrentLoggedUsers.currentUsers();
+		return userService.currentUsers();
 	}
 
 	@POST
