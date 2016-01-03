@@ -3,7 +3,9 @@ package hu.cdog.gifchat.service;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
@@ -15,11 +17,21 @@ import javax.websocket.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import hu.cdog.gifchat.GifChatConstants;
+import hu.cdog.gifchat.model.dto.UserMessageScoreDto;
+
 @Singleton
 public class ChatUsersService {
 
 	private static final Logger log = LoggerFactory.getLogger(ChatUsersService.class);
 	private final Map<String, ChatUser> users = new HashMap<>();
+
+	private static final Comparator<Map.Entry<String, ChatUser>> CHAT_USER_MESSAGE_NUMBER_COMPARATOR = (e1, e2) -> {
+		Integer n1 = e1.getValue().getMessageNumber();
+		Integer n2 = e2.getValue().getMessageNumber();
+
+		return n1.compareTo(n2);
+	};
 
 	public void removeUser(String username) {
 		if (username == null) {
@@ -30,6 +42,7 @@ public class ChatUsersService {
 			if (remove != null && remove.getSession().isOpen()) {
 				remove.getSession().close();
 			}
+
 		} catch (IOException e) {
 			log.warn(e.getMessage(), e);
 		}
@@ -47,8 +60,25 @@ public class ChatUsersService {
 		users.put(username, chatUser);
 	}
 
-	public void updateUserMessageSentTimeWithNow(String username) {
-		users.get(username).setLastSentMessage(LocalDateTime.now());
+	public void updateUserDependentProperties(String username) {
+		// update time
+		ChatUser chatUser = users.get(username);
+		chatUser.setLastSentMessage(LocalDateTime.now());
+		chatUser.increaseMessageNumber();
+	}
+
+	public List<UserMessageScoreDto> getTopUsersMessageScore() {
+		return sortUsersByScoreComparator(CHAT_USER_MESSAGE_NUMBER_COMPARATOR.reversed());
+	}
+
+	public List<UserMessageScoreDto> getLowestUsersMessageScore() {
+		return sortUsersByScoreComparator(CHAT_USER_MESSAGE_NUMBER_COMPARATOR);
+	}
+
+	private List<UserMessageScoreDto> sortUsersByScoreComparator(Comparator<Map.Entry<String, ChatUser>> comparator) {
+		return users.entrySet().stream().sorted(comparator).limit(GifChatConstants.NUM_USER_MESSAGE_SCORE)
+				.map(entry -> new UserMessageScoreDto(entry.getKey(), entry.getValue().getMessageNumber()))
+				.collect(Collectors.toList());
 	}
 
 	public void addSessionToUserOrCreateNew(String username, Session session) {
@@ -77,6 +107,15 @@ public class ChatUsersService {
 		private Session session;
 		private final String username;
 		private LocalDateTime lastSentMessage;
+		private Integer messageNumber = 0;
+
+		public Integer getMessageNumber() {
+			return messageNumber;
+		}
+
+		public void increaseMessageNumber() {
+			messageNumber++;
+		}
 
 		public ChatUser(String username) {
 			this.username = username;

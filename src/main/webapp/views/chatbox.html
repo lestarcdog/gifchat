@@ -22,11 +22,10 @@
 						<div ng-show="currentUsers.length == 0">No other users online</div>
 						<ul ng-show="currentUsers.length > 0">
 							<li ng-repeat="u in currentUsers" >
-								{{u}}
+								<span>{{u.username}}</span> <span>{{u.count}}</span>
 							</li>
 						</ul>
-						<a ng-click="showAllUsers()" ng-show="!isShowAll" >Show all</a>
-						<a ng-click="hideAll()" ng-show="isShowAll">Hide all</a>
+						<button class="btn btn-default" ng-click="refresh()">Refresh</button>
 					</div>
 				</div>
 

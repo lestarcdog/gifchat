@@ -123,7 +123,7 @@
 		<profile>
 			<id>openshift</id>
 			<properties>
-				<baseUrl>/</baseUrl>
+				<baseUrl></baseUrl>
 			</properties>
 			<build>
 
@@ -133,6 +133,16 @@
 						<artifactId>maven-war-plugin</artifactId>
 						<version>2.6</version>
 						<configuration>
+							<webResources>
+								<webResource>
+									<directory>src/main/webapp</directory>
+									<includes>
+										<include>**/index.html</include>
+										<include>**/app.js</include>
+									</includes>
+									<filtering>true</filtering>
+								</webResource>
+							</webResources>
 							<outputDirectory>deployments/</outputDirectory>
 							<warName>ROOT</warName>
 							<failOnMissingWebXml>false</failOnMissingWebXml>

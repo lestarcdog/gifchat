@@ -1,16 +1,21 @@
-var app = angular.module("GifApp", ["ngRoute"]);
+var app = angular.module("GifApp", [ "ngRoute" ]);
 
-app.config(function($routeProvider) {
-	$routeProvider
-	.when("/login", {
-		templateUrl: "views/login.html",
-		controller: "LoginController"
-	})
-	.when("/chat", {
-		templateUrl: "views/chatbox.html",
-		controller: "ChatController"
-	})	
-	.otherwise("/login");
+app.config(function($routeProvider, $httpProvider) {
+	$routeProvider.when("/login", {
+		templateUrl : "views/login.html",
+		controller : "LoginController"
+	}).when("/chat", {
+		templateUrl : "views/chatbox.html",
+		controller : "ChatController"
+	}).otherwise("/login");
+
+	$httpProvider.interceptors.push(function() {
+		return {
+			'requestError' : function(rejection) {
+				console.log("rejection :" +rejection);
+			}
+		}
+	});
 });
 
 app.run(function($rootScope) {

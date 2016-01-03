@@ -1,7 +1,6 @@
 package hu.cdog.gifchat.rest;
 
 import java.util.List;
-import java.util.Set;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
@@ -21,6 +20,7 @@ import hu.cdog.gifchat.exception.GifChatException;
 import hu.cdog.gifchat.model.dto.GifMessageDto;
 import hu.cdog.gifchat.model.dto.UserCredentialDto;
 import hu.cdog.gifchat.model.dto.UserMessageDto;
+import hu.cdog.gifchat.model.dto.UserMessageScoreDto;
 import hu.cdog.gifchat.service.ChatService;
 import hu.cdog.gifchat.service.ChatUsersService;
 
@@ -72,10 +72,10 @@ public class MessageController {
 	}
 
 	@GET
-	@Path("/currentUsers")
+	@Path("/currentTopUsers")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Set<String> getCurrentUsers() {
-		return userService.currentUsers();
+	public List<UserMessageScoreDto> getCurrentUsers() {
+		return userService.getTopUsersMessageScore();
 	}
 
 	@POST

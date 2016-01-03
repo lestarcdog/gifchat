@@ -5,7 +5,6 @@ app.factory("ServerService", function($http, $location, $q, BaseUrlConst) {
 
 	function login(username, password) {
 		var cred = new UserCredentialDto(username, password);
-		console.log(cred);
 		return $http.post(BaseUrlConst + "/api/messages/login", cred);
 	}
 
@@ -14,8 +13,8 @@ app.factory("ServerService", function($http, $location, $q, BaseUrlConst) {
 		return $http.post(BaseUrlConst + "/api/messages/new", data);
 	}
 
-	function currentUsers() {
-		return $http.get(BaseUrlConst + "/api/messages/currentUsers");
+	function currentTopUsers() {
+		return $http.get(BaseUrlConst + "/api/messages/currentTopUsers");
 	}
 
 	var url = "ws://" + $location.host() + ":" + $location.port() + BaseUrlConst + "/ws";
@@ -28,12 +27,11 @@ app.factory("ServerService", function($http, $location, $q, BaseUrlConst) {
 
 	function addListeners(newMessageListener) {
 		if (ws == null) {
-			//initWebSocketConnection();
 			console.log("web socket is not initialized yet. exiting");
 			return;
 		}
 		var listener = function onMessageListener(event) {
-			console.log("WS received: " + event.data);
+			//console.log("WS received: " + event.data);
 			var msg = JSON.parse(event.data);
 			if (msg._type = ".GifMessageDto") {
 				newMessageListener(msg);
@@ -46,7 +44,7 @@ app.factory("ServerService", function($http, $location, $q, BaseUrlConst) {
 		all : all,
 		login : login,
 		newMessage : newMessage,
-		currentUsers : currentUsers,
+		currentTopUsers : currentTopUsers,
 		initWebSocketConnection: initWebSocketConnection,
 		addListeners: addListeners
 

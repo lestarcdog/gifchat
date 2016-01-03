@@ -3,6 +3,7 @@ package hu.cdog.gifchat.service;
 import java.io.IOException;
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -48,8 +49,8 @@ public class ChatService {
 	}
 
 	public void newMessage(String message, String username) {
-		GifMessage newMessage = saveNewMessage(message, username);
-		chatUsersService.updateUserMessageSentTimeWithNow(username);
+		GifMessage newMessage = generateAndSaveNewMessage(message, username);
+		chatUsersService.updateUserDependentProperties(username);
 		sendNewMessageToEveryone(newMessage);
 
 	}
@@ -69,7 +70,7 @@ public class ChatService {
 		}
 	}
 
-	private GifMessage saveNewMessage(String message, String username) {
+	private GifMessage generateAndSaveNewMessage(String message, String username) {
 		MessageTokinezer possibleKeywords = new MessageTokinezer(message, LongestWordFirst.get());
 		String gifUrl = null;
 		int iteration = 0;
@@ -81,6 +82,14 @@ public class ChatService {
 				log.warn(e.getMessage(), e);
 			}
 			iteration++;
+		}
+		if (gifUrl == null) {
+			try {
+				gifUrl = gifGenerator.randomGifForKeyword(null, Collections.emptyList());
+			} catch (IOException e) {
+				// TODO should add some random gif last case
+				log.error(e.getMessage(), e);
+			}
 		}
 		GifMessage gifMessage = new GifMessage(username, message, gifUrl);
 		memDb.add(gifMessage);
