@@ -10,8 +10,8 @@
 	<packaging>war</packaging>
 
 	<properties>
-		<baseUrl></baseUrl>
-		<baseUrlConst></baseUrlConst>
+		<baseUrl>gifchat</baseUrl>
+		<baseUrlConst>/gifchat</baseUrlConst>
 	</properties>
 
 	<dependencies>

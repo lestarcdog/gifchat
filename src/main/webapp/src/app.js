@@ -11,7 +11,7 @@ app.config(function($routeProvider, $httpProvider) {
 
 	$httpProvider.interceptors.push(function() {
 		return {
-			'requestError' : function(rejection) {
+			'responseError' : function(rejection) {
 				console.log("rejection :" +rejection);
 			}
 		}

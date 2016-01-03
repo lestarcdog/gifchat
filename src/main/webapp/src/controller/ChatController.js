@@ -1,21 +1,31 @@
 app.controller("ChatController", function($scope, $rootScope, $location, ServerService) {
-	var chatBox = $("#chatBox");
+	var chatBox = angular.element("#chatBox");
 	var chatBoxMargin = 100;
+	var userTxtField = angular.element("#user-txt-field");
 	$scope.sending = false;
 	$scope.messages = [];
 	$scope.textMaxLength = 100;
 	$scope.message = null;
 	$scope.remainingChars = $scope.textMaxLength;
 	
+	var sendMessageEnd = function() {
+		$scope.sending = false;
+		$scope.message = null;
+		$scope.remainingChars = $scope.textMaxLength;
+		//need timeout because disabled field
+		setTimeout(function() {
+			userTxtField.focus();
+		}, 1000);
+		
+	}
+	
 	$scope.sendMessage = function() {
 		$scope.sending = true;
 		var msg = $scope.message;
 		ServerService.newMessage(msg).then(function(data) {
-			$scope.sending = false;
-			$scope.message = null;
+			sendMessageEnd();
 		},function(data) {
-			$scope.sending= false;
-			$scope.message = null;
+			sendMessageEnd();
 		});
 	};
 
@@ -49,6 +59,7 @@ app.controller("ChatController", function($scope, $rootScope, $location, ServerS
 	$(window).resize(function(event) {
 		sizeChatbox();
 	})
+	
 
 	refresh();
 	
