@@ -27,4 +27,4 @@ app.constant("SessionStorageConst", {
 	"usernameKey" : "username"
 });
 
-app.constant("BaseUrlConst", '/${baseUrl}');
+app.constant("BaseUrlConst", '${baseUrlConst}');

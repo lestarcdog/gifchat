@@ -11,6 +11,7 @@
 
 	<properties>
 		<baseUrl>gifchat</baseUrl>
+		<baseUrlConst>/${baseUrl}</baseUrlConst>
 	</properties>
 
 	<dependencies>
@@ -123,7 +124,8 @@
 		<profile>
 			<id>openshift</id>
 			<properties>
-				<baseUrl>/</baseUrl>
+				<baseUrl></baseUrl>
+				<baseUrlConst></baseUrlConst>
 			</properties>
 			<build>
 
