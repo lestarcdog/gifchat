@@ -64,7 +64,11 @@ public class ChatService {
 
 	private void sendMessage(Session s, GifMessageDto msg) {
 		try {
-			s.getBasicRemote().sendObject(msg);
+			if (s.isOpen()) {
+				s.getBasicRemote().sendObject(msg);
+			} else {
+				chatUsersService.removeUser(s);
+			}
 		} catch (IOException | EncodeException e) {
 			log.error(e.getMessage(), e);
 		}
