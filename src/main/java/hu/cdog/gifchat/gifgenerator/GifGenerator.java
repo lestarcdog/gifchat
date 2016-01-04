@@ -20,6 +20,7 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import hu.cdog.gifchat.model.giphy.GifImage;
 import hu.cdog.gifchat.model.giphy.GiphyData;
 
 @Singleton
@@ -45,7 +46,7 @@ public class GifGenerator {
 	}
 
 	@Lock(LockType.READ)
-	public String randomGifForKeyword(String keyword, List<String> gifUrls)
+	public GifImage randomGifForKeyword(String keyword, List<String> gifUrls)
 			throws JsonParseException, JsonMappingException, IOException {
 		String url = null;
 		if (keyword == null) {
@@ -61,7 +62,7 @@ public class GifGenerator {
 
 		ObjectMapper mapper = new ObjectMapper();
 		GiphyData gipyData = mapper.readValue(rawContent, GiphyData.class);
-		String returnUrl = null;
+		GifImage gif = null;
 
 		// nothing has found for the keyword
 		if (gipyData.getData().isEmpty()) {
@@ -69,12 +70,12 @@ public class GifGenerator {
 		}
 		int maxrand = gipyData.getData().size();
 		for (int i = 0; i < 5; i++) {
-			returnUrl = gipyData.getData().get(random.nextInt(maxrand)).getImages().getDownsized().getUrl();
-			if (!gifUrls.contains(returnUrl)) {
+			gif = gipyData.getData().get(random.nextInt(maxrand)).getImages().getDownsized();
+			if (!gifUrls.contains(gif.getUrl())) {
 				break;
 			}
 		}
-		return returnUrl;
+		return gif;
 
 	}
 

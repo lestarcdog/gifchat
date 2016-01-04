@@ -22,6 +22,7 @@ import hu.cdog.gifchat.gifgenerator.strategies.LongestWordFirst;
 import hu.cdog.gifchat.memdb.MemDb;
 import hu.cdog.gifchat.model.GifMessage;
 import hu.cdog.gifchat.model.dto.GifMessageDto;
+import hu.cdog.gifchat.model.giphy.GifImage;
 
 @Stateless
 public class ChatService {
@@ -76,26 +77,26 @@ public class ChatService {
 
 	private GifMessage generateAndSaveNewMessage(String message, String username) {
 		MessageTokinezer possibleKeywords = new MessageTokinezer(message, LongestWordFirst.get());
-		String gifUrl = null;
+		GifImage gif = null;
 		int iteration = 0;
-		while (gifUrl == null && iteration < 5) {
+		while (gif == null && iteration < 5) {
 			String keyword = possibleKeywords.getNextToken();
 			try {
-				gifUrl = gifGenerator.randomGifForKeyword(keyword, memDb.getGifUrls());
+				gif = gifGenerator.randomGifForKeyword(keyword, memDb.getGifUrls());
 			} catch (Exception e) {
 				log.warn(e.getMessage(), e);
 			}
 			iteration++;
 		}
-		if (gifUrl == null) {
+		if (gif == null) {
 			try {
-				gifUrl = gifGenerator.randomGifForKeyword(null, Collections.emptyList());
+				gif = gifGenerator.randomGifForKeyword(null, Collections.emptyList());
 			} catch (IOException e) {
-				// TODO should add some random gif last case
+				// TODO should add some random gif as last resort
 				log.error(e.getMessage(), e);
 			}
 		}
-		GifMessage gifMessage = new GifMessage(username, message, gifUrl);
+		GifMessage gifMessage = new GifMessage(username, message, gif);
 		memDb.add(gifMessage);
 		return gifMessage;
 	}

@@ -7,6 +7,15 @@ public class GifImageFormats {
 	private GifImage downsized;
 	private GifImage fixed_width_small;
 	private GifImage fixed_height_small;
+	private GifImage original;
+
+	public GifImage getOriginal() {
+		return original;
+	}
+
+	public void setOriginal(GifImage original) {
+		this.original = original;
+	}
 
 	public GifImage getDownsized() {
 		return downsized;

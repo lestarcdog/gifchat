@@ -3,11 +3,12 @@ package hu.cdog.gifchat.model;
 import java.time.LocalDateTime;
 
 import hu.cdog.gifchat.GifChatConstants;
+import hu.cdog.gifchat.model.giphy.GifImage;
 
 public class GifMessage {
 	private String username;
 	private String userText;
-	private String gifUrl;
+	private GifImage gifImage;
 	private final LocalDateTime sentTime;
 
 	public GifMessage() {
@@ -18,10 +19,10 @@ public class GifMessage {
 		return sentTime;
 	}
 
-	public GifMessage(String username, String userText, String gifUrl) {
+	public GifMessage(String username, String userText, GifImage image) {
 		this.username = username;
 		this.userText = userText;
-		this.gifUrl = gifUrl;
+		this.gifImage = image;
 		sentTime = LocalDateTime.now(GifChatConstants.UTC_ZONE);
 	}
 
@@ -41,12 +42,12 @@ public class GifMessage {
 		this.userText = userText;
 	}
 
-	public String getGifUrl() {
-		return gifUrl;
+	public GifImage getGifImage() {
+		return gifImage;
 	}
 
-	public void setGifUrl(String gifUrl) {
-		this.gifUrl = gifUrl;
+	public void setGifImage(GifImage gifImage) {
+		this.gifImage = gifImage;
 	}
 
 }

@@ -23,7 +23,7 @@ public class MemDb {
 			gifUrls.remove(0);
 		}
 		messages.add(message);
-		gifUrls.add(message.getGifUrl());
+		gifUrls.add(message.getGifImage().getUrl());
 	}
 
 	@Lock(LockType.READ)

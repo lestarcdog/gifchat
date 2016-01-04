@@ -7,7 +7,7 @@ import hu.cdog.gifchat.model.GifMessage;
 public class GifMessageDto extends BaseDto {
 	private String username;
 	private String userText;
-	private String gifUrl;
+	private GifImageDto gif;
 	private Long sentTime;
 
 	public GifMessageDto() {
@@ -16,7 +16,7 @@ public class GifMessageDto extends BaseDto {
 	public GifMessageDto(GifMessage message) {
 		this.username = message.getUsername();
 		this.userText = message.getUserText();
-		this.gifUrl = message.getGifUrl();
+		this.gif = new GifImageDto(message.getGifImage());
 		this.sentTime = message.getSentTime().toInstant(ZoneOffset.UTC).toEpochMilli();
 	}
 
@@ -36,12 +36,12 @@ public class GifMessageDto extends BaseDto {
 		this.userText = userText;
 	}
 
-	public String getGifUrl() {
-		return gifUrl;
+	public GifImageDto getGif() {
+		return gif;
 	}
 
-	public void setGifUrl(String gifUrl) {
-		this.gifUrl = gifUrl;
+	public void setGif(GifImageDto gif) {
+		this.gif = gif;
 	}
 
 	public Long getSentTime() {
@@ -54,7 +54,7 @@ public class GifMessageDto extends BaseDto {
 
 	@Override
 	public String toString() {
-		return "GifMessageDto [username=" + username + ", userText=" + userText + ", gifUrl=" + gifUrl + ", sentTime="
+		return "GifMessageDto [username=" + username + ", userText=" + userText + ", gif=" + gif + ", sentTime="
 				+ sentTime + "]";
 	}
 
