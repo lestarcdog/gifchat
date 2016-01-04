@@ -2,6 +2,7 @@ app.controller("ChatController", function($scope, $rootScope, $location, ServerS
 	var chatBox = angular.element("#chatBox");
 	var chatBoxMargin = 100;
 	var userTxtField = angular.element("#user-txt-field");
+	var scrollIntervalHandler = null;
 	$scope.sending = false;
 	$scope.messages = [];
 	$scope.textMaxLength = 100;
@@ -12,7 +13,7 @@ app.controller("ChatController", function($scope, $rootScope, $location, ServerS
 		$scope.sending = false;
 		$scope.message = null;
 		$scope.remainingChars = $scope.textMaxLength;
-		//need timeout because disabled field
+		//need timeout because disabled field to run the digest
 		setTimeout(function() {
 			userTxtField.focus();
 		}, 1000);
@@ -50,18 +51,25 @@ app.controller("ChatController", function($scope, $rootScope, $location, ServerS
 		});
 
 	}
+	
+	refresh();
 
 	function sizeChatbox() {
 		chatBox.height(window.innerHeight - chatBoxMargin);
 	}
 
+	
+	var scrollInterval = function() {
+		var sh =chatBox.prop("scrollHeight");
+		console.log(sh);
+		if(sh - chatBox.scrollTop > 100)
+		chatBox.scrollTop(sh);
+	} 
+
 	//chatbox on resize
 	$(window).resize(function(event) {
 		sizeChatbox();
 	})
-	
-
-	refresh();
 	
 	// on new message listener
 	var onNewMessage = function(gifMessage) {

@@ -5,11 +5,10 @@ app.directive("chatMessageScroll", function($location) {
 		link : function(scope, element, attrs) {
 			if (scope.$last) {
 				setTimeout(function() {
-					var anchor = $("#lastAnchor");
 					var chatBox = $("#chatBox");
-					console.log(anchor.position().top);
-					chatBox.scrollTop(anchor.position().top);
-				}, 3000);
+					//console.log("ScrollHeight: "+chatBox.prop("scrollHeight"));
+					chatBox.scrollTop(chatBox.prop("scrollHeight"));
+				}, 1000);
 
 			}
 		}

@@ -1,6 +1,6 @@
 
 <div ng-hide="!loggedIn" ng-cloak>
-	<div ng-controller="ChatController" class="container">
+	<div class="container">
 		<div class="row">
 			<div class="col-sm-3">
 				<div class="row">
@@ -31,9 +31,9 @@
 
 			</div>
 			<div class="col-sm-7">
-				<div id="chatBox">
+				<div id="chatBox" >
 					<div class="message-item" ng-class="{ 'message-right' : msg.username == username, 'message-left' : msg.username != username}"
-						ng-repeat="msg in messages" >
+						ng-repeat="msg in messages" chat-message-scroll>
 						<div class="username">{{msg.username}}</div>
 						<div class="message-content">
 							<img id="msg-img-{{$index}}" class="img-responsive gif" ng-src="{{msg.gifUrl}}" />

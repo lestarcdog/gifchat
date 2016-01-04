@@ -17,6 +17,7 @@ app.factory("ServerService", function($http, $location, $q, BaseUrlConst) {
 		return $http.get(BaseUrlConst + "/api/messages/currentTopUsers");
 	}
 
+	//because of openshift listens on 8000
 	var port = $location.port();
 	if(port == 80) {
 		port = 8000;
