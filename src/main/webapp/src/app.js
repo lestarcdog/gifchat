@@ -1,4 +1,4 @@
-var app = angular.module("GifApp", [ "ngRoute" ]);
+var app = angular.module("GifApp", [ "ngRoute", "angularMoment","bootstrapLightbox" ]);
 
 app.config(function($routeProvider, $httpProvider) {
 	$routeProvider.when("/login", {

@@ -7,7 +7,9 @@ import hu.cdog.gifchat.model.GifMessage;
 public class GifMessageDto extends BaseDto {
 	private String username;
 	private String userText;
-	private GifImageDto gif;
+	private String keyword;
+	private GifImageDto gifFixedHeight;
+	private GifImageDto gifOriginal;
 	private Long sentTime;
 
 	public GifMessageDto() {
@@ -16,12 +18,22 @@ public class GifMessageDto extends BaseDto {
 	public GifMessageDto(GifMessage message) {
 		this.username = message.getUsername();
 		this.userText = message.getUserText();
-		this.gif = new GifImageDto(message.getGifImage());
+		this.keyword = message.getKeyword();
+		this.gifFixedHeight = new GifImageDto(message.getFixedHeightImage());
+		this.gifOriginal = new GifImageDto(message.getOriginalImage());
 		this.sentTime = message.getSentTime().toInstant(ZoneOffset.UTC).toEpochMilli();
 	}
 
 	public String getUsername() {
 		return username;
+	}
+
+	public String getKeyword() {
+		return keyword;
+	}
+
+	public void setKeyword(String keyword) {
+		this.keyword = keyword;
 	}
 
 	public void setUsername(String username) {
@@ -36,14 +48,6 @@ public class GifMessageDto extends BaseDto {
 		this.userText = userText;
 	}
 
-	public GifImageDto getGif() {
-		return gif;
-	}
-
-	public void setGif(GifImageDto gif) {
-		this.gif = gif;
-	}
-
 	public Long getSentTime() {
 		return sentTime;
 	}
@@ -52,10 +56,20 @@ public class GifMessageDto extends BaseDto {
 		this.sentTime = sentTime;
 	}
 
-	@Override
-	public String toString() {
-		return "GifMessageDto [username=" + username + ", userText=" + userText + ", gif=" + gif + ", sentTime="
-				+ sentTime + "]";
+	public GifImageDto getGifFixedHeight() {
+		return gifFixedHeight;
+	}
+
+	public void setGifFixedHeight(GifImageDto gifFixedHeight) {
+		this.gifFixedHeight = gifFixedHeight;
+	}
+
+	public GifImageDto getGifOriginal() {
+		return gifOriginal;
+	}
+
+	public void setGifOriginal(GifImageDto gifOriginal) {
+		this.gifOriginal = gifOriginal;
 	}
 
 }

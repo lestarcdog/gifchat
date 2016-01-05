@@ -8,7 +8,7 @@ app.directive("chatMessageScroll", function($location) {
 					var chatBox = $("#chatBox");
 					//console.log("ScrollHeight: "+chatBox.prop("scrollHeight"));
 					chatBox.scrollTop(chatBox.prop("scrollHeight"));
-				}, 1000);
+				}, 1500);
 
 			}
 		}

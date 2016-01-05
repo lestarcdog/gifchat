@@ -15,7 +15,7 @@ public class MemDbTest {
 		for(int i=0;i<GifChatConstants.MAX_SIZE + 10; i++) {
 			memDb.add(m);;
 		}
-		Assert.assertEquals(GifChatConstants.MAX_SIZE, memDb.getGifUrls().size());
+		Assert.assertEquals(GifChatConstants.MAX_SIZE, memDb.getOriginalGifUrls().size());
 		Assert.assertEquals(GifChatConstants.MAX_SIZE, memDb.getAll().size());
 	}
 

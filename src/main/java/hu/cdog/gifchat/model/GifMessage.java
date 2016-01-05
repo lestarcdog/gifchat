@@ -4,11 +4,14 @@ import java.time.LocalDateTime;
 
 import hu.cdog.gifchat.GifChatConstants;
 import hu.cdog.gifchat.model.giphy.GifImage;
+import hu.cdog.gifchat.model.giphy.GifImageFormats;
 
 public class GifMessage {
 	private String username;
 	private String userText;
-	private GifImage gifImage;
+	private String keyword;
+	private GifImage fixedHeightImage;
+	private GifImage originalImage;
 	private final LocalDateTime sentTime;
 
 	public GifMessage() {
@@ -19,11 +22,21 @@ public class GifMessage {
 		return sentTime;
 	}
 
-	public GifMessage(String username, String userText, GifImage image) {
+	public GifMessage(String username, String userText, String keyword, GifImageFormats imageFormats) {
 		this.username = username;
 		this.userText = userText;
-		this.gifImage = image;
+		this.keyword = keyword;
+		this.fixedHeightImage = imageFormats.getFixed_height();
+		this.originalImage = imageFormats.getOriginal();
 		sentTime = LocalDateTime.now(GifChatConstants.UTC_ZONE);
+	}
+
+	public String getKeyword() {
+		return keyword;
+	}
+
+	public void setKeyword(String keyword) {
+		this.keyword = keyword;
 	}
 
 	public String getUsername() {
@@ -42,12 +55,20 @@ public class GifMessage {
 		this.userText = userText;
 	}
 
-	public GifImage getGifImage() {
-		return gifImage;
+	public GifImage getFixedHeightImage() {
+		return fixedHeightImage;
 	}
 
-	public void setGifImage(GifImage gifImage) {
-		this.gifImage = gifImage;
+	public void setFixedHeightImage(GifImage fixedHeightImage) {
+		this.fixedHeightImage = fixedHeightImage;
+	}
+
+	public GifImage getOriginalImage() {
+		return originalImage;
+	}
+
+	public void setOriginalImage(GifImage originalImage) {
+		this.originalImage = originalImage;
 	}
 
 }

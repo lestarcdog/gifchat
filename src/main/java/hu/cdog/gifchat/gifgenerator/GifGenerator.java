@@ -20,7 +20,7 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import hu.cdog.gifchat.model.giphy.GifImage;
+import hu.cdog.gifchat.model.giphy.GifImageFormats;
 import hu.cdog.gifchat.model.giphy.GiphyData;
 
 @Singleton
@@ -30,7 +30,6 @@ public class GifGenerator {
 
 	private static final String GIPHY_SEARCH_URL = "http://api.giphy.com/v1/gifs/search?q=<<key>>&api_key=dc6zaTOxFJmzC";
 	private static final String GIPHY_TRENDING_URL = "http://api.giphy.com/v1/stickers/trending?api_key=dc6zaTOxFJmzC";
-	private static final Integer DEFAULT_RANDOM = 25;
 	private final Random random = new Random();
 
 	private Client client;
@@ -46,7 +45,7 @@ public class GifGenerator {
 	}
 
 	@Lock(LockType.READ)
-	public GifImage randomGifForKeyword(String keyword, List<String> gifUrls)
+	public GifImageFormats randomGifForKeyword(String keyword, List<String> gifOriginalUrls)
 			throws JsonParseException, JsonMappingException, IOException {
 		String url = null;
 		if (keyword == null) {
@@ -62,7 +61,7 @@ public class GifGenerator {
 
 		ObjectMapper mapper = new ObjectMapper();
 		GiphyData gipyData = mapper.readValue(rawContent, GiphyData.class);
-		GifImage gif = null;
+		GifImageFormats gif = null;
 
 		// nothing has found for the keyword
 		if (gipyData.getData().isEmpty()) {
@@ -70,8 +69,8 @@ public class GifGenerator {
 		}
 		int maxrand = gipyData.getData().size();
 		for (int i = 0; i < 5; i++) {
-			gif = gipyData.getData().get(random.nextInt(maxrand)).getImages().getDownsized();
-			if (!gifUrls.contains(gif.getUrl())) {
+			gif = gipyData.getData().get(random.nextInt(maxrand)).getImages();
+			if (!gifOriginalUrls.contains(gif.getOriginal().getUrl())) {
 				break;
 			}
 		}
@@ -81,10 +80,6 @@ public class GifGenerator {
 
 	private String trendingUrl() {
 		return GIPHY_TRENDING_URL;
-	}
-
-	private static String getGiphyUrl(String keyword, Integer limit) {
-		throw new UnsupportedOperationException();
 	}
 
 	private static String giphySearchUrl(String keyword) {

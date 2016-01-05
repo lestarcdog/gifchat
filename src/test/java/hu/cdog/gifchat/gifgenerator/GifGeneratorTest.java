@@ -10,6 +10,8 @@ import org.junit.Test;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 
+import hu.cdog.gifchat.model.giphy.GifImageFormats;
+
 public class GifGeneratorTest {
 
 	public static GifGenerator generator;
@@ -26,23 +28,24 @@ public class GifGeneratorTest {
 
 	@Test
 	public void getRandomGifCat() throws JsonParseException, JsonMappingException, IOException {
-		String gifUrl = generator.randomGifForKeyword("cat", Collections.emptyList());
+		GifImageFormats formats = generator.randomGifForKeyword("cat", Collections.emptyList());
 
-		Assert.assertNotNull(gifUrl);
+		Assert.assertNotNull(formats);
 	}
 
 	@Test
 	public void getTrendingForNullKeyword() throws JsonParseException, JsonMappingException, IOException {
-		String gifUrl = generator.randomGifForKeyword(null, Collections.emptyList());
+		GifImageFormats formats = generator.randomGifForKeyword(null, Collections.emptyList());
 
-		Assert.assertNotNull(gifUrl);
+		Assert.assertNotNull(formats);
 	}
 
 	@Test
 	public void getNullForUnExistendKeyword() throws JsonParseException, JsonMappingException, IOException {
-		String gifUrl = generator.randomGifForKeyword("catasdffefewsaAwef fsda FEW aggastyán", Collections.emptyList());
+		GifImageFormats formats = generator.randomGifForKeyword("catasdffefewsaAwef fsda FEW aggastyán",
+				Collections.emptyList());
 
-		Assert.assertNull(gifUrl);
+		Assert.assertNull(formats);
 	}
 
 }

@@ -1,4 +1,4 @@
-app.controller("ChatController", function($scope, $rootScope, $location, ServerService) {
+app.controller("ChatController", function($scope, $rootScope, $location, ServerService, Lightbox) {
 	var chatBox = angular.element("#chatBox");
 	var chatBoxMargin = 100;
 	var userTxtField = angular.element("#user-txt-field");
@@ -8,24 +8,24 @@ app.controller("ChatController", function($scope, $rootScope, $location, ServerS
 	$scope.textMaxLength = 100;
 	$scope.message = null;
 	$scope.remainingChars = $scope.textMaxLength;
-	
+
 	var sendMessageEnd = function() {
 		$scope.sending = false;
 		$scope.message = null;
 		$scope.remainingChars = $scope.textMaxLength;
-		//need timeout because disabled field to run the digest
+		// need timeout because disabled field to run the digest
 		setTimeout(function() {
 			userTxtField.focus();
 		}, 1000);
-		
+
 	}
-	
+
 	$scope.sendMessage = function() {
 		$scope.sending = true;
 		var msg = $scope.message;
 		ServerService.newMessage(msg).then(function(data) {
 			sendMessageEnd();
-		},function(data) {
+		}, function(data) {
 			sendMessageEnd();
 		});
 	};
@@ -38,11 +38,20 @@ app.controller("ChatController", function($scope, $rootScope, $location, ServerS
 		}
 	};
 
+	$scope.openOriginal = function(msg) {
+		console.log(msg);
+		var img = [ {
+			"url" : msg.gifOriginal.url,
+			"caption" : msg.keyword
+		} ];
+		Lightbox.openModal(img, 0);
+	}
+
 	function refresh() {
-		if(!$rootScope.loggedIn) {
+		if (!$rootScope.loggedIn) {
 			$location.path("/");
 		}
-		
+
 		sizeChatbox();
 		ServerService.all().success(function(data, status, headers, config) {
 			$scope.messages = data;
@@ -51,30 +60,29 @@ app.controller("ChatController", function($scope, $rootScope, $location, ServerS
 		});
 
 	}
-	
+
 	refresh();
 
 	function sizeChatbox() {
 		chatBox.height(window.innerHeight - chatBoxMargin);
 	}
 
-	
 	var scrollInterval = function() {
-		var sh =chatBox.prop("scrollHeight");
+		var sh = chatBox.prop("scrollHeight");
 		console.log(sh);
-		if(sh - chatBox.scrollTop > 100)
-		chatBox.scrollTop(sh);
-	} 
+		if (sh - chatBox.scrollTop > 100)
+			chatBox.scrollTop(sh);
+	}
 
-	//chatbox on resize
+	// chatbox on resize
 	$(window).resize(function(event) {
 		sizeChatbox();
 	})
-	
+
 	// on new message listener
 	var onNewMessage = function(gifMessage) {
 		$scope.messages.push(gifMessage);
 	}
-	
+
 	ServerService.addListeners(onNewMessage);
 });
