@@ -65,7 +65,7 @@ public class ChatService {
 
 	private void sendMessage(Session s, GifMessageDto msg) {
 		try {
-			if (s.isOpen()) {
+			if (s != null && s.isOpen()) {
 				s.getBasicRemote().sendObject(msg);
 			} else {
 				chatUsersService.removeUser(s);

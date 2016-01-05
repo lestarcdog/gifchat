@@ -2,7 +2,6 @@ package hu.cdog.gifchat.service;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -108,8 +107,7 @@ public class ChatUsersService {
 	}
 
 	public Set<Session> getAllSessions() {
-		return Collections
-				.unmodifiableSet(users.values().stream().map(l -> l.getSession()).collect(Collectors.toSet()));
+		return users.values().stream().map(l -> l.getSession()).collect(Collectors.toSet());
 	}
 
 	public Set<String> currentUsers() {
