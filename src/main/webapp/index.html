@@ -8,6 +8,7 @@
 <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
 <link rel="stylesheet" type="text/css" href="css/bootstrap-theme.min.css">
 <link rel="stylesheet" type="text/css" href="css/angular-bootstrap-lightbox.css">
+<link rel="stylesheet" type="text/css" href="css/loading-bar.min.css">
 <link rel="stylesheet" type="text/css" href="css/main.css">
 <title>Giphy - POC</title>
 <!--[if lt IE 9]>
@@ -19,6 +20,7 @@
 	<div id="main-container">
 		<ng-view></ng-view>
 	</div>
+	<div class="footer">${git.commit.id.abbrev} - ${git.build.time}</div>
 	<!-- libraries -->
 	<script type="text/javascript" src="js/jquery-2.1.4.js"></script>
 	<script type="text/javascript" src="js/angular.js"></script>
@@ -28,6 +30,8 @@
 	<script type="text/javascript" src="js/underscore.js"></script>
 	<script type="text/javascript" src="js/angular-moment.js"></script>
 	<script type="text/javascript" src="js/ui-bootstrap-tpls-0.14.3.js"></script>
+	<script type="text/javascript" src="js/angular-animate.js"></script>
+	<script type="text/javascript" src="js/loading-bar.js"></script>
 	<script type="text/javascript" src="js/angular-bootstrap-lightbox.js"></script>
 	<!-- models -->
 	<script type="text/javascript" src="src/model/UserCredentialDto.js"></script>

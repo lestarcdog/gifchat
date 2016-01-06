@@ -12,7 +12,7 @@ app.config(function($routeProvider, $httpProvider) {
 	$httpProvider.interceptors.push(function() {
 		return {
 			'responseError' : function(rejection) {
-				console.log("rejection :" +rejection);
+				console.log("rejection :" + rejection.data +" status: "+ rejection.status);
 			}
 		}
 	});

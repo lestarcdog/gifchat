@@ -24,8 +24,8 @@ public class CurrentLoggedUsers implements HttpSessionListener {
 	@Override
 	public void sessionDestroyed(HttpSessionEvent se) {
 		String username = (String) se.getSession().getAttribute(GifChatConstants.SESSION_USERNAME_ATT);
-		userService.removeUser(username);
 		log.debug("Session destroy for user {}", username);
+		userService.removeUser(username);
 	}
 
 }

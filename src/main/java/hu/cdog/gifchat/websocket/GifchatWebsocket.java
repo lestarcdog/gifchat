@@ -1,7 +1,10 @@
 package hu.cdog.gifchat.websocket;
 
+import java.io.IOException;
+
 import javax.inject.Inject;
 import javax.websocket.CloseReason;
+import javax.websocket.CloseReason.CloseCodes;
 import javax.websocket.EndpointConfig;
 import javax.websocket.OnClose;
 import javax.websocket.OnMessage;
@@ -35,8 +38,13 @@ public class GifchatWebsocket {
 	ChatUsersService chatUsersService;
 
 	@OnOpen
-	public void onOpen(Session session, EndpointConfig config) {
+	public void onOpen(Session session, EndpointConfig config) throws IOException {
 		String username = (String) config.getUserProperties().get(GifChatConstants.SESSION_USERNAME_ATT);
+		if (username == null) {
+			log.debug("Username was not specified closing session");
+			session.close(new CloseReason(CloseCodes.TRY_AGAIN_LATER, "No username was specified in the session"));
+			return;
+		}
 		log.info("Open session for {} with session {}", username, session.toString());
 		chatUsersService.addSessionToUserOrCreateNew(username, session);
 	}

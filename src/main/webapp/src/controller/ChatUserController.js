@@ -3,7 +3,7 @@ app.controller("ChatUserController",function($scope,$rootScope,ServerService) {
 	$scope.currentUsers = [];
 	
 	$scope.refresh = function() {
-		ServerService.currentTopUsers().success(function(data, status, headers, config) {
+		ServerService.currentTopUsers().then(function(data) {
 			$scope.currentUsers = data;
 		})
 	}

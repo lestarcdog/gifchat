@@ -29,6 +29,8 @@ public class ChatService {
 
 	private static final Logger log = LoggerFactory.getLogger(ChatService.class);
 
+	private static final String TRENDING_KW = "**trending**";
+
 	@Inject
 	MemDb memDb;
 
@@ -50,6 +52,9 @@ public class ChatService {
 	}
 
 	public void newMessage(String message, String username) {
+		if (message == null || message.isEmpty()) {
+			return;
+		}
 		GifMessage newMessage = generateAndSaveNewMessage(message, username);
 		chatUsersService.updateUserDependentProperties(username);
 		sendNewMessageToEveryone(newMessage);
@@ -81,18 +86,25 @@ public class ChatService {
 		int iteration = 0;
 		String keyword = null;
 		while (gifFormats == null && iteration < 5) {
-			keyword = possibleKeywords.getNextToken();
+			String nextToken = possibleKeywords.getNextToken();
 			try {
-				gifFormats = gifGenerator.randomGifForKeyword(keyword, memDb.getOriginalGifUrls());
+				gifFormats = gifGenerator.randomGifForKeyword(nextToken, memDb.getOriginalGifUrls());
 			} catch (Exception e) {
 				log.warn(e.getMessage(), e);
 			}
 			iteration++;
+			if (nextToken != null && gifFormats != null) {
+				keyword = nextToken;
+				log.debug("Found keyword '{}' for message '{}'", keyword, message);
+			} else {
+				keyword = TRENDING_KW;
+			}
 		}
 		if (gifFormats == null) {
 			try {
 				gifFormats = gifGenerator.randomGifForKeyword(null, Collections.emptyList());
-				keyword = "**trending**";
+				keyword = TRENDING_KW;
+				log.debug("Out of iteration choosing a trending for message '{}'", message);
 			} catch (IOException e) {
 				// TODO should add some random gif as last resort
 				log.error(e.getMessage(), e);

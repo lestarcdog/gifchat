@@ -42,6 +42,7 @@ app.controller("ChatController", function($scope, $rootScope, $location, ServerS
 		console.log(msg);
 		var img = [ {
 			"url" : msg.gifOriginal.url,
+			"thumbUrl" : msg.gifFixedHeight.url,
 			"caption" : msg.keyword
 		} ];
 		Lightbox.openModal(img, 0);
@@ -53,7 +54,8 @@ app.controller("ChatController", function($scope, $rootScope, $location, ServerS
 		}
 
 		sizeChatbox();
-		ServerService.all().success(function(data, status, headers, config) {
+		ServerService.all().then(function(data) {
+			console.log("controller "+data);
 			$scope.messages = data;
 			$scope.message = null;
 			$scope.typeing();

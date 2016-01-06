@@ -29,7 +29,7 @@ public class GifGenerator {
 	private static final Logger log = LoggerFactory.getLogger(GifGenerator.class);
 
 	private static final String GIPHY_SEARCH_URL = "http://api.giphy.com/v1/gifs/search?q=<<key>>&api_key=dc6zaTOxFJmzC";
-	private static final String GIPHY_TRENDING_URL = "http://api.giphy.com/v1/stickers/trending?api_key=dc6zaTOxFJmzC";
+	private static final String GIPHY_TRENDING_URL = "http://api.giphy.com/v1/stickers/trending?limit=50&api_key=dc6zaTOxFJmzC";
 	private final Random random = new Random();
 
 	private Client client;

@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -39,10 +38,11 @@ public class ChatUsersService {
 	}
 
 	public void removeUser(Session s) {
-		Optional<Entry<String, ChatUser>> findFirst = users.entrySet().stream()
-				.filter(l -> l.getValue().session.equals(s)).findFirst();
-		if (findFirst.isPresent()) {
-			removeUserFromList(findFirst.get().getKey());
+		for (Entry<String, ChatUser> entry : users.entrySet()) {
+			if (entry.getValue() == null || entry.getValue().getSession() == null
+					|| entry.getValue().getSession().equals(s)) {
+				removeUserFromList(entry.getKey());
+			}
 		}
 	}
 

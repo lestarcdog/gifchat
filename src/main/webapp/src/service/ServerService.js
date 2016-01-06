@@ -1,20 +1,39 @@
 app.factory("ServerService", function($http, $location, $q, BaseUrlConst) {
+	
+	var error = function(rejection) {
+		if(rejection.status == 401) {
+			$location.path("/");
+		} else {
+			console.log("Error");
+			console.log(rejection.data);
+			$q.reject(data);
+		}
+	}
+	
 	function all() {
-		return $http.get(BaseUrlConst + "/api/messages/all");
+		return $http.get(BaseUrlConst + "/api/messages/all").then(function (response) {
+			return response.data;
+		}, error);
 	}
 
 	function login(username, password) {
 		var cred = new UserCredentialDto(username, password);
-		return $http.post(BaseUrlConst + "/api/messages/login", cred);
+		return $http.post(BaseUrlConst + "/api/messages/login", cred).then(function(response) {
+			return response.data;
+		}, error);
 	}
 
 	function newMessage(message) {
 		var data = new UserMessageDto(message);
-		return $http.post(BaseUrlConst + "/api/messages/new", data);
+		return $http.post(BaseUrlConst + "/api/messages/new", data).then(function(response) {
+			return response.data;
+		}, error);
 	}
 
 	function currentTopUsers() {
-		return $http.get(BaseUrlConst + "/api/messages/currentTopUsers");
+		return $http.get(BaseUrlConst + "/api/messages/currentTopUsers").then(function(response) {
+			return response.data;
+		}, error);
 	}
 
 	//because of openshift listens on 8000
