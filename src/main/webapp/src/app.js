@@ -1,6 +1,6 @@
-var app = angular.module("GifApp", [ "ngRoute", "angularMoment","bootstrapLightbox" ]);
+var app = angular.module("GifApp", [ "ngRoute", "angularMoment", "bootstrapLightbox" ]);
 
-app.config(function($routeProvider, $httpProvider) {
+app.config(function($routeProvider, $httpProvider, LightboxProvider) {
 	$routeProvider.when("/login", {
 		templateUrl : "views/login.html",
 		controller : "LoginController"
@@ -9,13 +9,17 @@ app.config(function($routeProvider, $httpProvider) {
 		controller : "ChatController"
 	}).otherwise("/login");
 
+	// interceptor
 	$httpProvider.interceptors.push(function() {
 		return {
 			'responseError' : function(rejection) {
-				console.log("rejection :" + rejection.data +" status: "+ rejection.status);
+				console.log("rejection :" + rejection.data + " status: " + rejection.status);
 			}
-		}
+		};
 	});
+
+	// lightbox template
+	LightboxProvider.templateUrl = "src/template/lightbox-template.html";
 });
 
 app.run(function($rootScope) {

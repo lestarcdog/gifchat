@@ -2,7 +2,6 @@ app.controller("ChatController", function($scope, $rootScope, $location, ServerS
 	var chatBox = angular.element("#chatBox");
 	var chatBoxMargin = 100;
 	var userTxtField = angular.element("#user-txt-field");
-	var scrollIntervalHandler = null;
 	$scope.sending = false;
 	$scope.messages = [];
 	$scope.textMaxLength = 100;
@@ -18,7 +17,7 @@ app.controller("ChatController", function($scope, $rootScope, $location, ServerS
 			userTxtField.focus();
 		}, 1000);
 
-	}
+	};
 
 	$scope.sendMessage = function() {
 		$scope.sending = true;
@@ -39,14 +38,11 @@ app.controller("ChatController", function($scope, $rootScope, $location, ServerS
 	};
 
 	$scope.openOriginal = function(msg) {
-		console.log(msg);
-		var img = [ {
-			"url" : msg.gifOriginal.url,
-			"thumbUrl" : msg.gifFixedHeight.url,
-			"caption" : msg.keyword
-		} ];
-		Lightbox.openModal(img, 0);
-	}
+		var img = new LightBoxImage(msg);
+		console.log(img);
+		var imgs = [ img ];
+		Lightbox.openModal(imgs, 0);
+	};
 
 	function refresh() {
 		if (!$rootScope.loggedIn) {
@@ -55,7 +51,6 @@ app.controller("ChatController", function($scope, $rootScope, $location, ServerS
 
 		sizeChatbox();
 		ServerService.all().then(function(data) {
-			console.log("controller "+data);
 			$scope.messages = data;
 			$scope.message = null;
 			$scope.typeing();

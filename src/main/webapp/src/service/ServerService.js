@@ -1,17 +1,17 @@
 app.factory("ServerService", function($http, $location, $q, BaseUrlConst) {
-	
+
 	var error = function(rejection) {
-		if(rejection.status == 401) {
+		if (rejection.status == 401) {
 			$location.path("/");
 		} else {
 			console.log("Error");
 			console.log(rejection.data);
 			$q.reject(data);
 		}
-	}
-	
+	};
+
 	function all() {
-		return $http.get(BaseUrlConst + "/api/messages/all").then(function (response) {
+		return $http.get(BaseUrlConst + "/api/messages/all").then(function(response) {
 			return response.data;
 		}, error);
 	}
@@ -36,16 +36,16 @@ app.factory("ServerService", function($http, $location, $q, BaseUrlConst) {
 		}, error);
 	}
 
-	//because of openshift listens on 8000
+	// because of openshift listens on 8000
 	var port = $location.port();
-	if(port == 80) {
+	if (port == 80) {
 		port = 8000;
 	}
 	var url = "ws://" + $location.host() + ":" + port + BaseUrlConst + "/ws";
 	var ws = null;
 
 	function initWebSocketConnection() {
-		console.log("connection to url "+url);
+		console.log("connection to url " + url);
 		ws = new WebSocket(url);
 	}
 
@@ -55,12 +55,12 @@ app.factory("ServerService", function($http, $location, $q, BaseUrlConst) {
 			return;
 		}
 		var listener = function onMessageListener(event) {
-			//console.log("WS received: " + event.data);
+			// console.log("WS received: " + event.data);
 			var msg = JSON.parse(event.data);
 			if (msg._type = ".GifMessageDto") {
 				newMessageListener(msg);
 			}
-		}
+		};
 		ws.onmessage = listener;
 	}
 
@@ -69,8 +69,8 @@ app.factory("ServerService", function($http, $location, $q, BaseUrlConst) {
 		login : login,
 		newMessage : newMessage,
 		currentTopUsers : currentTopUsers,
-		initWebSocketConnection: initWebSocketConnection,
-		addListeners: addListeners
+		initWebSocketConnection : initWebSocketConnection,
+		addListeners : addListeners
 
 	};
 });
