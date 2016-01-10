@@ -1,4 +1,5 @@
-var app = angular.module("GifApp", [ "ngRoute", "angularMoment", "bootstrapLightbox" ]);
+var app = angular.module("GifApp", ["ngRoute", "angularMoment",
+		"bootstrapLightbox", "infinite-scroll"]);
 
 app.config(function($routeProvider, $httpProvider, LightboxProvider) {
 	$routeProvider.when("/login", {
@@ -13,7 +14,8 @@ app.config(function($routeProvider, $httpProvider, LightboxProvider) {
 	$httpProvider.interceptors.push(function() {
 		return {
 			'responseError' : function(rejection) {
-				console.log("rejection :" + rejection.data + " status: " + rejection.status);
+				console.log("rejection :" + rejection.data + " status: "
+						+ rejection.status);
 			}
 		};
 	});

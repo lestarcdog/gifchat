@@ -40,10 +40,6 @@ public class ChatService {
 	@Inject
 	ChatUsersService chatUsersService;
 
-	public List<GifMessageDto> getAll() {
-		return map2Dto(memDb.getAll());
-	}
-
 	public List<GifMessageDto> getNewMessages(Long userTime) {
 		LocalDateTime userTimeLd = LocalDateTime.ofInstant(Instant.ofEpochMilli(userTime), GifChatConstants.UTC_ZONE);
 		List<GifMessage> filtered = memDb.getAll().stream().filter(l -> l.getSentTime().isAfter(userTimeLd))
@@ -59,6 +55,14 @@ public class ChatService {
 		chatUsersService.updateUserDependentProperties(username);
 		sendNewMessageToEveryone(newMessage);
 
+	}
+
+	public List<GifMessageDto> getLastMessages() {
+		return map2Dto(memDb.getCurrents());
+	}
+
+	public List<GifMessageDto> earlierThan(LocalDateTime currentTime) {
+		return map2Dto(memDb.earlierThan(currentTime));
 	}
 
 	private void sendNewMessageToEveryone(GifMessage message) {
@@ -118,4 +122,5 @@ public class ChatService {
 	private List<GifMessageDto> map2Dto(List<GifMessage> messages) {
 		return messages.stream().map(l -> new GifMessageDto(l)).collect(Collectors.toList());
 	}
+
 }

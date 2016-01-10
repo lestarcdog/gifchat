@@ -28,8 +28,8 @@
 				</div>
 
 			</div>
-			<div class="col-sm-7">
-				<div id="chatBox">
+			<div class="col-sm-7" ng-controller="ChatBoxController">
+				<div id="chatBox" infinite-scroll="" >
 					<div class="message-item" ng-class="{ 'message-right' : msg.username == username, 'message-left' : msg.username != username}"
 						ng-repeat="msg in messages" chat-message-scroll>
 						<div class="username">{{msg.username}}</div>

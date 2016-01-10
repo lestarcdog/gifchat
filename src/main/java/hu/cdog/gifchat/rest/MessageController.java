@@ -1,5 +1,7 @@
 package hu.cdog.gifchat.rest;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -57,10 +59,18 @@ public class MessageController {
 	}
 
 	@GET
-	@Path("/all")
+	@Path("/lastMessages")
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<GifMessageDto> all() {
-		return chatService.getAll();
+	public List<GifMessageDto> lastMessages() {
+		return chatService.getLastMessages();
+	}
+
+	@GET
+	@Path("/earlierThan")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<GifMessageDto> earlierThan(@QueryParam(value = "ts") Long currentTimestamp) {
+		return chatService.earlierThan(
+				LocalDateTime.ofInstant(Instant.ofEpochSecond(currentTimestamp), GifChatConstants.UTC_ZONE));
 	}
 
 	@GET

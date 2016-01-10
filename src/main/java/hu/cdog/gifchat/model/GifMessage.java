@@ -12,14 +12,10 @@ public class GifMessage {
 	private String keyword;
 	private GifImage fixedHeightImage;
 	private GifImage originalImage;
-	private final LocalDateTime sentTime;
+	private LocalDateTime sentTime;
 
 	public GifMessage() {
 		sentTime = LocalDateTime.now(GifChatConstants.UTC_ZONE);
-	}
-
-	public LocalDateTime getSentTime() {
-		return sentTime;
 	}
 
 	public GifMessage(String username, String userText, String keyword, GifImageFormats imageFormats) {
@@ -28,7 +24,6 @@ public class GifMessage {
 		this.keyword = keyword;
 		this.fixedHeightImage = imageFormats.getFixed_height();
 		this.originalImage = imageFormats.getOriginal();
-		sentTime = LocalDateTime.now(GifChatConstants.UTC_ZONE);
 	}
 
 	public String getKeyword() {
@@ -69,6 +64,18 @@ public class GifMessage {
 
 	public void setOriginalImage(GifImage originalImage) {
 		this.originalImage = originalImage;
+	}
+
+	public LocalDateTime getSentTime() {
+		return sentTime;
+	}
+
+	public void setSentTime(LocalDateTime sentTime) {
+		this.sentTime = sentTime;
+	}
+
+	public void setSentTimeNow() {
+		this.sentTime = LocalDateTime.now();
 	}
 
 }
