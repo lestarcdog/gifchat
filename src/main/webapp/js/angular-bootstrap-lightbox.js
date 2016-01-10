@@ -141,6 +141,14 @@ angular.module('bootstrapLightbox').provider(
 				return image.largeUrl;
 			};
 
+			this.getImageLargeWidth = function(image) {
+				return image.largeWidth;
+			};
+
+			this.getImageLargeHeight = function(image) {
+				return image.largeHeight;
+			};
+
 			/**
 			 * Calculate the max and min limits to the width and height of the
 			 * displayed image (all are optional). The max dimensions override
@@ -294,6 +302,8 @@ angular.module('bootstrapLightbox').provider(
 						Lightbox.fullScreenMode = this.fullScreenMode;
 						Lightbox.getImageUrl = this.getImageUrl;
 						Lightbox.getImageLargeUrl = this.getImageLargeUrl;
+						Lightbox.largeImageWidth = this.getImageLargeWidth;
+						Lightbox.largeImageHeight = this.getImageLargeHeight;
 						Lightbox.getImageCaption = this.getImageCaption;
 						Lightbox.calculateImageDimensionLimits = this.calculateImageDimensionLimits;
 						Lightbox.calculateModalDimensions = this.calculateModalDimensions;
@@ -461,9 +471,9 @@ angular.module('bootstrapLightbox').provider(
 							var successLarge = function(largeUrl) {
 								// update service properties for the image
 
-								Lightbox.imageLargeUrl = imageLargeUrl;
+								Lightbox.imageUrl = imageLargeUrl;
 
-								console.log("Success large normal");
+								console.log("Success large");
 
 								// restore the loading flag and complete the
 								// loading bar
@@ -719,6 +729,7 @@ angular.module('bootstrapLightbox').directive('lightboxSrc',
 			return {
 				'link' : function(scope, element, attrs) {
 					// resize the img element and the containing modal
+
 					var resize = function() {
 						// get the window dimensions
 						var windowWidth = $window.innerWidth;
@@ -788,8 +799,13 @@ angular.module('bootstrapLightbox').directive('lightboxSrc',
 								// these variables must be set before resize(),
 								// as they are used in
 								// it
-								imageWidth = image.naturalWidth;
-								imageHeight = image.naturalHeight;
+								// imageWidth = image.naturalWidth;
+								// imageHeight = image.naturalHeight;
+
+								imageWidth = Lightbox.largeImageWidth(Lightbox.image);
+								imageHeight = Lightbox.largeImageHeight(Lightbox.image);
+								console.log(imageWidth);
+								console.log(imageHeight);
 
 								// resize the img element and the containing
 								// modal
