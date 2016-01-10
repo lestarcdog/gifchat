@@ -1,6 +1,8 @@
 package hu.cdog.gifchat.memdb;
 
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedList;
@@ -16,7 +18,7 @@ import hu.cdog.gifchat.model.GifMessage;
 @Singleton
 public class MemDb {
 
-	private final List<GifMessage> messages = new LinkedList<>();
+	private final List<GifMessage> messages = new ArrayList<>();
 	private final List<String> gifUrls = new LinkedList<>();
 
 	public void add(GifMessage message) {
@@ -25,19 +27,18 @@ public class MemDb {
 			gifUrls.remove(0);
 		}
 		// set sent time
-		message.setSentTimeNow();
+		message.setSentTimeNowUtc();
 		messages.add(message);
 		gifUrls.add(message.getOriginalImage().getUrl());
 	}
 
 	@Lock(LockType.READ)
 	public List<GifMessage> getCurrents() {
-		if (messages.size() < GifChatConstants.CURRENT_IMAGE_RETURN_LIMIT + 1) {
+		if (messages.size() <= GifChatConstants.CURRENT_IMAGE_RETURN_LIMIT) {
 			return Collections.unmodifiableList(messages);
 		} else {
-			int inclusiveAlso = messages.size() + 1;
-			return Collections.unmodifiableList(
-					messages.subList(inclusiveAlso - GifChatConstants.CURRENT_IMAGE_RETURN_LIMIT, inclusiveAlso));
+			int startFrom = messages.size() - GifChatConstants.CURRENT_IMAGE_RETURN_LIMIT;
+			return Collections.unmodifiableList(messages.subList(startFrom, messages.size()));
 		}
 
 	}
@@ -54,9 +55,13 @@ public class MemDb {
 	public List<GifMessage> earlierThan(LocalDateTime current) {
 		GifMessage dummy = new GifMessage();
 		dummy.setSentTime(current);
-		int foundIdx = Collections.binarySearch(messages, dummy, Comparator.comparing(GifMessage::getSentTime));
+		int foundIdx = Collections.binarySearch(messages, dummy,
+				Comparator.comparing(l -> l.getSentTime().toInstant(ZoneOffset.UTC)));
 		if (foundIdx > -1) {
-			// Exclusive the current
+			// already the first element
+			if (foundIdx == 0) {
+				return Collections.emptyList();
+			}
 			int sublistFrom = foundIdx - GifChatConstants.CURRENT_IMAGE_RETURN_LIMIT;
 			if (sublistFrom < 0) {
 				// send from the begininng

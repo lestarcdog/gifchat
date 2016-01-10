@@ -70,7 +70,7 @@ public class MessageController {
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<GifMessageDto> earlierThan(@QueryParam(value = "ts") Long currentTimestamp) {
 		return chatService.earlierThan(
-				LocalDateTime.ofInstant(Instant.ofEpochSecond(currentTimestamp), GifChatConstants.UTC_ZONE));
+				LocalDateTime.ofInstant(Instant.ofEpochMilli(currentTimestamp), GifChatConstants.UTC_ZONE));
 	}
 
 	@GET

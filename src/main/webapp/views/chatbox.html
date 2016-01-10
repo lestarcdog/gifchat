@@ -26,12 +26,12 @@
 						<button class="btn btn-default" ng-click="refresh()">Refresh</button>
 					</div>
 				</div>
-
 			</div>
 			<div class="col-sm-7" ng-controller="ChatBoxController">
-				<div id="chatBox" infinite-scroll="" >
+				<div id="chatBox">
+					<div ng-if="chatBoxLazyLoading" class="text-center">Loading...</div>
 					<div class="message-item" ng-class="{ 'message-right' : msg.username == username, 'message-left' : msg.username != username}"
-						ng-repeat="msg in messages" chat-message-scroll>
+						ng-repeat="msg in messages" scroll-bottom>
 						<div class="username">{{msg.username}}</div>
 						<div class="message-content">
 							<div class="gif" ng-click="openOriginal(msg)">
@@ -39,11 +39,14 @@
 							</div>
 							<div class="usertext">
 								<div>{{msg.userText}}</div>
-								<div class="senttime"><span am-time-ago="msg.sentTime"></span></div>
+								<div class="senttime">
+									<span am-time-ago="msg.sentTime"></span>
+								</div>
 							</div>
 						</div>
 					</div>
 					<span id="lastAnchor">.</span>
+					<div class="clearfix"></div>
 				</div>
 			</div>
 		</div>

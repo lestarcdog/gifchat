@@ -7,6 +7,7 @@ import hu.cdog.gifchat.model.giphy.GifImage;
 import hu.cdog.gifchat.model.giphy.GifImageFormats;
 
 public class GifMessage {
+
 	private String username;
 	private String userText;
 	private String keyword;
@@ -15,7 +16,6 @@ public class GifMessage {
 	private LocalDateTime sentTime;
 
 	public GifMessage() {
-		sentTime = LocalDateTime.now(GifChatConstants.UTC_ZONE);
 	}
 
 	public GifMessage(String username, String userText, String keyword, GifImageFormats imageFormats) {
@@ -74,8 +74,13 @@ public class GifMessage {
 		this.sentTime = sentTime;
 	}
 
-	public void setSentTimeNow() {
-		this.sentTime = LocalDateTime.now();
+	public void setSentTimeNowUtc() {
+		this.sentTime = LocalDateTime.now(GifChatConstants.UTC_ZONE);
+	}
+
+	@Override
+	public String toString() {
+		return "GifMessage [username=" + username + ", userText=" + userText + ", sentTime=" + sentTime + "]";
 	}
 
 }

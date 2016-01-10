@@ -1,36 +1,34 @@
-var app = angular.module("GifApp", ["ngRoute", "angularMoment",
-		"bootstrapLightbox", "infinite-scroll"]);
+var app = angular.module("GifApp", [ "ngRoute", "angularMoment", "bootstrapLightbox" ]);
 
 app.config(function($routeProvider, $httpProvider, LightboxProvider) {
-	$routeProvider.when("/login", {
-		templateUrl : "views/login.html",
-		controller : "LoginController"
-	}).when("/chat", {
-		templateUrl : "views/chatbox.html",
-		controller : "ChatController"
-	}).otherwise("/login");
+    $routeProvider.when("/login", {
+        templateUrl : "views/login.html",
+        controller : "LoginController"
+    }).when("/chat", {
+        templateUrl : "views/chatbox.html",
+        controller : "ChatController"
+    }).otherwise("/login");
 
-	// interceptor
-	$httpProvider.interceptors.push(function() {
-		return {
-			'responseError' : function(rejection) {
-				console.log("rejection :" + rejection.data + " status: "
-						+ rejection.status);
-			}
-		};
-	});
+    // interceptor
+    $httpProvider.interceptors.push(function() {
+        return {
+            'responseError' : function(rejection) {
+                console.log("rejection :" + rejection.data + " status: " + rejection.status);
+            }
+        };
+    });
 
-	// lightbox template
-	LightboxProvider.templateUrl = "src/template/lightbox-template.html";
+    // lightbox template
+    LightboxProvider.templateUrl = "src/template/lightbox-template.html";
 });
 
 app.run(function($rootScope) {
-	$rootScope.loggedIn = false;
-	$rootScope.username = null;
+    $rootScope.loggedIn = false;
+    $rootScope.username = null;
 });
 
 app.constant("SessionStorageConst", {
-	"usernameKey" : "username"
+    "usernameKey" : "username"
 });
 
 app.constant("BaseUrlConst", '${baseUrlConst}');
