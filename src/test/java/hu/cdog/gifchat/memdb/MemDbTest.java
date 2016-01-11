@@ -34,7 +34,7 @@ public class MemDbTest {
 		GifMessage msg = null;
 		gf.setOriginal(new GifImage());
 		for (int i = 0; i < GifChatConstants.CURRENT_IMAGE_RETURN_LIMIT * 3; i++) {
-			msg = new GifMessage("a", String.valueOf(i), "asdf", gf);
+			msg = new GifMessage("a", String.valueOf(i), "asdf", "asdf", gf);
 			db.add(msg);
 		}
 
@@ -50,7 +50,7 @@ public class MemDbTest {
 		GifImageFormats gf = new GifImageFormats();
 		gf.setOriginal(new GifImage());
 		for (int i = 0; i < GifChatConstants.CURRENT_IMAGE_RETURN_LIMIT * 3; i++) {
-			msg = new GifMessage("a", String.valueOf(i), "asdf", gf);
+			msg = new GifMessage("a", String.valueOf(i), "asdf", "asdf", gf);
 			db.add(msg);
 			Thread.sleep(5);
 		}
