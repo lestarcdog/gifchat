@@ -1,9 +1,4 @@
 {
-  "libs": [
-    "ecma5",
-    "browser",
-    "jquery"
-  ],
   "plugins": {
     "guess-types": {
       
@@ -14,8 +9,16 @@
     "angular": {
       
     },
+    "browser-extension": {
+      
+    },
     "bootstrap": {
       
     }
-  }
+  },
+  "libs": [
+    "ecma5",
+    "browser",
+    "jquery"
+  ]
 }

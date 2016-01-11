@@ -1,4 +1,4 @@
-package hu.cdog.gifchat.gifgenerator;
+package hu.cdog.gifchat.service.gifgenerator;
 
 import java.io.IOException;
 import java.util.List;

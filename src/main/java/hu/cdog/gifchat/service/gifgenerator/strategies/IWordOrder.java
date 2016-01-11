@@ -1,4 +1,4 @@
-package hu.cdog.gifchat.gifgenerator.strategies;
+package hu.cdog.gifchat.service.gifgenerator.strategies;
 
 import java.util.List;
 

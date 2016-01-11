@@ -4,7 +4,8 @@ import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
 import org.junit.Test;
 
-import hu.cdog.gifchat.gifgenerator.strategies.LongestWordFirst;
+import hu.cdog.gifchat.service.gifgenerator.MessageTokinezer;
+import hu.cdog.gifchat.service.gifgenerator.strategies.LongestWordFirst;
 
 public class MessageTokinezerTest {
 

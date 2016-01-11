@@ -16,13 +16,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import hu.cdog.gifchat.GifChatConstants;
-import hu.cdog.gifchat.gifgenerator.GifGenerator;
-import hu.cdog.gifchat.gifgenerator.MessageTokinezer;
-import hu.cdog.gifchat.gifgenerator.strategies.LongestWordFirst;
 import hu.cdog.gifchat.memdb.MemDb;
 import hu.cdog.gifchat.model.GifMessage;
 import hu.cdog.gifchat.model.dto.GifMessageDto;
 import hu.cdog.gifchat.model.giphy.GifImageFormats;
+import hu.cdog.gifchat.service.gifgenerator.GifGenerator;
+import hu.cdog.gifchat.service.gifgenerator.MessageTokinezer;
+import hu.cdog.gifchat.service.gifgenerator.strategies.LongestWordFirst;
 
 @Stateless
 public class ChatService {
