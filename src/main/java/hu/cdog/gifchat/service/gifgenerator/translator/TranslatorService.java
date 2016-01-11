@@ -4,12 +4,15 @@ import java.io.IOException;
 import java.util.Properties;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
+import javax.annotation.Resource;
+import javax.ejb.Lock;
+import javax.ejb.LockType;
 import javax.ejb.Singleton;
 import javax.ejb.Timeout;
 import javax.ejb.Timer;
 import javax.ejb.TimerConfig;
 import javax.ejb.TimerService;
-import javax.inject.Inject;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
@@ -25,8 +28,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @Singleton
 public class TranslatorService {
 
-	private static final String OAUTH_URL = "https://datamarket.accesscontrol.windows.net/v2/OAuth2-13";
 	private static final Logger log = LoggerFactory.getLogger(TranslatorService.class);
+
+	private static final String OAUTH_URL = "https://datamarket.accesscontrol.windows.net/v2/OAuth2-13";
+	private static final String TRANSLATE_URL = "http://api.microsofttranslator.com/V2/Ajax.svc/Translate";
 	private static final ObjectMapper mapper = new ObjectMapper();
 	public static final int OAUTH_RETRY_TIME = 6000;
 
@@ -39,12 +44,19 @@ public class TranslatorService {
 	private MsTranslateApiResponse accessToken = null;
 	private final Client client = ClientBuilder.newClient();
 
-	@Inject
+	@Resource
 	TimerService timerService;
 
 	@PostConstruct
 	public void wakeUp() {
 		getNewApiTokenKey(null);
+	}
+
+	@PreDestroy
+	public void destroy() {
+		if (client != null) {
+			client.close();
+		}
 	}
 
 	@Timeout
@@ -84,6 +96,26 @@ public class TranslatorService {
 				timerService.createSingleActionTimer(OAUTH_RETRY_TIME, tc);
 			}
 		}
+	}
+
+	@Lock(LockType.READ)
+	public String translate(String msg) {
+		log.debug("Translating {}", msg);
+		if (accessToken != null) {
+			WebTarget translate = client.target(TRANSLATE_URL).queryParam("text", msg).queryParam("to", "en");
+
+			Response response = translate.request().header("Authorization", "Bearer " + accessToken.getAccess_token())
+					.get();
+			String translatedMessage = response.readEntity(String.class);
+			log.debug(translatedMessage);
+			if (translatedMessage.contains("ArgumentException")) {
+				return msg;
+			}
+			return translatedMessage;
+		} else {
+			return msg;
+		}
+
 	}
 
 	public static class MsTranslateApiResponse {

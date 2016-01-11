@@ -23,6 +23,7 @@ import hu.cdog.gifchat.model.giphy.GifImageFormats;
 import hu.cdog.gifchat.service.gifgenerator.GifGenerator;
 import hu.cdog.gifchat.service.gifgenerator.MessageTokinezer;
 import hu.cdog.gifchat.service.gifgenerator.strategies.LongestWordFirst;
+import hu.cdog.gifchat.service.gifgenerator.translator.TranslatorService;
 
 @Stateless
 public class ChatService {
@@ -36,6 +37,9 @@ public class ChatService {
 
 	@Inject
 	GifGenerator gifGenerator;
+
+	@Inject
+	TranslatorService translatorService;
 
 	@Inject
 	ChatUsersService chatUsersService;
@@ -84,8 +88,9 @@ public class ChatService {
 		}
 	}
 
-	private GifMessage generateAndSaveNewMessage(String message, String username) {
-		MessageTokinezer possibleKeywords = new MessageTokinezer(message, LongestWordFirst.get());
+	private GifMessage generateAndSaveNewMessage(String rawMessage, String username) {
+		String translatedMessage = translatorService.translate(rawMessage);
+		MessageTokinezer possibleKeywords = new MessageTokinezer(translatedMessage, LongestWordFirst.get());
 		GifImageFormats gifFormats = null;
 		int iteration = 0;
 		String keyword = null;
@@ -99,7 +104,7 @@ public class ChatService {
 			iteration++;
 			if (nextToken != null && gifFormats != null) {
 				keyword = nextToken;
-				log.debug("Found keyword '{}' for message '{}'", keyword, message);
+				log.debug("Found keyword '{}' for message '{}'", keyword, translatedMessage);
 			} else {
 				keyword = TRENDING_KW;
 			}
@@ -108,13 +113,13 @@ public class ChatService {
 			try {
 				gifFormats = gifGenerator.randomGifForKeyword(null, Collections.emptyList());
 				keyword = TRENDING_KW;
-				log.debug("Out of iteration choosing a trending for message '{}'", message);
+				log.debug("Out of iteration choosing a trending for message '{}'", translatedMessage);
 			} catch (IOException e) {
 				// TODO should add some random gif as last resort
 				log.error(e.getMessage(), e);
 			}
 		}
-		GifMessage gifMessage = new GifMessage(username, message, keyword, gifFormats);
+		GifMessage gifMessage = new GifMessage(username, rawMessage, translatedMessage, keyword, gifFormats);
 		memDb.add(gifMessage);
 		return gifMessage;
 	}

@@ -10,6 +10,7 @@ public class GifMessage {
 
 	private String username;
 	private String userText;
+	private String translatedMessage;
 	private String keyword;
 	private GifImage fixedHeightImage;
 	private GifImage originalImage;
@@ -18,9 +19,11 @@ public class GifMessage {
 	public GifMessage() {
 	}
 
-	public GifMessage(String username, String userText, String keyword, GifImageFormats imageFormats) {
+	public GifMessage(String username, String userText, String translatedMessage, String keyword,
+			GifImageFormats imageFormats) {
 		this.username = username;
 		this.userText = userText;
+		this.translatedMessage = translatedMessage;
 		this.keyword = keyword;
 		this.fixedHeightImage = imageFormats.getFixed_height();
 		this.originalImage = imageFormats.getOriginal();
@@ -76,6 +79,14 @@ public class GifMessage {
 
 	public void setSentTimeNowUtc() {
 		this.sentTime = LocalDateTime.now(GifChatConstants.UTC_ZONE);
+	}
+
+	public String getTranslatedMessage() {
+		return translatedMessage;
+	}
+
+	public void setTranslatedMessage(String translatedMessage) {
+		this.translatedMessage = translatedMessage;
 	}
 
 	@Override

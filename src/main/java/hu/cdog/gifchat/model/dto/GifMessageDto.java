@@ -7,6 +7,7 @@ import hu.cdog.gifchat.model.GifMessage;
 public class GifMessageDto extends BaseDto {
 	private String username;
 	private String userText;
+	private String translatedMessage;
 	private String keyword;
 	private GifImageDto gifFixedHeight;
 	private GifImageDto gifOriginal;
@@ -18,6 +19,7 @@ public class GifMessageDto extends BaseDto {
 	public GifMessageDto(GifMessage message) {
 		this.username = message.getUsername();
 		this.userText = message.getUserText();
+		this.translatedMessage = message.getTranslatedMessage();
 		this.keyword = message.getKeyword();
 		this.gifFixedHeight = new GifImageDto(message.getFixedHeightImage());
 		this.gifOriginal = new GifImageDto(message.getOriginalImage());
@@ -70,6 +72,14 @@ public class GifMessageDto extends BaseDto {
 
 	public void setGifOriginal(GifImageDto gifOriginal) {
 		this.gifOriginal = gifOriginal;
+	}
+
+	public String getTranslatedMessage() {
+		return translatedMessage;
+	}
+
+	public void setTranslatedMessage(String translatedMessage) {
+		this.translatedMessage = translatedMessage;
 	}
 
 }

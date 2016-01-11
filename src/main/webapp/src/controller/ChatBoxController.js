@@ -57,6 +57,8 @@ app.controller("ChatBoxController", [ "$scope", "ServerService", "Lightbox", fun
 
     // on new message listener
     var onNewMessage = function(gifMessage) {
+    	console.log("== DEBUG INCOMING MSG ==");
+    	console.log(gifMessage)
         $scope.messages.push(gifMessage);
     };
 
