@@ -64,7 +64,8 @@ public class TranslatorService {
 		try {
 			log.debug("Trying to acquire token from {}", OAUTH_URL);
 			Properties msTranslate = new Properties();
-			msTranslate.load(TranslatorService.class.getResourceAsStream(MS_TRANSLATE_PROP_FILE));
+			msTranslate
+					.load(Thread.currentThread().getContextClassLoader().getResourceAsStream(MS_TRANSLATE_PROP_FILE));
 
 			WebTarget target = client.target(OAUTH_URL);
 

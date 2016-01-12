@@ -88,13 +88,13 @@
 	<build>
 		<resources>
 			<resource>
-				<directory>src/main/java</directory>
+				<directory>src/main/resources</directory>
 				<filtering>true</filtering>
 			</resource>
 		</resources>
 		<testResources>
 			<testResource>
-				<directory>src/test/java</directory>
+				<directory>src/test/resources</directory>
 				<filtering>true</filtering>
 			</testResource>
 		</testResources>
@@ -103,19 +103,6 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-war-plugin</artifactId>
 				<version>2.6</version>
-				<configuration>
-					<webResources>
-						<webResource>
-							<directory>src/main/webapp</directory>
-							<includes>
-								<include>**/index.html</include>
-								<include>**/app.js</include>
-							</includes>
-							<filtering>true</filtering>
-						</webResource>
-					</webResources>
-					<warName>ROOT</warName>
-				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>

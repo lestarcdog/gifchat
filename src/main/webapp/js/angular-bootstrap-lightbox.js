@@ -21,20 +21,8 @@ try {
 	angular.module('bootstrapLightbox').requires.push('videosharing-embed');
 } catch (e) {
 }
-angular
-		.module('bootstrapLightbox')
-		.run(
-				[
-						'$templateCache',
-						function($templateCache) {
-							'use strict';
-
-							$templateCache
-									.put(
-											'lightbox.html',
-											"<div class=modal-body ng-swipe-left=Lightbox.nextImage() ng-swipe-right=Lightbox.prevImage()><div class=lightbox-nav><button class=close aria-hidden=true ng-click=$dismiss()>×</button><div class=btn-group ng-if=\"Lightbox.images.length > 1\"><a class=\"btn btn-xs btn-default\" ng-click=Lightbox.prevImage()>‹ Previous</a> <a ng-href={{Lightbox.imageUrl}} target=_blank class=\"btn btn-xs btn-default\" title=\"Open in new tab\">Open image in new tab</a> <a class=\"btn btn-xs btn-default\" ng-click=Lightbox.nextImage()>Next ›</a></div></div><div class=lightbox-image-container><div class=lightbox-image-caption><span>{{Lightbox.imageCaption}}</span></div><img ng-if=!Lightbox.isVideo(Lightbox.image) lightbox-src={{Lightbox.imageUrl}}><div ng-if=Lightbox.isVideo(Lightbox.image) class=\"embed-responsive embed-responsive-16by9\"><video ng-if=!Lightbox.isSharedVideo(Lightbox.image) lightbox-src={{Lightbox.imageUrl}} controls autoplay></video><embed-video ng-if=Lightbox.isSharedVideo(Lightbox.image) lightbox-src={{Lightbox.imageUrl}} ng-href={{Lightbox.imageUrl}} iframe-id=lightbox-video class=embed-responsive-item><a ng-href={{Lightbox.imageUrl}}>Watch video</a></embed-video></div></div></div>");
-
-						} ]);
+angular.module('bootstrapLightbox');
+		
 /**
  * @class ImageLoader
  * @classdesc Service for loading an image.
@@ -473,7 +461,6 @@ angular.module('bootstrapLightbox').provider(
 
 								Lightbox.imageUrl = imageLargeUrl;
 
-								console.log("Success large");
 
 								// restore the loading flag and complete the
 								// loading bar
@@ -497,8 +484,6 @@ angular.module('bootstrapLightbox').provider(
 								if (cfpLoadingBar) {
 									cfpLoadingBar.complete();
 								}
-
-								console.log("Success loading normal");
 
 								// load large resolution image
 
@@ -804,8 +789,6 @@ angular.module('bootstrapLightbox').directive('lightboxSrc',
 
 								imageWidth = Lightbox.largeImageWidth(Lightbox.image);
 								imageHeight = Lightbox.largeImageHeight(Lightbox.image);
-								console.log(imageWidth);
-								console.log(imageHeight);
 
 								// resize the img element and the containing
 								// modal
