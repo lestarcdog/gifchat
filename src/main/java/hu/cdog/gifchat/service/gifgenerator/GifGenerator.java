@@ -28,8 +28,10 @@ public class GifGenerator {
 
 	private static final Logger log = LoggerFactory.getLogger(GifGenerator.class);
 
-	private static final String GIPHY_SEARCH_URL = "http://api.giphy.com/v1/gifs/search?q=<<key>>&api_key=dc6zaTOxFJmzC";
-	private static final String GIPHY_TRENDING_URL = "http://api.giphy.com/v1/stickers/trending?limit=50&api_key=dc6zaTOxFJmzC";
+	private static final String GIPHY_SEARCH_URL = "http://api.giphy.com/v1/gifs/search?q=<<key>>&limit=10&api_key=dc6zaTOxFJmzC";
+	private static final String GIPHY_TRENDING_URL = "http://api.giphy.com/v1/gifs/translate?limit=50&api_key=dc6zaTOxFJmzC";
+	private static final String GIPHY_RANDOM = "http://api.giphy.com/v1/stickers/trending?limit=50&api_key=dc6zaTOxFJmzC";
+	private static final String GIPHY_TRANSLATE = "http://api.giphy.com/v1/stickers/trending?s=<<key>>&limit=10&api_key=dc6zaTOxFJmzC";
 	private final Random random = new Random();
 
 	private Client client;
@@ -44,8 +46,22 @@ public class GifGenerator {
 		client.close();
 	}
 
+	/**
+	 * Searches based on the keyword for a gif. If no message found returns
+	 * null. On a null keyword returns a ternding gif.
+	 * 
+	 * @param keyword
+	 *            can be null keyword to search for
+	 * @param gifOriginalUrls
+	 *            already posted gifs try to return a different which not
+	 *            contained in the list
+	 * @return
+	 * @throws JsonParseException
+	 * @throws JsonMappingException
+	 * @throws IOException
+	 */
 	@Lock(LockType.READ)
-	public GifImageFormats randomGifForKeyword(String keyword, List<String> gifOriginalUrls)
+	public GifImageFormats searchGifForKeyword(String keyword, List<String> gifOriginalUrls)
 			throws JsonParseException, JsonMappingException, IOException {
 		String url = null;
 		if (keyword == null) {
@@ -53,23 +69,20 @@ public class GifGenerator {
 			url = trendingUrl();
 		} else {
 			log.debug("Searching gif for keyword: {}", keyword);
-			url = giphySearchUrl(keyword);
+			url = giphyTranslateUrl(keyword);
 		}
-		Response result = client.target(url).request().get();
-		String rawContent = result.readEntity(String.class);
-		result.close();
 
-		ObjectMapper mapper = new ObjectMapper();
-		GiphyData gipyData = mapper.readValue(rawContent, GiphyData.class);
-		GifImageFormats gif = null;
+		GiphyData giphyData = fetchGifsFromUrl(url);
 
 		// nothing has found for the keyword
-		if (gipyData.getData().isEmpty()) {
+		if (giphyData.getData().isEmpty()) {
 			return null;
 		}
-		int maxrand = gipyData.getData().size();
+
+		GifImageFormats gif = null;
+		int maxrand = giphyData.getData().size();
 		for (int i = 0; i < 5; i++) {
-			gif = gipyData.getData().get(random.nextInt(maxrand)).getImages();
+			gif = giphyData.getData().get(random.nextInt(maxrand)).getImages();
 			if (!gifOriginalUrls.contains(gif.getOriginal().getUrl())) {
 				break;
 			}
@@ -78,12 +91,38 @@ public class GifGenerator {
 
 	}
 
+	/**
+	 * Picks a random gif image at last
+	 * 
+	 * @return not null random image
+	 * @throws IOException
+	 * @throws JsonMappingException
+	 * @throws JsonParseException
+	 */
+	public GifImageFormats pickRandomImage() throws JsonParseException, JsonMappingException, IOException {
+		return fetchGifsFromUrl(GIPHY_RANDOM).getData().get(0).getImages();
+	}
+
+	private GiphyData fetchGifsFromUrl(String url) throws JsonParseException, JsonMappingException, IOException {
+		Response result = client.target(url).request().get();
+		String rawContent = result.readEntity(String.class);
+		result.close();
+
+		ObjectMapper mapper = new ObjectMapper();
+		return mapper.readValue(rawContent, GiphyData.class);
+	}
+
 	private String trendingUrl() {
 		return GIPHY_TRENDING_URL;
 	}
 
+	@SuppressWarnings("unused")
 	private static String giphySearchUrl(String keyword) {
 		return GIPHY_SEARCH_URL.replace("<<key>>", keyword);
+	}
+
+	private static String giphyTranslateUrl(String keyword) {
+		return GIPHY_TRANSLATE.replace("<<key>>", keyword);
 	}
 
 }

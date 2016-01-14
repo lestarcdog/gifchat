@@ -3,7 +3,6 @@ package hu.cdog.gifchat.service;
 import java.io.IOException;
 import java.time.Instant;
 import java.time.LocalDateTime;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -89,19 +88,26 @@ public class ChatService {
 	}
 
 	private GifMessage generateAndSaveNewMessage(String rawMessage, String username) {
+		// translate to english
 		String translatedMessage = translatorService.translate(rawMessage);
+
+		// tokenize the message
 		MessageTokinezer possibleKeywords = new MessageTokinezer(translatedMessage, LongestWordFirst.get());
 		GifImageFormats gifFormats = null;
 		int iteration = 0;
 		String keyword = null;
+
 		while (gifFormats == null && iteration < 5) {
 			String nextToken = possibleKeywords.getNextToken();
 			try {
-				gifFormats = gifGenerator.randomGifForKeyword(nextToken, memDb.getOriginalGifUrls());
+				// search for image based on keyword
+				gifFormats = gifGenerator.searchGifForKeyword(nextToken,
+						memDb.getLastGifs(GifChatConstants.SEARCH_WITHIN_GIF_IMAGES_LIMIT));
 			} catch (Exception e) {
 				log.warn(e.getMessage(), e);
 			}
 			iteration++;
+			// if found keyword save it and exit
 			if (nextToken != null && gifFormats != null) {
 				keyword = nextToken;
 				log.debug("Found keyword '{}' for message '{}'", keyword, translatedMessage);
@@ -109,16 +115,18 @@ public class ChatService {
 				keyword = TRENDING_KW;
 			}
 		}
+		// still nothing found pick a random gif
 		if (gifFormats == null) {
 			try {
-				gifFormats = gifGenerator.randomGifForKeyword(null, Collections.emptyList());
+				gifFormats = gifGenerator.pickRandomImage();
 				keyword = TRENDING_KW;
 				log.debug("Out of iteration choosing a trending for message '{}'", translatedMessage);
 			} catch (IOException e) {
-				// TODO should add some random gif as last resort
+				// TODO should add some random gif as very last resort
 				log.error(e.getMessage(), e);
 			}
 		}
+
 		GifMessage gifMessage = new GifMessage(username, rawMessage, translatedMessage, keyword, gifFormats);
 		memDb.add(gifMessage);
 		return gifMessage;

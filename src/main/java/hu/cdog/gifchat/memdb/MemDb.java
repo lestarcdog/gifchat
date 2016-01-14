@@ -80,8 +80,22 @@ public class MemDb {
 		return Collections.unmodifiableList(messages);
 	}
 
+	/**
+	 * Returns the last number {@code size} of urls.
+	 * 
+	 * @param size
+	 *            can be null or any positive ingerger
+	 * @return at most the size of the {@code size} elements
+	 */
 	@Lock(LockType.READ)
-	public List<String> getOriginalGifUrls() {
-		return gifUrls;
+	public List<String> getLastGifs(Integer size) {
+		int listSize = gifUrls.size();
+		if (size == null || size == 0 || listSize < size) {
+			return gifUrls;
+		} else {
+			return gifUrls.subList(gifUrls.size() - size, gifUrls.size());
+
+		}
+
 	}
 }

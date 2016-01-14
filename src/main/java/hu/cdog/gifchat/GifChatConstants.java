@@ -11,6 +11,8 @@ public class GifChatConstants {
 	public static final long NUM_USER_MESSAGE_SCORE = 5;
 	public static final int CURRENT_IMAGE_RETURN_LIMIT = 5;
 
+	public static final int SEARCH_WITHIN_GIF_IMAGES_LIMIT = 20;
+
 	private GifChatConstants() {
 	}
 }

@@ -3,6 +3,7 @@ app.controller("ChatController", function($scope, $rootScope, $location, ServerS
     $scope.sending = false;
     $scope.message = null;
     $scope.textMaxLength = 100;
+    $scope.showUserTexts = true;
 
     $scope.remainingChars = $scope.textMaxLength;
 
