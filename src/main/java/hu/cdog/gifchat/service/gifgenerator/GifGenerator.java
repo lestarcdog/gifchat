@@ -22,6 +22,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import hu.cdog.gifchat.model.giphy.GifImageFormats;
 import hu.cdog.gifchat.model.giphy.GiphyData;
+import hu.cdog.gifchat.model.giphy.GipyImage;
 
 @Singleton
 public class GifGenerator {
@@ -29,9 +30,9 @@ public class GifGenerator {
 	private static final Logger log = LoggerFactory.getLogger(GifGenerator.class);
 
 	private static final String GIPHY_SEARCH_URL = "http://api.giphy.com/v1/gifs/search?q=<<key>>&limit=10&api_key=dc6zaTOxFJmzC";
-	private static final String GIPHY_TRENDING_URL = "http://api.giphy.com/v1/gifs/translate?limit=50&api_key=dc6zaTOxFJmzC";
-	private static final String GIPHY_RANDOM = "http://api.giphy.com/v1/stickers/trending?limit=50&api_key=dc6zaTOxFJmzC";
-	private static final String GIPHY_TRANSLATE = "http://api.giphy.com/v1/stickers/trending?s=<<key>>&limit=10&api_key=dc6zaTOxFJmzC";
+	private static final String GIPHY_TRENDING_URL = "http://api.giphy.com/v1/gifs/trending?limit=50&api_key=dc6zaTOxFJmzC";
+	private static final String GIPHY_RANDOM = "http://api.giphy.com/v1/gifs/random?limit=100&api_key=dc6zaTOxFJmzC";
+	private static final String GIPHY_TRANSLATE = "http://api.giphy.com/v1/gifs/translate?s=<<key>>&limit=10&api_key=dc6zaTOxFJmzC";
 	private final Random random = new Random();
 
 	private Client client;
@@ -54,19 +55,19 @@ public class GifGenerator {
 	 *            can be null keyword to search for
 	 * @param gifOriginalUrls
 	 *            already posted gifs try to return a different which not
-	 *            contained in the list
+	 *            contained in the list. the original urls.
 	 * @return
 	 * @throws JsonParseException
 	 * @throws JsonMappingException
 	 * @throws IOException
 	 */
 	@Lock(LockType.READ)
-	public GifImageFormats searchGifForKeyword(String keyword, List<String> gifOriginalUrls)
+	public GifImageFormats searchGifForKeyword(String keyword, List<String> alreadySentUrls)
 			throws JsonParseException, JsonMappingException, IOException {
 		String url = null;
 		if (keyword == null) {
 			log.debug("Searching trending gif because null keyword");
-			url = trendingUrl();
+			url = giphyTrendingUrl();
 		} else {
 			log.debug("Searching gif for keyword: {}", keyword);
 			url = giphySearchUrl(keyword);
@@ -79,15 +80,7 @@ public class GifGenerator {
 			return null;
 		}
 
-		GifImageFormats gif = null;
-		int maxrand = giphyData.getData().size();
-		for (int i = 0; i < 5; i++) {
-			gif = giphyData.getData().get(random.nextInt(maxrand)).getImages();
-			if (!gifOriginalUrls.contains(gif.getOriginal().getUrl())) {
-				break;
-			}
-		}
-		return gif;
+		return selectNonExistentRandomImage(giphyData.getData(), alreadySentUrls);
 
 	}
 
@@ -112,7 +105,19 @@ public class GifGenerator {
 		return mapper.readValue(rawContent, GiphyData.class);
 	}
 
-	private String trendingUrl() {
+	private GifImageFormats selectNonExistentRandomImage(List<GipyImage> images, List<String> alreadySentUrls) {
+		GifImageFormats gif = null;
+		int maxrand = images.size();
+		for (int i = 0; i < 5; i++) {
+			gif = images.get(random.nextInt(maxrand)).getImages();
+			if (!alreadySentUrls.contains(gif.getOriginal().getUrl())) {
+				break;
+			}
+		}
+		return gif;
+	}
+
+	private String giphyTrendingUrl() {
 		return GIPHY_TRENDING_URL;
 	}
 

@@ -120,7 +120,7 @@ public class ChatService {
 			try {
 				gifFormats = gifGenerator.pickRandomImage();
 				keyword = TRENDING_KW;
-				log.debug("Out of iteration choosing a trending for message '{}'", translatedMessage);
+				log.debug("Out of iteration choosing a random gif for message '{}'", translatedMessage);
 			} catch (IOException e) {
 				// TODO should add some random gif as very last resort
 				log.error(e.getMessage(), e);
