@@ -110,7 +110,7 @@ public class TranslatorService {
 					.get();
 			String translatedMessage = response.readEntity(String.class);
 			log.debug(translatedMessage);
-			if (translatedMessage.contains("ArgumentException")) {
+			if (response.getStatus() != 200) {
 				return msg;
 			}
 			return translatedMessage;
