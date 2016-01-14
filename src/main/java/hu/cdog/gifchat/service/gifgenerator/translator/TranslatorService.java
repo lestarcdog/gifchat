@@ -64,8 +64,7 @@ public class TranslatorService {
 		try {
 			log.debug("Trying to acquire token from {}", OAUTH_URL);
 			Properties msTranslate = new Properties();
-			msTranslate
-					.load(Thread.currentThread().getContextClassLoader().getResourceAsStream(MS_TRANSLATE_PROP_FILE));
+			msTranslate.load(TranslatorService.class.getResourceAsStream(MS_TRANSLATE_PROP_FILE));
 
 			WebTarget target = client.target(OAUTH_URL);
 
@@ -90,7 +89,9 @@ public class TranslatorService {
 			// if access token available read the expiration time
 			if (accessToken != null) {
 				// a little bit before the end
-				long revalidateDuration = (long) Math.floor(accessToken.getExpires_in() * 0.9);
+				long revalidateDuration = (long) Math.floor(accessToken.getExpires_in() * 1000 * 0.95);
+				log.debug("Ticket expires after {} secs and revalidate ticket after {} ms", accessToken.getExpires_in(),
+						revalidateDuration);
 				timerService.createSingleActionTimer(revalidateDuration, tc);
 			} else {
 				// retry after one minute

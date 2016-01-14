@@ -69,7 +69,7 @@ public class GifGenerator {
 			url = trendingUrl();
 		} else {
 			log.debug("Searching gif for keyword: {}", keyword);
-			url = giphyTranslateUrl(keyword);
+			url = giphySearchUrl(keyword);
 		}
 
 		GiphyData giphyData = fetchGifsFromUrl(url);

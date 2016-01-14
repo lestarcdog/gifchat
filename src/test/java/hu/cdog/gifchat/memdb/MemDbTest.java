@@ -23,7 +23,7 @@ public class MemDbTest {
 			memDb.add(m);
 
 		}
-		Assert.assertEquals(GifChatConstants.MAX_SIZE, memDb.getOriginalGifUrls().size());
+		Assert.assertEquals(GifChatConstants.MAX_SIZE, memDb.getLastGifs(10).size());
 		Assert.assertEquals(GifChatConstants.MAX_SIZE, memDb.getAll().size());
 	}
 
