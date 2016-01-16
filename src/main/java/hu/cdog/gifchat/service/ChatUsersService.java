@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -38,10 +39,13 @@ public class ChatUsersService {
 	}
 
 	public void removeUser(Session s) {
-		for (Entry<String, ChatUser> entry : users.entrySet()) {
+		for (Iterator<Entry<String, ChatUser>> it = users.entrySet().iterator(); it.hasNext();) {
+			Entry<String, ChatUser> entry = it.next();
 			if (entry.getValue() == null || entry.getValue().getSession() == null
 					|| entry.getValue().getSession().equals(s)) {
-				removeUserFromList(entry.getKey());
+
+				close(entry.getValue());
+				it.remove();
 			}
 		}
 	}
@@ -51,9 +55,13 @@ public class ChatUsersService {
 			return;
 		}
 		ChatUser remove = users.remove(username);
+		close(remove);
+	}
+
+	private void close(ChatUser chatUser) {
 		try {
-			if (remove != null && remove.getSession() != null && remove.getSession().isOpen()) {
-				remove.getSession().close();
+			if (chatUser != null && chatUser.getSession() != null && chatUser.getSession().isOpen()) {
+				chatUser.getSession().close();
 			}
 
 		} catch (IOException e) {
