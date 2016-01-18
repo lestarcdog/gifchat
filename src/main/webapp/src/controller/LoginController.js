@@ -1,4 +1,4 @@
-app.controller("LoginController", function($scope, $rootScope, $location, ServerService, SessionStorageService) {
+app.controller("LoginController", function($scope, $rootScope, $location, ServerService, LocalStorageService) {
 
 	$scope.user = {};
 	var usernameField = $("#username");
@@ -6,7 +6,6 @@ app.controller("LoginController", function($scope, $rootScope, $location, Server
 	var successfulLogin = function(data, status, headers, config) {
 		$rootScope.username = $scope.user.username;
 		$rootScope.loggedIn = true;
-		SessionStorageService.addCurrentUser($rootScope.username);
 		ServerService.initWebSocketConnection();
 		usernameField.popover("hide");
 		$location.path("/chat");
@@ -36,15 +35,6 @@ app.controller("LoginController", function($scope, $rootScope, $location, Server
 		// add content
 		usernameField.data("bs.popover").options.content = content;
 		usernameField.popover('show');
-	}
-
-	function loginTryFromStorage() {
-		var user = SessionStorageService.getCurrentUser();
-		console.log(user);
-		if (user != null) {
-
-			ServerService.login($scope.user.username, "dummy").success(successfulLogin);
-		}
 	}
 
 	// loginTryFromStorage();

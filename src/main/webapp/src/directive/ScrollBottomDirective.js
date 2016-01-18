@@ -11,7 +11,6 @@ app.directive("scrollBottom", function() {
 			}
 			
 			if (scope.$last) {
-				console.log("scrollLast");
 				element.find("img").load(function() {
 					var chatBox = $("#chatBox");
 					chatBox.scrollTop(chatBox.prop("scrollHeight"));

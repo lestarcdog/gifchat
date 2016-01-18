@@ -8,10 +8,11 @@ app.controller("ChatBoxController", [ "$scope", "ServerService", "$timeout", "Li
 			var chatBox = angular.element("#chatBox");
 			var chatBoxMargin = 100;
 			var chatBoxLazyLoadHeight = 25;
+			var showNotification = false;
 			$scope.chatBoxLazyLoading = false;
 
 			var loadMore = function(evt) {
-				//user is scrolling but still loading
+				// user is scrolling but still loading
 				if (chatBox.scrollTop() > chatBoxLazyLoadHeight || $scope.chatBoxLazyLoading) {
 					return;
 				}
@@ -21,7 +22,7 @@ app.controller("ChatBoxController", [ "$scope", "ServerService", "$timeout", "Li
 				} else {
 					$scope.$apply(function() {
 						$scope.chatBoxLazyLoading = true;
-					});					
+					});
 					$timeout(function() {
 						var firstMsg = $scope.messages[0];
 						ServerService.earlierMessages(firstMsg).then(function(value) {
@@ -72,9 +73,20 @@ app.controller("ChatBoxController", [ "$scope", "ServerService", "$timeout", "Li
 					}
 					$scope.messages.push(gifMessage);
 				});
+				if (showNotification) {
+					var options = {
+						body : gifMessage.userText,
+						icon : gifMessage.gifFixedHeight.url
+					};
+					new Notification(gifMessage.username + " wrote", options);
+				}
 
 			};
 
 			ServerService.addListeners(onNewMessage);
+
+			$scope.$on("visibilityChanged", function(evt, args) {
+				showNotification = args;
+			});
 
 		} ]);
