@@ -76,8 +76,7 @@ angular.module('bootstrapLightbox').service(
  * @classdesc Lightbox service.
  * @memberOf bootstrapLightbox
  */
-angular.module('bootstrapLightbox').provider(
-		'Lightbox',
+angular.module('bootstrapLightbox').provider('Lightbox',
 		function() {
 			/**
 			 * Template URL passed into `$uibModal.open()`.

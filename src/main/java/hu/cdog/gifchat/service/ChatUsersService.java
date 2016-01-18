@@ -44,28 +44,9 @@ public class ChatUsersService {
 			if (entry.getValue() == null || entry.getValue().getSession() == null
 					|| entry.getValue().getSession().equals(s)) {
 
-				close(entry.getValue());
+				closeChatUser(entry.getValue());
 				it.remove();
 			}
-		}
-	}
-
-	private void removeUserFromList(String username) {
-		if (username == null) {
-			return;
-		}
-		ChatUser remove = users.remove(username);
-		close(remove);
-	}
-
-	private void close(ChatUser chatUser) {
-		try {
-			if (chatUser != null && chatUser.getSession() != null && chatUser.getSession().isOpen()) {
-				chatUser.getSession().close();
-			}
-
-		} catch (IOException e) {
-			log.warn(e.getMessage(), e);
 		}
 	}
 
@@ -120,6 +101,25 @@ public class ChatUsersService {
 
 	public Set<String> currentUsers() {
 		return users.keySet();
+	}
+
+	private void removeUserFromList(String username) {
+		if (username == null) {
+			return;
+		}
+		ChatUser remove = users.remove(username);
+		closeChatUser(remove);
+	}
+
+	private void closeChatUser(ChatUser chatUser) {
+		try {
+			if (chatUser != null && chatUser.getSession() != null && chatUser.getSession().isOpen()) {
+				chatUser.getSession().close();
+			}
+
+		} catch (IOException e) {
+			log.warn(e.getMessage(), e);
+		}
 	}
 
 	private static class ChatUser {

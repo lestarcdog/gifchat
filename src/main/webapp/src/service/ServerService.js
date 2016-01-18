@@ -1,7 +1,9 @@
-app.factory("ServerService", function($http, $location, $q, BaseUrlConst) {
+app.factory("ServerService", function($http, $location, $q, $rootScope, BaseUrlConst) {
 
     var error = function(rejection) {
         if (rejection.status == 401) {
+            $rootScope.loggedIn = false;
+            $rootScope.username = null;
             $location.path("/");
         } else {
             console.log("Error");

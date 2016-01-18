@@ -11,6 +11,12 @@ html,body {
 	position: relative;
 }
 
+#chatBoxLoading {
+	position: relative;
+	clear: both;
+	font-weight: bold;
+}
+
 #remaining-chars {
 	margin-top: 5px;
 	font-size: 11px;
@@ -36,6 +42,7 @@ html,body {
 
 .message-content {
 	display: inline-block;
+	overflow: hidden;
 }
 
 .message-content .gif {
@@ -44,6 +51,7 @@ html,body {
 	height: 200px;
 	cursor: pointer;
 }
+
 
 .message-content .usertext {
 	position: relative;
@@ -55,6 +63,13 @@ html,body {
 	border-top: 1px black solid;
 	border-bottom: 1px black solid;
 	width: 98%;
+	opacity: 1;
+	transition: opacity 0.2s;
+}
+
+
+.message-content:hover .usertext {
+	opacity: 0;
 }
 
 .message-item .senttime {

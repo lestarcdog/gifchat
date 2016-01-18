@@ -12,10 +12,6 @@
 									maxlength="{{textMaxLength}}" autofocus="autofocus">
 								<div id="remaining-chars">{{ remainingChars }}</div>
 							</div>
-							<div class="form-group">
-								<label>Show user messages</label>
-								<input type="checkbox" ng-model="showUserTexts">
-							</div>
 						</form>
 					</div>
 				</div>
@@ -32,15 +28,15 @@
 			</div>
 			<div class="col-sm-7" ng-controller="ChatBoxController">
 				<div id="chatBox">
-					<div ng-if="chatBoxLazyLoading" class="text-center">Loading...</div>
+					<div id="chatBoxLoading" ng-if="chatBoxLazyLoading" class="text-center">Loading...</div>
 					<div class="message-item" ng-class="{ 'message-right' : msg.username == username, 'message-left' : msg.username != username}"
-						ng-repeat="msg in messages" scroll-bottom>
+						ng-repeat="msg in messages" scroll-bottom loaded-images-size="{{loadedImagesSize}}">
 						<div class="username">{{msg.username}}</div>
 						<div class="message-content">
 							<div id="msg-{{$index}}" class="gif" ng-click="openOriginal(msg)">
 								<img ng-src="{{msg.gifFixedHeight.url}}" />
 							</div>
-							<div ng-show="showUserTexts" class="usertext">
+							<div class="usertext">
 								<div>{{msg.userText}}</div>
 								<div class="senttime">
 									<span am-time-ago="msg.sentTime"></span>
