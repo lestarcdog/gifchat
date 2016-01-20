@@ -21,8 +21,8 @@ import hu.cdog.gifchat.model.dto.GifMessageDto;
 import hu.cdog.gifchat.model.giphy.GifImageFormats;
 import hu.cdog.gifchat.service.gifgenerator.GifGenerator;
 import hu.cdog.gifchat.service.gifgenerator.MessageTokinezer;
+import hu.cdog.gifchat.service.gifgenerator.azure.TranslatorService;
 import hu.cdog.gifchat.service.gifgenerator.strategies.LongestWordFirst;
-import hu.cdog.gifchat.service.gifgenerator.translator.TranslatorService;
 
 @Stateless
 public class ChatService {

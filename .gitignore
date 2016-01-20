@@ -5,4 +5,4 @@
 /.project
 /.tern-project
 /deployments/
-mstranslate.properties
+mssecret.properties
