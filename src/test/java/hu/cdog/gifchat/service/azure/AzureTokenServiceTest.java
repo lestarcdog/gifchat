@@ -1,4 +1,4 @@
-package hu.cdog.gifchat.service.gifgenerator.azure;
+package hu.cdog.gifchat.service.azure;
 
 import javax.ejb.TimerService;
 
@@ -8,6 +8,8 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+
+import hu.cdog.gifchat.service.azure.AzureTokenService;
 
 @RunWith(MockitoJUnitRunner.class)
 public class AzureTokenServiceTest {

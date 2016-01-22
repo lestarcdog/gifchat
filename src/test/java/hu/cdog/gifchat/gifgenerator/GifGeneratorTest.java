@@ -11,7 +11,7 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 
 import hu.cdog.gifchat.model.giphy.GifImageFormats;
-import hu.cdog.gifchat.service.gifgenerator.GifGenerator;
+import hu.cdog.gifchat.service.giphy.GifGenerator;
 
 public class GifGeneratorTest {
 

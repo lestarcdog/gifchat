@@ -1,4 +1,4 @@
-package hu.cdog.gifchat.memdb;
+package hu.cdog.gifchat.service;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
@@ -8,20 +8,37 @@ import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
 import javax.ejb.Lock;
 import javax.ejb.LockType;
 import javax.ejb.Singleton;
+import javax.ejb.Startup;
+
+import org.infinispan.Cache;
+import org.infinispan.manager.CacheContainer;
 
 import hu.cdog.gifchat.GifChatConstants;
-import hu.cdog.gifchat.model.GifMessage;
+import hu.cdog.gifchat.model.entities.UserMessage;
 
 @Singleton
-public class MemDb {
+@Startup
+public class MemDbCache {
 
-	private final List<GifMessage> messages = new ArrayList<>();
+	private final List<UserMessage> messages = new ArrayList<>();
 	private final List<String> gifUrls = new LinkedList<>();
 
-	public void add(GifMessage message) {
+	@Resource(lookup = "java:/infinispan/storychat")
+	CacheContainer cacheContainer;
+
+	@PostConstruct
+	public void init() {
+		System.out.println(" ===== Starting");
+		Cache<String, UserMessage> cache = cacheContainer.getCache("storychat-localcache");
+		System.out.println(" ====== Ending");
+	}
+
+	public void add(UserMessage message) {
 		if (messages.size() >= GifChatConstants.MAX_SIZE) {
 			messages.remove(0);
 			gifUrls.remove(0);
@@ -33,7 +50,7 @@ public class MemDb {
 	}
 
 	@Lock(LockType.READ)
-	public List<GifMessage> getCurrents() {
+	public List<UserMessage> getCurrents() {
 		if (messages.size() <= GifChatConstants.CURRENT_IMAGE_RETURN_LIMIT) {
 			return Collections.unmodifiableList(messages);
 		} else {
@@ -52,8 +69,8 @@ public class MemDb {
 	 * @return
 	 */
 	@Lock(LockType.READ)
-	public List<GifMessage> earlierThan(LocalDateTime current) {
-		GifMessage dummy = new GifMessage();
+	public List<UserMessage> earlierThan(LocalDateTime current) {
+		UserMessage dummy = new UserMessage();
 		dummy.setSentTime(current);
 		int foundIdx = Collections.binarySearch(messages, dummy,
 				Comparator.comparing(l -> l.getSentTime().toInstant(ZoneOffset.UTC)));
@@ -76,7 +93,7 @@ public class MemDb {
 	}
 
 	@Lock(LockType.READ)
-	public List<GifMessage> getAll() {
+	public List<UserMessage> getAll() {
 		return Collections.unmodifiableList(messages);
 	}
 

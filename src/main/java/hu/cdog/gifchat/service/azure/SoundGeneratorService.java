@@ -1,4 +1,4 @@
-package hu.cdog.gifchat.service.gifgenerator.azure;
+package hu.cdog.gifchat.service.azure;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -36,7 +36,7 @@ public class SoundGeneratorService {
 	WebClientService webTargetService;
 
 	public GeneratedSound generateSound(String message) {
-		log.debug("Generating sound for {}", message);
+		log.debug("Generating sound for: {}", message);
 		WebTarget target = webTargetService.createTarget(SPEECH_URL);
 
 		Builder request = target.request().header("Content-Type", CONTENT_TYPE)

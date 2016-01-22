@@ -7,9 +7,9 @@ import javax.websocket.EndpointConfig;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import hu.cdog.gifchat.model.dto.GifMessageDto;
+import hu.cdog.gifchat.model.dto.UserMessageDto;
 
-public class GifMessageDtoEncoder implements Text<GifMessageDto> {
+public class GifMessageDtoEncoder implements Text<UserMessageDto> {
 
 	private static final ObjectMapper mapper = new ObjectMapper();
 
@@ -24,7 +24,7 @@ public class GifMessageDtoEncoder implements Text<GifMessageDto> {
 	}
 
 	@Override
-	public String encode(GifMessageDto object) throws EncodeException {
+	public String encode(UserMessageDto object) throws EncodeException {
 		try {
 			return mapper.writeValueAsString(object);
 		} catch (JsonProcessingException e) {

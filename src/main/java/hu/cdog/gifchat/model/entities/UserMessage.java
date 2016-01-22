@@ -1,4 +1,4 @@
-package hu.cdog.gifchat.model;
+package hu.cdog.gifchat.model.entities;
 
 import java.time.LocalDateTime;
 
@@ -6,7 +6,7 @@ import hu.cdog.gifchat.GifChatConstants;
 import hu.cdog.gifchat.model.giphy.GifImage;
 import hu.cdog.gifchat.model.giphy.GifImageFormats;
 
-public class GifMessage {
+public class UserMessage {
 
 	private String username;
 	private String userText;
@@ -16,10 +16,10 @@ public class GifMessage {
 	private GifImage originalImage;
 	private LocalDateTime sentTime;
 
-	public GifMessage() {
+	public UserMessage() {
 	}
 
-	public GifMessage(String username, String userText, String translatedMessage, String keyword,
+	public UserMessage(String username, String userText, String translatedMessage, String keyword,
 			GifImageFormats imageFormats) {
 		this.username = username;
 		this.userText = userText;

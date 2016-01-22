@@ -23,8 +23,8 @@ import org.mockito.Spy;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import hu.cdog.gifchat.service.WebClientService;
-import hu.cdog.gifchat.service.gifgenerator.azure.AzureTokenService;
-import hu.cdog.gifchat.service.gifgenerator.azure.TranslatorService;
+import hu.cdog.gifchat.service.azure.AzureTokenService;
+import hu.cdog.gifchat.service.azure.TranslatorService;
 
 @RunWith(MockitoJUnitRunner.class)
 public class TranslatorServiceTest {

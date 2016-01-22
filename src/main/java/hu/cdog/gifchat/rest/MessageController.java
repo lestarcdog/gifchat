@@ -19,7 +19,6 @@ import javax.ws.rs.core.Response;
 
 import hu.cdog.gifchat.GifChatConstants;
 import hu.cdog.gifchat.exception.GifChatException;
-import hu.cdog.gifchat.model.dto.GifMessageDto;
 import hu.cdog.gifchat.model.dto.UserCredentialDto;
 import hu.cdog.gifchat.model.dto.UserMessageDto;
 import hu.cdog.gifchat.model.dto.UserMessageScoreDto;
@@ -61,14 +60,14 @@ public class MessageController {
 	@GET
 	@Path("/lastMessages")
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<GifMessageDto> lastMessages() {
+	public List<UserMessageDto> lastMessages() {
 		return chatService.getLastMessages();
 	}
 
 	@GET
 	@Path("/earlierThan")
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<GifMessageDto> earlierThan(@QueryParam(value = "ts") Long currentTimestamp) {
+	public List<UserMessageDto> earlierThan(@QueryParam(value = "ts") Long currentTimestamp) {
 		return chatService.earlierThan(
 				LocalDateTime.ofInstant(Instant.ofEpochMilli(currentTimestamp), GifChatConstants.UTC_ZONE));
 	}
@@ -76,7 +75,7 @@ public class MessageController {
 	@GET
 	@Path("/from")
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<GifMessageDto> newMessages(@QueryParam(value = "usertime") Long userTime) {
+	public List<UserMessageDto> newMessages(@QueryParam(value = "usertime") Long userTime) {
 		return chatService.getNewMessages(userTime);
 
 	}
@@ -96,7 +95,7 @@ public class MessageController {
 		if (username == null) {
 			return Response.status(Response.Status.UNAUTHORIZED).build();
 		}
-		chatService.newMessage(message.getMessage(), username);
+		chatService.newMessage(message.getUserText(), username);
 		return Response.ok().build();
 	}
 

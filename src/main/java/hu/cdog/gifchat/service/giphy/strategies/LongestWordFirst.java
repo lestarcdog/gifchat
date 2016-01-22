@@ -1,4 +1,4 @@
-package hu.cdog.gifchat.service.gifgenerator.strategies;
+package hu.cdog.gifchat.service.giphy.strategies;
 
 import java.util.Collections;
 import java.util.Comparator;

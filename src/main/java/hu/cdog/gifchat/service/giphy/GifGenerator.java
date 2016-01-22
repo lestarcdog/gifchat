@@ -1,4 +1,4 @@
-package hu.cdog.gifchat.service.gifgenerator;
+package hu.cdog.gifchat.service.giphy;
 
 import java.io.IOException;
 import java.util.List;
@@ -22,7 +22,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import hu.cdog.gifchat.model.giphy.GifImageFormats;
 import hu.cdog.gifchat.model.giphy.GiphyData;
-import hu.cdog.gifchat.model.giphy.GipyImage;
+import hu.cdog.gifchat.model.giphy.GipyImageContainer;
 
 @Singleton
 public class GifGenerator {
@@ -105,7 +105,7 @@ public class GifGenerator {
 		return mapper.readValue(rawContent, GiphyData.class);
 	}
 
-	private GifImageFormats selectNonExistentRandomImage(List<GipyImage> images, List<String> alreadySentUrls) {
+	private GifImageFormats selectNonExistentRandomImage(List<GipyImageContainer> images, List<String> alreadySentUrls) {
 		GifImageFormats gif = null;
 		int maxrand = images.size();
 		for (int i = 0; i < 5; i++) {

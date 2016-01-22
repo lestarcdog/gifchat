@@ -3,7 +3,7 @@ package hu.cdog.gifchat.model.giphy;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class GipyImage {
+public class GipyImageContainer {
 	private String type;
 	private String id;
 	private String url;

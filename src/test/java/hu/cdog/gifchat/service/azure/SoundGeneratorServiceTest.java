@@ -1,11 +1,9 @@
-package hu.cdog.gifchat.service.gifgenerator.azure;
+package hu.cdog.gifchat.service.azure;
 
-import java.io.File;
 import java.io.IOException;
 
 import javax.ejb.TimerService;
 
-import org.apache.commons.io.FileUtils;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,7 +11,9 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import hu.cdog.gifchat.service.WebClientService;
-import hu.cdog.gifchat.service.gifgenerator.azure.SoundGeneratorService.GeneratedSound;
+import hu.cdog.gifchat.service.azure.AzureTokenService;
+import hu.cdog.gifchat.service.azure.SoundGeneratorService;
+import hu.cdog.gifchat.service.azure.SoundGeneratorService.GeneratedSound;
 
 @RunWith(MockitoJUnitRunner.class)
 public class SoundGeneratorServiceTest {
@@ -35,9 +35,10 @@ public class SoundGeneratorServiceTest {
 
 		tokenService.getNewApiTokenKeys(null);
 
-		GeneratedSound generateSound = soundService.generateSound("Hi this is dave");
+		GeneratedSound generateSound = soundService.generateSound("hülye köcsög");
 		Assert.assertTrue(generateSound.isGenerated());
-		FileUtils.writeByteArrayToFile(new File("hang.wav"), generateSound.getContent());
+		// FileUtils.writeByteArrayToFile(new File("hang.wav"),
+		// generateSound.getContent());
 
 	}
 

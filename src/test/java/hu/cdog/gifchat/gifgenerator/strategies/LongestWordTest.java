@@ -7,7 +7,7 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 
-import hu.cdog.gifchat.service.gifgenerator.strategies.LongestWordFirst;
+import hu.cdog.gifchat.service.giphy.strategies.LongestWordFirst;
 
 public class LongestWordTest {
 

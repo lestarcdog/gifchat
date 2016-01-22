@@ -15,14 +15,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import hu.cdog.gifchat.GifChatConstants;
-import hu.cdog.gifchat.memdb.MemDb;
-import hu.cdog.gifchat.model.GifMessage;
-import hu.cdog.gifchat.model.dto.GifMessageDto;
+import hu.cdog.gifchat.model.dto.UserMessageDto;
+import hu.cdog.gifchat.model.entities.UserMessage;
 import hu.cdog.gifchat.model.giphy.GifImageFormats;
-import hu.cdog.gifchat.service.gifgenerator.GifGenerator;
-import hu.cdog.gifchat.service.gifgenerator.MessageTokinezer;
-import hu.cdog.gifchat.service.gifgenerator.azure.TranslatorService;
-import hu.cdog.gifchat.service.gifgenerator.strategies.LongestWordFirst;
+import hu.cdog.gifchat.service.azure.TranslatorService;
+import hu.cdog.gifchat.service.giphy.GifGenerator;
+import hu.cdog.gifchat.service.giphy.MessageTokinezer;
+import hu.cdog.gifchat.service.giphy.strategies.LongestWordFirst;
 
 @Stateless
 public class ChatService {
@@ -32,7 +31,7 @@ public class ChatService {
 	private static final String TRENDING_KW = "**trending**";
 
 	@Inject
-	MemDb memDb;
+	MemDbCache memDb;
 
 	@Inject
 	GifGenerator gifGenerator;
@@ -43,9 +42,9 @@ public class ChatService {
 	@Inject
 	ChatUsersService chatUsersService;
 
-	public List<GifMessageDto> getNewMessages(Long userTime) {
+	public List<UserMessageDto> getNewMessages(Long userTime) {
 		LocalDateTime userTimeLd = LocalDateTime.ofInstant(Instant.ofEpochMilli(userTime), GifChatConstants.UTC_ZONE);
-		List<GifMessage> filtered = memDb.getAll().stream().filter(l -> l.getSentTime().isAfter(userTimeLd))
+		List<UserMessage> filtered = memDb.getAll().stream().filter(l -> l.getSentTime().isAfter(userTimeLd))
 				.collect(Collectors.toList());
 		return map2Dto(filtered);
 	}
@@ -54,28 +53,28 @@ public class ChatService {
 		if (message == null || message.isEmpty()) {
 			return;
 		}
-		GifMessage newMessage = generateAndSaveNewMessage(message, username);
+		UserMessage newMessage = generateAndSaveNewMessage(message, username);
 		chatUsersService.updateUserDependentProperties(username);
 		sendNewMessageToEveryone(newMessage);
 
 	}
 
-	public List<GifMessageDto> getLastMessages() {
+	public List<UserMessageDto> getLastMessages() {
 		return map2Dto(memDb.getCurrents());
 	}
 
-	public List<GifMessageDto> earlierThan(LocalDateTime currentTime) {
+	public List<UserMessageDto> earlierThan(LocalDateTime currentTime) {
 		return map2Dto(memDb.earlierThan(currentTime));
 	}
 
-	private void sendNewMessageToEveryone(GifMessage message) {
-		GifMessageDto dto = new GifMessageDto(message);
+	private void sendNewMessageToEveryone(UserMessage message) {
+		UserMessageDto dto = new UserMessageDto(message);
 		for (Session session : chatUsersService.getAllSessions()) {
 			sendMessage(session, dto);
 		}
 	}
 
-	private void sendMessage(Session s, GifMessageDto msg) {
+	private void sendMessage(Session s, UserMessageDto msg) {
 		try {
 			if (s != null && s.isOpen()) {
 				s.getBasicRemote().sendObject(msg);
@@ -87,7 +86,7 @@ public class ChatService {
 		}
 	}
 
-	private GifMessage generateAndSaveNewMessage(String rawMessage, String username) {
+	private UserMessage generateAndSaveNewMessage(String rawMessage, String username) {
 		// translate to english
 		String translatedMessage = translatorService.translate(rawMessage);
 
@@ -127,13 +126,13 @@ public class ChatService {
 			}
 		}
 
-		GifMessage gifMessage = new GifMessage(username, rawMessage, translatedMessage, keyword, gifFormats);
+		UserMessage gifMessage = new UserMessage(username, rawMessage, translatedMessage, keyword, gifFormats);
 		memDb.add(gifMessage);
 		return gifMessage;
 	}
 
-	private List<GifMessageDto> map2Dto(List<GifMessage> messages) {
-		return messages.stream().map(l -> new GifMessageDto(l)).collect(Collectors.toList());
+	private List<UserMessageDto> map2Dto(List<UserMessage> messages) {
+		return messages.stream().map(l -> new UserMessageDto(l)).collect(Collectors.toList());
 	}
 
 }

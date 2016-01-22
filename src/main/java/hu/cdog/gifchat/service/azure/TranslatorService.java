@@ -1,4 +1,4 @@
-package hu.cdog.gifchat.service.gifgenerator.azure;
+package hu.cdog.gifchat.service.azure;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;

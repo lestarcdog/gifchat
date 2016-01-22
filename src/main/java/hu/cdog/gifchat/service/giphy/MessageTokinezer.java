@@ -1,11 +1,11 @@
-package hu.cdog.gifchat.service.gifgenerator;
+package hu.cdog.gifchat.service.giphy;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import hu.cdog.gifchat.GifChatConstants;
-import hu.cdog.gifchat.service.gifgenerator.strategies.IWordOrder;
+import hu.cdog.gifchat.service.giphy.strategies.IWordOrder;
 
 public class MessageTokinezer {
 

@@ -9,16 +9,17 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import hu.cdog.gifchat.GifChatConstants;
-import hu.cdog.gifchat.model.GifMessage;
+import hu.cdog.gifchat.model.entities.UserMessage;
 import hu.cdog.gifchat.model.giphy.GifImage;
 import hu.cdog.gifchat.model.giphy.GifImageFormats;
+import hu.cdog.gifchat.service.MemDbCache;
 
 public class MemDbTest {
 
 	@Test
 	public void onlyStore100Messages() {
-		MemDb memDb = new MemDb();
-		GifMessage m = dummyGifMessage();
+		MemDbCache memDb = new MemDbCache();
+		UserMessage m = dummyGifMessage();
 		for (int i = 0; i < GifChatConstants.MAX_SIZE + 10; i++) {
 			memDb.add(m);
 
@@ -29,40 +30,40 @@ public class MemDbTest {
 
 	@Test
 	public void getCurrents() {
-		MemDb db = new MemDb();
+		MemDbCache db = new MemDbCache();
 		GifImageFormats gf = new GifImageFormats();
-		GifMessage msg = null;
+		UserMessage msg = null;
 		gf.setOriginal(new GifImage());
 		for (int i = 0; i < GifChatConstants.CURRENT_IMAGE_RETURN_LIMIT * 3; i++) {
-			msg = new GifMessage("a", String.valueOf(i), "asdf", "asdf", gf);
+			msg = new UserMessage("a", String.valueOf(i), "asdf", "asdf", gf);
 			db.add(msg);
 		}
 
-		List<GifMessage> currents = db.getCurrents();
+		List<UserMessage> currents = db.getCurrents();
 		Assert.assertEquals(GifChatConstants.CURRENT_IMAGE_RETURN_LIMIT, currents.size());
 
 	}
 
 	@Test
 	public void returnEarlierMessagesContinsList() throws InterruptedException {
-		MemDb db = new MemDb();
-		GifMessage msg = null;
+		MemDbCache db = new MemDbCache();
+		UserMessage msg = null;
 		GifImageFormats gf = new GifImageFormats();
 		gf.setOriginal(new GifImage());
 		for (int i = 0; i < GifChatConstants.CURRENT_IMAGE_RETURN_LIMIT * 3; i++) {
-			msg = new GifMessage("a", String.valueOf(i), "asdf", "asdf", gf);
+			msg = new UserMessage("a", String.valueOf(i), "asdf", "asdf", gf);
 			db.add(msg);
 			Thread.sleep(5);
 		}
 
-		List<GifMessage> all = db.getAll();
+		List<UserMessage> all = db.getAll();
 
 		// full list
-		List<GifMessage> full = db.earlierThan(all.get(all.size() - 2).getSentTime());
+		List<UserMessage> full = db.earlierThan(all.get(all.size() - 2).getSentTime());
 		Assert.assertEquals(GifChatConstants.CURRENT_IMAGE_RETURN_LIMIT, full.size());
 
 		// small list
-		List<GifMessage> smallList = db
+		List<UserMessage> smallList = db
 				.earlierThan(all.get(GifChatConstants.CURRENT_IMAGE_RETURN_LIMIT - 2).getSentTime());
 		Assert.assertEquals(GifChatConstants.CURRENT_IMAGE_RETURN_LIMIT - 2, smallList.size());
 
@@ -70,13 +71,13 @@ public class MemDbTest {
 
 	@Test(expected = UnsupportedOperationException.class)
 	public void throwNotImplementedSearch() {
-		MemDb db = new MemDb();
+		MemDbCache db = new MemDbCache();
 
 		db.earlierThan(LocalDateTime.now());
 	}
 
-	private GifMessage dummyGifMessage() {
-		GifMessage m = new GifMessage();
+	private UserMessage dummyGifMessage() {
+		UserMessage m = new UserMessage();
 		m.setKeyword("keyword");
 		m.setUsername("justin bieber");
 		m.setUserText("asdf");
