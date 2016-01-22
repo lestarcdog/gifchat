@@ -15,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import hu.cdog.gifchat.GifChatConstants;
+import hu.cdog.gifchat.data.MessageCache;
 import hu.cdog.gifchat.model.dto.UserMessageDto;
 import hu.cdog.gifchat.model.entities.UserMessage;
 import hu.cdog.gifchat.model.giphy.GifImageFormats;
@@ -31,7 +32,7 @@ public class ChatService {
 	private static final String TRENDING_KW = "**trending**";
 
 	@Inject
-	MemDbCache memDb;
+	MessageCache memDb;
 
 	@Inject
 	GifGenerator gifGenerator;

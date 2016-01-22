@@ -1,4 +1,4 @@
-package hu.cdog.gifchat.service;
+package hu.cdog.gifchat.data;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
@@ -8,35 +8,18 @@ import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.Resource;
 import javax.ejb.Lock;
 import javax.ejb.LockType;
 import javax.ejb.Singleton;
-import javax.ejb.Startup;
-
-import org.infinispan.Cache;
-import org.infinispan.manager.CacheContainer;
 
 import hu.cdog.gifchat.GifChatConstants;
 import hu.cdog.gifchat.model.entities.UserMessage;
 
 @Singleton
-@Startup
-public class MemDbCache {
+public class MessageCache {
 
 	private final List<UserMessage> messages = new ArrayList<>();
 	private final List<String> gifUrls = new LinkedList<>();
-
-	@Resource(lookup = "java:/infinispan/storychat")
-	CacheContainer cacheContainer;
-
-	@PostConstruct
-	public void init() {
-		System.out.println(" ===== Starting");
-		Cache<String, UserMessage> cache = cacheContainer.getCache("storychat-localcache");
-		System.out.println(" ====== Ending");
-	}
 
 	public void add(UserMessage message) {
 		if (messages.size() >= GifChatConstants.MAX_SIZE) {

@@ -10,10 +10,10 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import hu.cdog.gifchat.model.internal.GeneratedSound;
 import hu.cdog.gifchat.service.WebClientService;
 import hu.cdog.gifchat.service.azure.AzureTokenService;
 import hu.cdog.gifchat.service.azure.SoundGeneratorService;
-import hu.cdog.gifchat.service.azure.SoundGeneratorService.GeneratedSound;
 
 @RunWith(MockitoJUnitRunner.class)
 public class SoundGeneratorServiceTest {

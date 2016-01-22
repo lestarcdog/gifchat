@@ -9,16 +9,16 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import hu.cdog.gifchat.GifChatConstants;
+import hu.cdog.gifchat.data.MessageCache;
 import hu.cdog.gifchat.model.entities.UserMessage;
 import hu.cdog.gifchat.model.giphy.GifImage;
 import hu.cdog.gifchat.model.giphy.GifImageFormats;
-import hu.cdog.gifchat.service.MemDbCache;
 
 public class MemDbTest {
 
 	@Test
 	public void onlyStore100Messages() {
-		MemDbCache memDb = new MemDbCache();
+		MessageCache memDb = new MessageCache();
 		UserMessage m = dummyGifMessage();
 		for (int i = 0; i < GifChatConstants.MAX_SIZE + 10; i++) {
 			memDb.add(m);
@@ -30,7 +30,7 @@ public class MemDbTest {
 
 	@Test
 	public void getCurrents() {
-		MemDbCache db = new MemDbCache();
+		MessageCache db = new MessageCache();
 		GifImageFormats gf = new GifImageFormats();
 		UserMessage msg = null;
 		gf.setOriginal(new GifImage());
@@ -46,7 +46,7 @@ public class MemDbTest {
 
 	@Test
 	public void returnEarlierMessagesContinsList() throws InterruptedException {
-		MemDbCache db = new MemDbCache();
+		MessageCache db = new MessageCache();
 		UserMessage msg = null;
 		GifImageFormats gf = new GifImageFormats();
 		gf.setOriginal(new GifImage());
@@ -71,7 +71,7 @@ public class MemDbTest {
 
 	@Test(expected = UnsupportedOperationException.class)
 	public void throwNotImplementedSearch() {
-		MemDbCache db = new MemDbCache();
+		MessageCache db = new MessageCache();
 
 		db.earlierThan(LocalDateTime.now());
 	}

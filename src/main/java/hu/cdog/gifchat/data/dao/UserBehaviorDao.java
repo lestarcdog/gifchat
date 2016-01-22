@@ -1,4 +1,4 @@
-package hu.cdog.gifchat.dao;
+package hu.cdog.gifchat.data.dao;
 
 import javax.ejb.Stateless;
 

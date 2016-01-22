@@ -15,7 +15,7 @@ public class ExceptionHandler implements ExceptionMapper<GifChatException> {
 	@Override
 	public Response toResponse(GifChatException exception) {
 		Entity<ExceptionDto> json = Entity.json(new ExceptionDto(exception));
-		return Response.status(Response.Status.BAD_REQUEST).type(MediaType.APPLICATION_JSON_TYPE).entity(json).build();
+		return Response.status(Response.Status.OK).type(MediaType.APPLICATION_JSON_TYPE).entity(json).build();
 	}
 
 }

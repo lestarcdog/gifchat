@@ -13,6 +13,10 @@ public class GifChatConstants {
 
 	public static final int SEARCH_WITHIN_GIF_IMAGES_LIMIT = 20;
 
+	// Audio mime types
+	public static final String WAV_MIME_TYPE = "audio/wav";
+	public static final String MP3_MIME_TYPE = "audio/mpeg3";
+
 	private GifChatConstants() {
 	}
 }

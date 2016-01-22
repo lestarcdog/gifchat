@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import hu.cdog.gifchat.GifChatConstants;
 import hu.cdog.gifchat.model.giphy.GifImage;
 import hu.cdog.gifchat.model.giphy.GifImageFormats;
+import hu.cdog.gifchat.model.internal.GeneratedSound;
 
 public class UserMessage {
 
@@ -15,6 +16,7 @@ public class UserMessage {
 	private GifImage fixedHeightImage;
 	private GifImage originalImage;
 	private LocalDateTime sentTime;
+	private byte[] sound;
 
 	public UserMessage() {
 	}
@@ -92,6 +94,14 @@ public class UserMessage {
 	@Override
 	public String toString() {
 		return "GifMessage [username=" + username + ", userText=" + userText + ", sentTime=" + sentTime + "]";
+	}
+
+	public GeneratedSound getSound() {
+		return new GeneratedSound(sound, userText);
+	}
+
+	public void setSound(GeneratedSound sound) {
+		this.sound = sound.getContent();
 	}
 
 }

@@ -16,6 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import hu.cdog.gifchat.exception.GifChatException;
+import hu.cdog.gifchat.model.internal.GeneratedSound;
 import hu.cdog.gifchat.service.WebClientService;
 
 @Stateless
@@ -69,31 +70,6 @@ public class SoundGeneratorService {
 		} else {
 			throw new GifChatException("Invalid message to make it sound from " + message);
 		}
-	}
-
-	public static class GeneratedSound {
-		private final byte[] content;
-		private final boolean generated;
-		private final String message;
-
-		public GeneratedSound(byte[] content, String message) {
-			this.content = content;
-			this.generated = (content != null);
-			this.message = message;
-		}
-
-		public byte[] getContent() {
-			return content;
-		}
-
-		public boolean isGenerated() {
-			return generated;
-		}
-
-		public String getMessage() {
-			return message;
-		}
-
 	}
 
 }
