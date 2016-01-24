@@ -59,12 +59,17 @@ html,body {
 	color: black;
 	background: white;
 	padding: 5px;
-	margin-top: -50px;
+	top: -50px;
 	border-top: 1px black solid;
 	border-bottom: 1px black solid;
 	width: 98%;
 	opacity: 1;
 	transition: opacity 0.2s;
+}
+
+.message-content .controls {
+	position: relative;
+	height: 50px;
 }
 
 
