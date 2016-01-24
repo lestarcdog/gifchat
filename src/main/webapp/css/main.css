@@ -72,6 +72,7 @@ html,body {
 	z-index:102;
 	height:20px;
 	opacity: 0;
+	cursor: pointer;
 	transition: opacity 0.2s;
 }
 
