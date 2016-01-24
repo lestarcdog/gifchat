@@ -12,6 +12,7 @@
 	<properties>
 		<baseUrl>gifchat</baseUrl>
 		<baseUrlConst>/gifchat</baseUrlConst>
+
 	</properties>
 
 	<dependencies>
@@ -57,6 +58,12 @@
 			<artifactId>slf4j-api</artifactId>
 			<version>1.7.13</version>
 		</dependency>
+		<dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+			<version>19.0</version>
+		</dependency>
+
 
 
 		<!-- test -->
@@ -91,14 +98,6 @@
 		<resources>
 			<resource>
 				<directory>src/main/resources</directory>
-				<filtering>true</filtering>
-			</resource>
-			<resource>
-				<directory>src/main/webapp</directory>
-				<includes>
-					<include>**/index.html</include>
-					<include>**/app.js</include>
-				</includes>
 				<filtering>true</filtering>
 			</resource>
 		</resources>

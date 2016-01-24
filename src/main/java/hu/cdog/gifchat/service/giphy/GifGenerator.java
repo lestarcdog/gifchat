@@ -20,9 +20,8 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import hu.cdog.gifchat.model.giphy.GifImageFormats;
 import hu.cdog.gifchat.model.giphy.GiphyData;
-import hu.cdog.gifchat.model.giphy.GipyImageContainer;
+import hu.cdog.gifchat.model.giphy.GiphyImageContainer;
 
 @Singleton
 public class GifGenerator {
@@ -62,7 +61,7 @@ public class GifGenerator {
 	 * @throws IOException
 	 */
 	@Lock(LockType.READ)
-	public GifImageFormats searchGifForKeyword(String keyword, List<String> alreadySentUrls)
+	public GiphyImageContainer searchGifForKeyword(String keyword)
 			throws JsonParseException, JsonMappingException, IOException {
 		String url = null;
 		if (keyword == null) {
@@ -80,7 +79,7 @@ public class GifGenerator {
 			return null;
 		}
 
-		return selectNonExistentRandomImage(giphyData.getData(), alreadySentUrls);
+		return selectRandomImage(giphyData.getData());
 
 	}
 
@@ -92,8 +91,8 @@ public class GifGenerator {
 	 * @throws JsonMappingException
 	 * @throws JsonParseException
 	 */
-	public GifImageFormats pickRandomImage() throws JsonParseException, JsonMappingException, IOException {
-		return fetchGifsFromUrl(GIPHY_RANDOM).getData().get(0).getImages();
+	public GiphyImageContainer pickRandomImage() throws JsonParseException, JsonMappingException, IOException {
+		return fetchGifsFromUrl(GIPHY_RANDOM).getData().get(0);
 	}
 
 	private GiphyData fetchGifsFromUrl(String url) throws JsonParseException, JsonMappingException, IOException {
@@ -105,16 +104,8 @@ public class GifGenerator {
 		return mapper.readValue(rawContent, GiphyData.class);
 	}
 
-	private GifImageFormats selectNonExistentRandomImage(List<GipyImageContainer> images, List<String> alreadySentUrls) {
-		GifImageFormats gif = null;
-		int maxrand = images.size();
-		for (int i = 0; i < 5; i++) {
-			gif = images.get(random.nextInt(maxrand)).getImages();
-			if (!alreadySentUrls.contains(gif.getOriginal().getUrl())) {
-				break;
-			}
-		}
-		return gif;
+	private GiphyImageContainer selectRandomImage(List<GiphyImageContainer> images) {
+		return images.get(random.nextInt(images.size()));
 	}
 
 	private String giphyTrendingUrl() {

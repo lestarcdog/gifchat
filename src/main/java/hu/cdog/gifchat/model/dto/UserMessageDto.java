@@ -9,8 +9,10 @@ public class UserMessageDto extends BaseDto {
 	private String userText;
 	private String translatedMessage;
 	private String keyword;
-	private GifImageDto gifFixedHeight;
-	private GifImageDto gifOriginal;
+	private String gifFixedHeightUrl;
+	private String gifOriginalUrl;
+	private Integer gifOriginalWidth;
+	private Integer gifOriginalHeight;
 	private Long sentTime;
 
 	public UserMessageDto() {
@@ -21,8 +23,10 @@ public class UserMessageDto extends BaseDto {
 		this.userText = message.getUserText();
 		this.translatedMessage = message.getTranslatedMessage();
 		this.keyword = message.getKeyword();
-		this.gifFixedHeight = new GifImageDto(message.getFixedHeightImage());
-		this.gifOriginal = new GifImageDto(message.getOriginalImage());
+		this.gifFixedHeightUrl = message.getFixedHeightUrl();
+		this.gifOriginalUrl = message.getOriginalImageUrl();
+		this.gifOriginalWidth = message.getOriginalImageWidth();
+		this.gifOriginalHeight = message.getOriginalImageHeight();
 		this.sentTime = message.getSentTime().toInstant(ZoneOffset.UTC).toEpochMilli();
 	}
 
@@ -58,28 +62,44 @@ public class UserMessageDto extends BaseDto {
 		this.sentTime = sentTime;
 	}
 
-	public GifImageDto getGifFixedHeight() {
-		return gifFixedHeight;
-	}
-
-	public void setGifFixedHeight(GifImageDto gifFixedHeight) {
-		this.gifFixedHeight = gifFixedHeight;
-	}
-
-	public GifImageDto getGifOriginal() {
-		return gifOriginal;
-	}
-
-	public void setGifOriginal(GifImageDto gifOriginal) {
-		this.gifOriginal = gifOriginal;
-	}
-
 	public String getTranslatedMessage() {
 		return translatedMessage;
 	}
 
 	public void setTranslatedMessage(String translatedMessage) {
 		this.translatedMessage = translatedMessage;
+	}
+
+	public String getGifFixedHeightUrl() {
+		return gifFixedHeightUrl;
+	}
+
+	public void setGifFixedHeightUrl(String gifFixedHeightUrl) {
+		this.gifFixedHeightUrl = gifFixedHeightUrl;
+	}
+
+	public String getGifOriginalUrl() {
+		return gifOriginalUrl;
+	}
+
+	public void setGifOriginalUrl(String gifOriginalUrl) {
+		this.gifOriginalUrl = gifOriginalUrl;
+	}
+
+	public Integer getGifOriginalWidth() {
+		return gifOriginalWidth;
+	}
+
+	public void setGifOriginalWidth(Integer gifOriginalWidth) {
+		this.gifOriginalWidth = gifOriginalWidth;
+	}
+
+	public Integer getGifOriginalHeight() {
+		return gifOriginalHeight;
+	}
+
+	public void setGifOriginalHeight(Integer gifOriginalHeight) {
+		this.gifOriginalHeight = gifOriginalHeight;
 	}
 
 }

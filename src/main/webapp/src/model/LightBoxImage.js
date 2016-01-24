@@ -1,7 +1,7 @@
 function LightBoxImage(gifMessage) {
-	this.url = gifMessage.gifFixedHeight.url;
-	this.largeUrl = gifMessage.gifOriginal.url;
+	this.url = gifMessage.gifFixedHeightUrl;
+	this.largeUrl = gifMessage.gifOriginalUrl;
 	this.caption = gifMessage.keyword;
-	this.largeHeight = gifMessage.gifOriginal.height;
-	this.largeWidth = gifMessage.gifOriginal.width;
+	this.largeHeight = gifMessage.gifOriginalHeight;
+	this.largeWidth = gifMessage.gifOriginalWidth;
 }

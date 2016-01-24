@@ -1,7 +1,6 @@
 package hu.cdog.gifchat.service;
 
 import java.io.IOException;
-import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -14,11 +13,10 @@ import javax.websocket.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import hu.cdog.gifchat.GifChatConstants;
-import hu.cdog.gifchat.data.MessageCache;
+import hu.cdog.gifchat.data.dao.MessagesDao;
 import hu.cdog.gifchat.model.dto.UserMessageDto;
 import hu.cdog.gifchat.model.entities.UserMessage;
-import hu.cdog.gifchat.model.giphy.GifImageFormats;
+import hu.cdog.gifchat.model.giphy.GiphyImageContainer;
 import hu.cdog.gifchat.service.azure.TranslatorService;
 import hu.cdog.gifchat.service.giphy.GifGenerator;
 import hu.cdog.gifchat.service.giphy.MessageTokinezer;
@@ -32,7 +30,7 @@ public class ChatService {
 	private static final String TRENDING_KW = "**trending**";
 
 	@Inject
-	MessageCache memDb;
+	MessagesDao messagesDao;
 
 	@Inject
 	GifGenerator gifGenerator;
@@ -43,29 +41,23 @@ public class ChatService {
 	@Inject
 	ChatUsersService chatUsersService;
 
-	public List<UserMessageDto> getNewMessages(Long userTime) {
-		LocalDateTime userTimeLd = LocalDateTime.ofInstant(Instant.ofEpochMilli(userTime), GifChatConstants.UTC_ZONE);
-		List<UserMessage> filtered = memDb.getAll().stream().filter(l -> l.getSentTime().isAfter(userTimeLd))
-				.collect(Collectors.toList());
-		return map2Dto(filtered);
-	}
-
 	public void newMessage(String message, String username) {
 		if (message == null || message.isEmpty()) {
 			return;
 		}
-		UserMessage newMessage = generateAndSaveNewMessage(message, username);
+		UserMessage newMessage = generateNewMessage(message, username);
 		chatUsersService.updateUserDependentProperties(username);
+		messagesDao.persist(newMessage);
 		sendNewMessageToEveryone(newMessage);
 
 	}
 
 	public List<UserMessageDto> getLastMessages() {
-		return map2Dto(memDb.getCurrents());
+		return map2Dto(messagesDao.getCurrentsMessages());
 	}
 
 	public List<UserMessageDto> earlierThan(LocalDateTime currentTime) {
-		return map2Dto(memDb.earlierThan(currentTime));
+		return map2Dto(messagesDao.earlierThan(currentTime));
 	}
 
 	private void sendNewMessageToEveryone(UserMessage message) {
@@ -87,28 +79,27 @@ public class ChatService {
 		}
 	}
 
-	private UserMessage generateAndSaveNewMessage(String rawMessage, String username) {
+	private UserMessage generateNewMessage(String rawMessage, String username) {
 		// translate to english
 		String translatedMessage = translatorService.translate(rawMessage);
 
 		// tokenize the message
 		MessageTokinezer possibleKeywords = new MessageTokinezer(translatedMessage, LongestWordFirst.get());
-		GifImageFormats gifFormats = null;
+		GiphyImageContainer container = null;
 		int iteration = 0;
 		String keyword = null;
 
-		while (gifFormats == null && iteration < 5) {
+		while (container == null && iteration < 5) {
 			String nextToken = possibleKeywords.getNextToken();
 			try {
 				// search for image based on keyword
-				gifFormats = gifGenerator.searchGifForKeyword(nextToken,
-						memDb.getLastGifs(GifChatConstants.SEARCH_WITHIN_GIF_IMAGES_LIMIT));
+				container = gifGenerator.searchGifForKeyword(nextToken);
 			} catch (Exception e) {
 				log.warn(e.getMessage(), e);
 			}
 			iteration++;
 			// if found keyword save it and exit
-			if (nextToken != null && gifFormats != null) {
+			if (nextToken != null && container != null) {
 				keyword = nextToken;
 				log.debug("Found keyword '{}' for message '{}'", keyword, translatedMessage);
 			} else {
@@ -116,9 +107,9 @@ public class ChatService {
 			}
 		}
 		// still nothing found pick a random gif
-		if (gifFormats == null) {
+		if (container == null) {
 			try {
-				gifFormats = gifGenerator.pickRandomImage();
+				container = gifGenerator.pickRandomImage();
 				keyword = TRENDING_KW;
 				log.debug("Out of iteration choosing a random gif for message '{}'", translatedMessage);
 			} catch (IOException e) {
@@ -127,8 +118,7 @@ public class ChatService {
 			}
 		}
 
-		UserMessage gifMessage = new UserMessage(username, rawMessage, translatedMessage, keyword, gifFormats);
-		memDb.add(gifMessage);
+		UserMessage gifMessage = new UserMessage(username, rawMessage, translatedMessage, keyword, container);
 		return gifMessage;
 	}
 

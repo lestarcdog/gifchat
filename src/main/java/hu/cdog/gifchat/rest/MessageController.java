@@ -19,6 +19,7 @@ import javax.ws.rs.core.Response;
 
 import hu.cdog.gifchat.GifChatConstants;
 import hu.cdog.gifchat.exception.GifChatException;
+import hu.cdog.gifchat.model.dto.NewMessageDto;
 import hu.cdog.gifchat.model.dto.UserCredentialDto;
 import hu.cdog.gifchat.model.dto.UserMessageDto;
 import hu.cdog.gifchat.model.dto.UserMessageScoreDto;
@@ -73,14 +74,6 @@ public class MessageController {
 	}
 
 	@GET
-	@Path("/from")
-	@Produces(MediaType.APPLICATION_JSON)
-	public List<UserMessageDto> newMessages(@QueryParam(value = "usertime") Long userTime) {
-		return chatService.getNewMessages(userTime);
-
-	}
-
-	@GET
 	@Path("/currentTopUsers")
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<UserMessageScoreDto> getCurrentUsers() {
@@ -90,12 +83,12 @@ public class MessageController {
 	@POST
 	@Path("/new")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response newMessage(UserMessageDto message) {
+	public Response newMessage(NewMessageDto message) {
 		String username = getLoggedInUser();
 		if (username == null) {
 			return Response.status(Response.Status.UNAUTHORIZED).build();
 		}
-		chatService.newMessage(message.getUserText(), username);
+		chatService.newMessage(message.getMessage(), username);
 		return Response.ok().build();
 	}
 

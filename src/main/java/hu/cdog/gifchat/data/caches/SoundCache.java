@@ -1,4 +1,4 @@
-package hu.cdog.gifchat.data;
+package hu.cdog.gifchat.data.caches;
 
 import java.time.LocalDateTime;
 

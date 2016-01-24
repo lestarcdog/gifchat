@@ -2,33 +2,66 @@ package hu.cdog.gifchat.model.entities;
 
 import java.time.LocalDateTime;
 
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.Convert;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Lob;
+import javax.persistence.SequenceGenerator;
+
 import hu.cdog.gifchat.GifChatConstants;
-import hu.cdog.gifchat.model.giphy.GifImage;
-import hu.cdog.gifchat.model.giphy.GifImageFormats;
+import hu.cdog.gifchat.model.entities.converters.LocalDateTimeConverter;
+import hu.cdog.gifchat.model.giphy.GiphyImageContainer;
 import hu.cdog.gifchat.model.internal.GeneratedSound;
 
-public class UserMessage {
+@Entity
+public class UserMessage extends AbstractEntity {
 
+	@Id
+	@SequenceGenerator(name = "USER_MESSAGE_SEQ", sequenceName = "USER_MESSAGE_SEQ")
+	@GeneratedValue(generator = "USER_MESSAGE_SEQ", strategy = GenerationType.SEQUENCE)
+	private Integer id;
+	@Column(length = 50)
 	private String username;
+	@Column(length = 150)
 	private String userText;
 	private String translatedMessage;
+	@Column(length = 30)
 	private String keyword;
-	private GifImage fixedHeightImage;
-	private GifImage originalImage;
+	private String gifImageId;
+
+	private String fixedHeightUrl;
+	private String originalImageUrl;
+
+	private Integer originalImageWidth;
+	private Integer originalImageHeight;
+
+	@Convert(converter = LocalDateTimeConverter.class)
 	private LocalDateTime sentTime;
+	@Lob
+	@Basic(fetch = FetchType.LAZY)
 	private byte[] sound;
 
 	public UserMessage() {
 	}
 
 	public UserMessage(String username, String userText, String translatedMessage, String keyword,
-			GifImageFormats imageFormats) {
+			GiphyImageContainer container) {
 		this.username = username;
 		this.userText = userText;
 		this.translatedMessage = translatedMessage;
 		this.keyword = keyword;
-		this.fixedHeightImage = imageFormats.getFixed_height();
-		this.originalImage = imageFormats.getOriginal();
+		this.fixedHeightUrl = container.getImages().getFixed_height().getUrl();
+		this.originalImageUrl = container.getImages().getOriginal().getUrl();
+		this.originalImageWidth = container.getImages().getOriginal().getWidth();
+		this.originalImageHeight = container.getImages().getOriginal().getHeight();
+
+		this.gifImageId = container.getId();
+		sentTime = LocalDateTime.now(GifChatConstants.UTC_ZONE);
 	}
 
 	public String getKeyword() {
@@ -55,22 +88,6 @@ public class UserMessage {
 		this.userText = userText;
 	}
 
-	public GifImage getFixedHeightImage() {
-		return fixedHeightImage;
-	}
-
-	public void setFixedHeightImage(GifImage fixedHeightImage) {
-		this.fixedHeightImage = fixedHeightImage;
-	}
-
-	public GifImage getOriginalImage() {
-		return originalImage;
-	}
-
-	public void setOriginalImage(GifImage originalImage) {
-		this.originalImage = originalImage;
-	}
-
 	public LocalDateTime getSentTime() {
 		return sentTime;
 	}
@@ -91,9 +108,12 @@ public class UserMessage {
 		this.translatedMessage = translatedMessage;
 	}
 
-	@Override
-	public String toString() {
-		return "GifMessage [username=" + username + ", userText=" + userText + ", sentTime=" + sentTime + "]";
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
 	}
 
 	public GeneratedSound getSound() {
@@ -102,6 +122,51 @@ public class UserMessage {
 
 	public void setSound(GeneratedSound sound) {
 		this.sound = sound.getContent();
+	}
+
+	@Override
+	public String toString() {
+		return "GifMessage [username=" + username + ", userText=" + userText + ", sentTime=" + sentTime + "]";
+	}
+
+	public String getGifImageId() {
+		return gifImageId;
+	}
+
+	public void setGifImageId(String gifImageId) {
+		this.gifImageId = gifImageId;
+	}
+
+	public String getFixedHeightUrl() {
+		return fixedHeightUrl;
+	}
+
+	public void setFixedHeightUrl(String fixedHeightUrl) {
+		this.fixedHeightUrl = fixedHeightUrl;
+	}
+
+	public String getOriginalImageUrl() {
+		return originalImageUrl;
+	}
+
+	public void setOriginalImageUrl(String originalImageUrl) {
+		this.originalImageUrl = originalImageUrl;
+	}
+
+	public Integer getOriginalImageWidth() {
+		return originalImageWidth;
+	}
+
+	public void setOriginalImageWidth(Integer originalImageWidth) {
+		this.originalImageWidth = originalImageWidth;
+	}
+
+	public Integer getOriginalImageHeight() {
+		return originalImageHeight;
+	}
+
+	public void setOriginalImageHeight(Integer originalImageHeight) {
+		this.originalImageHeight = originalImageHeight;
 	}
 
 }

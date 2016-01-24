@@ -26,7 +26,7 @@ app.factory("ServerService", function($http, $location, $q, $rootScope, BaseUrlC
     }
 
     function newMessage(message) {
-        var data = new UserMessageDto(message);
+        var data = new NewMessageDto(message);
         return $http.post(BaseUrlConst + "/api/messages/new", data).then(function(response) {
             return response.data;
         }, error);

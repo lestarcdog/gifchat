@@ -76,7 +76,7 @@ app.controller("ChatBoxController", [ "$scope", "ServerService", "$timeout", "Li
 				if (showNotification) {
 					var options = {
 						body : gifMessage.userText,
-						icon : gifMessage.gifFixedHeight.url
+						icon : gifMessage.gifFixedHeightUrl
 					};
 					new Notification(gifMessage.username + " wrote", options);
 				}

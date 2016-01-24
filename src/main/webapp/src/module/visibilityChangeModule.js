@@ -2,7 +2,7 @@
 var visibilityChangeModule = function($rootScope,eventName) {
 	
 	// Set the name of the hidden property and the change event for visibility
-	var hidden, visibilityChange; 
+	var hidden="hidden", visibilityChange="visibilitychange"; 
 	if (typeof document.hidden !== "undefined") { // Opera 12.10 and Firefox 18 and later support 
 	  hidden = "hidden";
 	  visibilityChange = "visibilitychange";

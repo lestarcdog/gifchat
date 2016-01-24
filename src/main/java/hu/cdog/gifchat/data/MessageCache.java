@@ -29,7 +29,7 @@ public class MessageCache {
 		// set sent time
 		message.setSentTimeNowUtc();
 		messages.add(message);
-		gifUrls.add(message.getOriginalImage().getUrl());
+		gifUrls.add(message.getOriginalImageUrl());
 	}
 
 	@Lock(LockType.READ)

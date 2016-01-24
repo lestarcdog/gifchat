@@ -7,13 +7,13 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class GiphyData {
 
-	private List<GipyImageContainer> data;
+	private List<GiphyImageContainer> data;
 
-	public List<GipyImageContainer> getData() {
+	public List<GiphyImageContainer> getData() {
 		return data;
 	}
 
-	public void setData(List<GipyImageContainer> data) {
+	public void setData(List<GiphyImageContainer> data) {
 		this.data = data;
 	}
 
