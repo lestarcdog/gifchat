@@ -31,11 +31,18 @@ public class TranslatorService {
 			Response response = translate.request()
 					.header("Authorization", "Bearer " + tokenService.getTranslatorToken()).get();
 			String translatedMessage = response.readEntity(String.class);
+
 			log.debug(translatedMessage);
 			if (response.getStatus() != 200) {
 				return msg;
 			}
-			return translatedMessage;
+			// TODO too empiric removal. it starts with a space and a double
+			// quote and ends with one
+			if (translatedMessage.endsWith("\"")) {
+				return translatedMessage.substring(2, translatedMessage.length() - 1);
+			} else {
+				return translatedMessage;
+			}
 		} else {
 			return msg;
 		}

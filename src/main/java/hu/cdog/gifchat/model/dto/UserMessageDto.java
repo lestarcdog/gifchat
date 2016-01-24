@@ -5,6 +5,7 @@ import java.time.ZoneOffset;
 import hu.cdog.gifchat.model.entities.UserMessage;
 
 public class UserMessageDto extends BaseDto {
+	private Integer id;
 	private String username;
 	private String userText;
 	private String translatedMessage;
@@ -14,11 +15,13 @@ public class UserMessageDto extends BaseDto {
 	private Integer gifOriginalWidth;
 	private Integer gifOriginalHeight;
 	private Long sentTime;
+	private Boolean hasSound;
 
 	public UserMessageDto() {
 	}
 
 	public UserMessageDto(UserMessage message) {
+		this.id = message.getId();
 		this.username = message.getUsername();
 		this.userText = message.getUserText();
 		this.translatedMessage = message.getTranslatedMessage();
@@ -28,6 +31,7 @@ public class UserMessageDto extends BaseDto {
 		this.gifOriginalWidth = message.getOriginalImageWidth();
 		this.gifOriginalHeight = message.getOriginalImageHeight();
 		this.sentTime = message.getSentTime().toInstant(ZoneOffset.UTC).toEpochMilli();
+		this.hasSound = message.getSound().isGenerated();
 	}
 
 	public String getUsername() {
@@ -100,6 +104,22 @@ public class UserMessageDto extends BaseDto {
 
 	public void setGifOriginalHeight(Integer gifOriginalHeight) {
 		this.gifOriginalHeight = gifOriginalHeight;
+	}
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public Boolean getHasSound() {
+		return hasSound;
+	}
+
+	public void setHasSound(Boolean hasSound) {
+		this.hasSound = hasSound;
 	}
 
 }

@@ -88,5 +88,4 @@ app.controller("ChatBoxController", [ "$scope", "ServerService", "$timeout", "Li
 			$scope.$on("visibilityChanged", function(evt, args) {
 				showNotification = args;
 			});
-
 		} ]);

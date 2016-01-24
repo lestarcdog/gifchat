@@ -42,7 +42,7 @@ html,body {
 
 .message-content {
 	display: inline-block;
-	overflow: hidden;
+	/* overflow: hidden; */
 }
 
 .message-content .gif {
@@ -59,7 +59,7 @@ html,body {
 	color: black;
 	background: white;
 	padding: 5px;
-	top: -50px;
+	margin-top: -50px;
 	border-top: 1px black solid;
 	border-bottom: 1px black solid;
 	width: 98%;
@@ -69,7 +69,14 @@ html,body {
 
 .message-content .controls {
 	position: relative;
-	height: 50px;
+	z-index:102;
+	height:20px;
+	opacity: 0;
+	transition: opacity 0.2s;
+}
+
+.message-content:hover .controls {
+	opacity: 1;
 }
 
 
