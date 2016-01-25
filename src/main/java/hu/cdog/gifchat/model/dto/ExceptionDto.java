@@ -1,7 +1,5 @@
 package hu.cdog.gifchat.model.dto;
 
-import hu.cdog.gifchat.exception.GifChatException;
-
 public class ExceptionDto extends BaseDto {
 
 	@Override
@@ -10,12 +8,13 @@ public class ExceptionDto extends BaseDto {
 	}
 
 	private String message;
+	private final Boolean error = Boolean.TRUE;
 
 	public ExceptionDto() {
 
 	}
 
-	public ExceptionDto(GifChatException e) {
+	public ExceptionDto(Exception e) {
 		this.message = e.getMessage();
 	}
 
@@ -25,6 +24,10 @@ public class ExceptionDto extends BaseDto {
 
 	public void setMessage(String message) {
 		this.message = message;
+	}
+
+	public Boolean getError() {
+		return error;
 	}
 
 }

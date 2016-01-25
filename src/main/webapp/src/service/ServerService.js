@@ -8,7 +8,7 @@ app.factory("ServerService", function($http, $location, $q, $rootScope, BaseUrlC
         } else {
             console.log("Error");
             console.log(rejection.data);
-            $q.reject(data);
+            $q.reject(rejection.data);
         }
     };
 
@@ -72,6 +72,21 @@ app.factory("ServerService", function($http, $location, $q, $rootScope, BaseUrlC
         };
         ws.onmessage = listener;
     }
+    
+    // ===== Sound/speak methods ========
+    
+    var makeSoundOfMessage = function(id) {
+    	return $http.post(BaseUrlConst + "/api/sound/makeSound", {"id" : id}).then(function(response) {
+    		return response.data;
+    	}, error);
+    };
+    
+    var getSoundOfMessage = function(id) {
+    	//return $http.get(BaseUrlConst + "/api/sound/get/"+id).then(function(response) {
+    	//}, error);
+    	return BaseUrlConst + "/api/sound/"+id;
+    };
+    
 
     return {
         lastMessages : lastMessages,
@@ -80,7 +95,10 @@ app.factory("ServerService", function($http, $location, $q, $rootScope, BaseUrlC
         newMessage : newMessage,
         currentTopUsers : currentTopUsers,
         initWebSocketConnection : initWebSocketConnection,
-        addListeners : addListeners
+        addListeners : addListeners,
+        //===== sound ========
+        makeSoundOfMessage : makeSoundOfMessage,
+        getSoundOfMessage : getSoundOfMessage
 
     };
 });
