@@ -162,20 +162,12 @@
 				<baseUrlConst></baseUrlConst>
 			</properties>
 			<build>
-				<finalName>storychat-${env.OPENSHIFT_DATA_DIR}</finalName>
+				<finalName>storychat-${project.version}</finalName>
 				<plugins>
 					<plugin>
 						<artifactId>maven-war-plugin</artifactId>
 						<version>2.6</version>
 						<configuration>
-							<webResources>
-								<webResource>
-									<directory>${env.OPENSHIFT_DATA_DIR}</directory>
-									<includes>
-										<include>*.properties</include>
-									</includes>
-								</webResource>
-							</webResources>
 							<outputDirectory>deployments/</outputDirectory>
 							<warName>ROOT</warName>
 							<failOnMissingWebXml>false</failOnMissingWebXml>
