@@ -19,5 +19,8 @@
   "bugs": {
     "url": "https://github.com/lestarcdog/gifchat/issues"
   },
-  "homepage": "https://github.com/lestarcdog/gifchat"
+  "homepage": "https://github.com/lestarcdog/gifchat",
+  "devDependencies": {
+    "bower": "~1.7.2"
+  }
 }

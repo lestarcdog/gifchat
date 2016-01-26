@@ -1,5 +1,5 @@
 <div id="chatBox">
-	<div id="chatBoxLoading" ng-if="chatBoxLazyLoading" class="text-center">Loading...</div>
+	<div id="chatBoxLoading" ng-if="chatBoxLazyLoading" class="text-center"><span class="fa fa-spinner fa-spin"></span>Loading...</div>
 	<div class="message-item" ng-class="{ 'message-right' : msg.username == username, 'message-left' : msg.username != username}"
 		ng-repeat="msg in messages" scroll-bottom loaded-images-size="{{loadedImagesSize}}">
 		<div class="username">{{msg.username}}</div>
