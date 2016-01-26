@@ -2,6 +2,7 @@ package hu.cdog.gifchat.service;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -53,11 +54,12 @@ public class ChatService {
 	}
 
 	public List<UserMessageDto> getLastMessages() {
-		return map2Dto(messagesDao.getCurrentsMessages());
+		return map2Dto(reverse(messagesDao.getCurrentsMessages()));
 	}
 
 	public List<UserMessageDto> earlierThan(LocalDateTime currentTime) {
-		return map2Dto(messagesDao.earlierThan(currentTime));
+		List<UserMessage> earlierThan = messagesDao.earlierThan(currentTime);
+		return map2Dto(reverse(earlierThan));
 	}
 
 	private void sendNewMessageToEveryone(UserMessage message) {
@@ -120,6 +122,11 @@ public class ChatService {
 
 		UserMessage gifMessage = new UserMessage(username, rawMessage, translatedMessage, keyword, container);
 		return gifMessage;
+	}
+
+	private List<UserMessage> reverse(List<UserMessage> list) {
+		Collections.reverse(list);
+		return list;
 	}
 
 	private List<UserMessageDto> map2Dto(List<UserMessage> messages) {

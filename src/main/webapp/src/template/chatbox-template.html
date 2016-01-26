@@ -13,7 +13,7 @@
 					<span am-time-ago="msg.sentTime"></span>
 				</div>
 			</div>
-			<div class="controls">
+			<div ng-if="msg.username == username || msg.hasSound" class="controls">
 				<speak msg="msg"></speak>
 			</div>
 		</div>

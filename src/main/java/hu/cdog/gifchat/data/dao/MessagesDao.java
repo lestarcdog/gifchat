@@ -21,11 +21,13 @@ public class MessagesDao extends AbstractDao {
 	private static final String GET_BEFORE_TIME = "SELECT u FROM UserMessage u WHERE u.sentTime < :beforeTime ORDER BY u.sentTime DESC";
 
 	public List<UserMessage> getCurrentsMessages() {
-		return query("SELECT u FROM UserMessage u", UserMessage.class, GifChatConstants.CURRENT_IMAGE_RETURN_LIMIT);
+		return query("SELECT u FROM UserMessage u ORDER BY u.sentTime DESC", UserMessage.class,
+				GifChatConstants.CURRENT_IMAGE_RETURN_LIMIT);
 	}
 
 	public List<UserMessage> earlierThan(LocalDateTime treshold) {
-		return query(GET_BEFORE_TIME, UserMessage.class, ImmutableMap.of("beforeTime", treshold));
+		return query(GET_BEFORE_TIME, UserMessage.class, ImmutableMap.of("beforeTime", treshold),
+				GifChatConstants.CURRENT_IMAGE_RETURN_LIMIT);
 	}
 
 	@Override

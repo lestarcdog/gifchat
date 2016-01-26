@@ -1,22 +1,21 @@
-app.directive("speak", function(ServerService) {
+app.directive("speak", function(ServerService,$rootScope) {
 	return {
 		templateUrl: "src/template/speak-template.html",
 		scope : {
 			"msg" : "="
 		},
 		controller: function($scope,ServerService) {
-			var progress = false;
+			$scope.progress = false;
 			$scope.speak = function(msg) {
 				//do not progress twice
-				if(progress) {
+				if($scope.progress) {
 					return;
 				}
 				console.log("speak "+msg.id);
-				console.log(msg);
-				progress = true;
+				$scope.progress = true;
 				ServerService.makeSoundOfMessage(msg.id).then(function(response) {
 					console.log(response);
-					progress = false;
+					$scope.progress = false;
 					msg.hasSound = true;
 				});
 			};

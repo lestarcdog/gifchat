@@ -46,7 +46,7 @@ public class SoundController {
 
 	@POST
 	@Path("/makeSound")
-	public String makeSoundOfMessage(Map<String, Object> params) throws GifChatException {
+	public void makeSoundOfMessage(Map<String, Object> params) throws GifChatException {
 		Integer messageId = (Integer) params.get("id");
 		if (messageId == null) {
 			throw new GifChatException("Invalid parameter. Expected variable 'id'");
@@ -54,7 +54,6 @@ public class SoundController {
 
 		soundService.makeSound(messageId,
 				(String) request.getSession().getAttribute(GifChatConstants.SESSION_USERNAME_ATT));
-		return "ok";
 
 	}
 

@@ -31,6 +31,7 @@ public class SoundService {
 	SoundCache cache;
 
 	public void makeSound(Integer messageId, String username) throws GifChatException {
+		log.debug("Making sound for msg id {} for requesting user {}", messageId, username);
 		Optional<UserMessage> find = messagesDao.find(messageId, UserMessage.class);
 		UserMessage message = find.orElseThrow(() -> new ResourceNotFoundException(messageId));
 		// already generated

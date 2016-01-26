@@ -1,4 +1,5 @@
-<a id="speak" ng-click="speak(msg)" ng-if="!msg.hasSound"><span class="fa fa-volume-up"> Speak</span></a>
+<a id="speak" ng-click="speak(msg)" ng-if="!msg.hasSound && !progress"><span class="fa fa-volume-up"> Speak</span></a>
+<span ng-if="progress"><span class="fa fa-spinner"></span> Please wait...</span>
 <audio ng-if="msg.hasSound" controls="controls">
 	<source ng-src="{{getSound(msg)}}">
 </audio>

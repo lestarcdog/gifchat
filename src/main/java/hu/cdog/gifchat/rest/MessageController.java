@@ -45,7 +45,8 @@ public class MessageController {
 	@Path("/login")
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response login(UserCredentialDto credentials) throws GifChatException {
-		if (credentials.getUsername() == null || credentials.getUsername().isEmpty()) {
+		if (credentials.getUsername() == null || credentials.getUsername().isEmpty()
+				|| credentials.getUsername().length() < 3 || credentials.getUsername().length() > 10) {
 			return Response.status(Response.Status.UNAUTHORIZED).build();
 		}
 		if (!userService.containsUser(credentials.getUsername())) {
