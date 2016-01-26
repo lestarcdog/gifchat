@@ -64,8 +64,6 @@
 			<version>19.0</version>
 		</dependency>
 
-
-
 		<!-- test -->
 		<dependency>
 			<groupId>junit</groupId>
@@ -148,6 +146,11 @@
 					<encoding>UTF-8</encoding>
 				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>com.github.eirslett</groupId>
+				<artifactId>frontend-maven-plugin</artifactId>
+				<version>0.0.27</version>
+			</plugin>
 		</plugins>
 	</build>
 
@@ -159,7 +162,7 @@
 				<baseUrlConst></baseUrlConst>
 			</properties>
 			<build>
-				<finalName>storychat-${project.version}</finalName>
+				<finalName>storychat-${env.OPENSHIFT_DATA_DIR}</finalName>
 				<plugins>
 					<plugin>
 						<artifactId>maven-war-plugin</artifactId>
@@ -169,7 +172,7 @@
 								<webResource>
 									<directory>${env.OPENSHIFT_DATA_DIR}</directory>
 									<includes>
-										<include>mssecret.properties</include>
+										<include>*.properties</include>
 									</includes>
 								</webResource>
 							</webResources>
