@@ -159,8 +159,7 @@
 				<baseUrlConst></baseUrlConst>
 			</properties>
 			<build>
-
-				<finalName>gifchat</finalName>
+				<finalName>storychat</finalName>
 				<plugins>
 					<plugin>
 						<artifactId>maven-war-plugin</artifactId>
@@ -168,7 +167,7 @@
 						<configuration>
 							<webResources>
 								<webResource>
-									<directory>${OPENSHIFT_DATA_DIR}</directory>
+									<directory>${env.OPENSHIFT_DATA_DIR}</directory>
 									<include>mssecret.properties</include>
 								</webResource>
 							</webResources>
