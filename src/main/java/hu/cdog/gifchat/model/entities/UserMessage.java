@@ -55,12 +55,13 @@ public class UserMessage extends AbstractEntity {
 		this.userText = userText;
 		this.translatedMessage = translatedMessage;
 		this.keyword = keyword;
-		this.fixedHeightUrl = container.getImages().getFixed_height().getUrl();
-		this.originalImageUrl = container.getImages().getOriginal().getUrl();
-		this.originalImageWidth = container.getImages().getOriginal().getWidth();
-		this.originalImageHeight = container.getImages().getOriginal().getHeight();
-
-		this.gifImageId = container.getId();
+		if (container != null) {
+			this.fixedHeightUrl = container.getImages().getFixed_height().getUrl();
+			this.originalImageUrl = container.getImages().getOriginal().getUrl();
+			this.originalImageWidth = container.getImages().getOriginal().getWidth();
+			this.originalImageHeight = container.getImages().getOriginal().getHeight();
+			this.gifImageId = container.getId();
+		}
 		sentTime = LocalDateTime.now(GifChatConstants.UTC_ZONE);
 	}
 

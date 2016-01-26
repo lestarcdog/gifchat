@@ -29,6 +29,7 @@ public class ChatService {
 	private static final Logger log = LoggerFactory.getLogger(ChatService.class);
 
 	private static final String TRENDING_KW = "**trending**";
+	private static final String RANDOM_KW = "**random**";
 
 	@Inject
 	MessagesDao messagesDao;
@@ -83,7 +84,13 @@ public class ChatService {
 
 	private UserMessage generateNewMessage(String rawMessage, String username) {
 		// translate to english
-		String translatedMessage = translatorService.translate(rawMessage);
+		String translatedMessage = null;
+		try {
+			translatedMessage = translatorService.translate(rawMessage);
+		} catch (Exception ex) {
+			log.warn(ex.getMessage());
+			translatedMessage = rawMessage;
+		}
 
 		// tokenize the message
 		MessageTokinezer possibleKeywords = new MessageTokinezer(translatedMessage, LongestWordFirst.get());
@@ -112,10 +119,10 @@ public class ChatService {
 		if (container == null) {
 			try {
 				container = gifGenerator.pickRandomImage();
-				keyword = TRENDING_KW;
+				keyword = RANDOM_KW;
 				log.debug("Out of iteration choosing a random gif for message '{}'", translatedMessage);
-			} catch (IOException e) {
-				// TODO should add some random gif as very last resort
+			} catch (Exception e) {
+				// TODO should add some random gif as a very last resort
 				log.error(e.getMessage(), e);
 			}
 		}

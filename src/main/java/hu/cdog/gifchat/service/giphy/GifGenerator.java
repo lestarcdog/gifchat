@@ -9,6 +9,8 @@ import javax.annotation.PreDestroy;
 import javax.ejb.Lock;
 import javax.ejb.LockType;
 import javax.ejb.Singleton;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.core.Response;
@@ -61,6 +63,7 @@ public class GifGenerator {
 	 * @throws IOException
 	 */
 	@Lock(LockType.READ)
+	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
 	public GiphyImageContainer searchGifForKeyword(String keyword)
 			throws JsonParseException, JsonMappingException, IOException {
 		String url = null;
@@ -91,6 +94,7 @@ public class GifGenerator {
 	 * @throws JsonMappingException
 	 * @throws JsonParseException
 	 */
+	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
 	public GiphyImageContainer pickRandomImage() throws JsonParseException, JsonMappingException, IOException {
 		return fetchGifsFromUrl(GIPHY_RANDOM).getData().get(0);
 	}

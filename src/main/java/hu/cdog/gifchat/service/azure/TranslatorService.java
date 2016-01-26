@@ -2,6 +2,8 @@ package hu.cdog.gifchat.service.azure;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
 
@@ -23,6 +25,7 @@ public class TranslatorService {
 	@EJB
 	WebClientService webClient;
 
+	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
 	public String translate(String msg) {
 		log.debug("Translating {}", msg);
 		if (tokenService.getTranslatorToken() != null) {
