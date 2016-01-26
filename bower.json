@@ -1,0 +1,27 @@
+{
+  "name": "storychat",
+  "description": "Storychat for everybody",
+  "main": "",
+  "authors": [
+    "cdog"
+  ],
+  "license": "ISC",
+  "keywords": [
+    "storychat",
+    "gif",
+    "chat"
+  ],
+  "homepage": "https://github.com/lestarcdog/gifchat",
+  "moduleType": [
+    "es6",
+    "node"
+  ],
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
