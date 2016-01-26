@@ -5,7 +5,7 @@
 	<groupId>hu.cdog</groupId>
 	<artifactId>gifchat</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>GifChat - Root</name>
+	<name>StoryChat - Root</name>
 	<description>A proof of concept chat program. Contains everything on the first run.</description>
 	<packaging>war</packaging>
 
@@ -159,7 +159,7 @@
 				<baseUrlConst></baseUrlConst>
 			</properties>
 			<build>
-				<finalName>storychat</finalName>
+				<finalName>storychat-${project.version}</finalName>
 				<plugins>
 					<plugin>
 						<artifactId>maven-war-plugin</artifactId>
@@ -168,7 +168,9 @@
 							<webResources>
 								<webResource>
 									<directory>${env.OPENSHIFT_DATA_DIR}</directory>
-									<include>mssecret.properties</include>
+									<includes>
+										<include>mssecret.properties</include>
+									</includes>
 								</webResource>
 							</webResources>
 							<outputDirectory>deployments/</outputDirectory>
