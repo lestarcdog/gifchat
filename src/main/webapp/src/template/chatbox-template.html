@@ -3,7 +3,7 @@
 		<span class="fa fa-spinner fa-spin"></span> Loading...
 	</div>
 	<div class="message-item" ng-class="{ 'message-right' : msg.username == username, 'message-left' : msg.username != username}"
-		ng-repeat="msg in messages" scroll-bottom >
+		ng-repeat="msg in messages" scroll-bottom>
 		<div class="username">{{msg.username}}</div>
 		<div class="message-content">
 			<div id="msg-{{$index}}" class="gif" ng-click="openOriginal(msg)">
@@ -21,9 +21,9 @@
 		</div>
 	</div>
 	<div class="clearfix"></div>
-	<div id="status">
-		<div class="alert alert-info" style="width: 50%">
-			new messages <span class="badge">10</span>
-		</div>
+</div>
+<div id="chatbox-status" ng-if="newMessagesCount !== 0" ng-click="scrollToPos(null,true)">
+	<div class="alert alert-info text-center">
+		new messages <span class="badge">{{newMessagesCount}}</span>
 	</div>
 </div>
