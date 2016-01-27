@@ -41,8 +41,8 @@ public class AzureTokenService {
 	private static final String SCOPE_SPEECH = "scope_speech";
 	private static final String GRANT_TYPE = "grant_type";
 
-	private MsTranslateApiResponse translateToken = null;
-	private MsTranslateApiResponse speechToken = null;
+	private AzureApiResponse translateToken = null;
+	private AzureApiResponse speechToken = null;
 
 	// this is a big guy it can have its on client
 	private final Client client = ClientBuilder.newClient();
@@ -104,7 +104,7 @@ public class AzureTokenService {
 			Response response = target.request().post(Entity.form(form));
 			String readEntity = response.readEntity(String.class);
 
-			translateToken = mapper.readValue(readEntity, MsTranslateApiResponse.class);
+			translateToken = mapper.readValue(readEntity, AzureApiResponse.class);
 			log.debug("Translate Token successfully acquired");
 		} catch (IOException e) {
 			log.error(e.getMessage(), e);
@@ -123,7 +123,7 @@ public class AzureTokenService {
 			Response response = target.request().post(Entity.form(form));
 			String readEntity = response.readEntity(String.class);
 
-			speechToken = mapper.readValue(readEntity, MsTranslateApiResponse.class);
+			speechToken = mapper.readValue(readEntity, AzureApiResponse.class);
 			log.debug("Speech Token successfully acquired");
 		} catch (IOException e) {
 			log.error(e.getMessage(), e);
@@ -158,7 +158,7 @@ public class AzureTokenService {
 		}
 	}
 
-	public static class MsTranslateApiResponse {
+	public static class AzureApiResponse {
 		private String access_token;
 		private String token_type;
 		private Long expires_in;

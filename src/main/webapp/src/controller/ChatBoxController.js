@@ -1,22 +1,19 @@
 app.controller("ChatBoxController", [ "$scope", "ServerService", "$timeout", "Lightbox",
 		function($scope, ServerService, $timeout, Lightbox) {
-			var MAX_MESSAGE = 20;
 
 			$scope.isLoading = false;
 			$scope.messages = [];
 			$scope.loadedImagesSize = 1000;
 			var chatBox = angular.element("#chatBox");
-			var chatBoxMargin = 100;
-			var chatBoxLazyLoadHeight = 25;
-			var showNotification = false;
+			var scrollMode = SCROLL_BAR_MODE.NEWEST;
+			// var showNotification = false;
 			$scope.chatBoxLazyLoading = false;
+			
+			$scope.getScrollMode = function() {
+				return scrollMode;
+			};
 
-			var loadMore = function(evt) {
-				// user is scrolling but still loading
-				if (chatBox.scrollTop() > chatBoxLazyLoadHeight || $scope.chatBoxLazyLoading) {
-					return;
-				}
-
+			var loadMoreMessages = function() {
 				if ($scope.messages.length === 0) {
 					return;
 				} else {
@@ -37,7 +34,22 @@ app.controller("ChatBoxController", [ "$scope", "ServerService", "$timeout", "Li
 
 			};
 
-			chatBox.scroll(loadMore);
+			var selectScrollMode = function(evt) {
+				console.log()
+				if (chatBox.scrollTop() < CHATBOX_CONST.chatBoxLazyLoadHeight) {
+					scrollMode = SCROLL_BAR_MODE.LOADING;
+					if(!$scope.chatBoxLazyLoading) {
+						loadMoreMessages();
+					}
+				} else if((chatBox.prop("scrollHeight") - chatBox.innerHeight() - chatBox.scrollTop()) < CHATBOX_CONST.chatBoxLazyLoadHeight) {
+					scrollMode = SCROLL_BAR_MODE.NEWEST;
+				} else {
+					scrollMode = SCROLL_BAR_MODE.BROWSING;
+				}
+				console.log(scrollMode);
+			};
+
+			chatBox.scroll(selectScrollMode);
 
 			$scope.openOriginal = function(msg) {
 				var img = new LightBoxImage(msg);
@@ -46,7 +58,7 @@ app.controller("ChatBoxController", [ "$scope", "ServerService", "$timeout", "Li
 			};
 
 			var sizeChatbox = function() {
-				chatBox.height(window.innerHeight - chatBoxMargin);
+				chatBox.height(window.innerHeight - CHATBOX_CONST.chatBoxMargin);
 				chatBoxLazyLoadHeight = Math.floor(chatBox.height() * 0.2);
 			};
 
@@ -68,24 +80,33 @@ app.controller("ChatBoxController", [ "$scope", "ServerService", "$timeout", "Li
 				console.log("== DEBUG INCOMING MSG ==");
 				console.log(gifMessage);
 				$scope.$apply(function() {
-					while ($scope.messages.length > MAX_MESSAGE) {
+					while ($scope.messages.length > CHATBOX_CONST.MAX_MESSAGE) {
 						$scope.messages.shift();
 					}
 					$scope.messages.push(gifMessage);
 				});
-				if (showNotification) {
-					var options = {
-						body : gifMessage.userText,
-						icon : gifMessage.gifFixedHeightUrl
-					};
-					new Notification(gifMessage.username + " wrote", options);
-				}
-
 			};
 
 			ServerService.addListeners(onNewMessage);
 
-			$scope.$on("visibilityChanged", function(evt, args) {
-				showNotification = args;
-			});
+			// $scope.$on("visibilityChanged", function(evt, args) {
+			// showNotification = args;
+			// });
 		} ]);
+
+/* The scrollbar works in 3 states
+	LOADING - the user loads the old messages
+	BROWSING - in the middle browsing beetween messages
+	NEWEST - at the bottom of the chatbox
+*/
+var SCROLL_BAR_MODE = Object.freeze({
+	LOADING : "LOADING",
+	BROWSING : "BROWSING",
+	NEWEST : "NEWEST"
+});
+
+var CHATBOX_CONST = Object.freeze({
+	chatBoxMargin : 100,
+	chatBoxLazyLoadHeight : 25,
+	MAX_MESSAGE : 20
+});

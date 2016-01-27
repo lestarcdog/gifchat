@@ -1,7 +1,9 @@
 <div id="chatBox">
-	<div id="chatBoxLoading" ng-if="chatBoxLazyLoading" class="text-center"><span class="fa fa-spinner fa-spin"></span>Loading...</div>
+	<div id="chatBoxLoading" ng-if="chatBoxLazyLoading" class="text-center">
+		<span class="fa fa-spinner fa-spin"></span> Loading...
+	</div>
 	<div class="message-item" ng-class="{ 'message-right' : msg.username == username, 'message-left' : msg.username != username}"
-		ng-repeat="msg in messages" scroll-bottom loaded-images-size="{{loadedImagesSize}}">
+		ng-repeat="msg in messages" scroll-bottom >
 		<div class="username">{{msg.username}}</div>
 		<div class="message-content">
 			<div id="msg-{{$index}}" class="gif" ng-click="openOriginal(msg)">
@@ -18,6 +20,10 @@
 			</div>
 		</div>
 	</div>
-	<span id="lastAnchor">.</span>
 	<div class="clearfix"></div>
+	<div id="status">
+		<div class="alert alert-info" style="width: 50%">
+			new messages <span class="badge">10</span>
+		</div>
+	</div>
 </div>

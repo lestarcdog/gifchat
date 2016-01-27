@@ -40,7 +40,6 @@ app.factory("ServerService", function($http, $location, $q, $rootScope, BaseUrlC
 
     function earlierMessages(firstMessage) {
         var ts = firstMessage.sentTime;
-        console.log("Timestamp "+ts);
         return $http.get(BaseUrlConst + "/api/messages/earlierThan?ts=" + ts).then(function(response) {
             return response.data;
         }, error);

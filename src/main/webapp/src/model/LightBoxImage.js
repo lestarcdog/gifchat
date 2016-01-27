@@ -4,4 +4,5 @@ function LightBoxImage(gifMessage) {
 	this.caption = gifMessage.keyword;
 	this.largeHeight = gifMessage.gifOriginalHeight;
 	this.largeWidth = gifMessage.gifOriginalWidth;
+	this.original = gifMessage;
 }
