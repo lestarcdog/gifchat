@@ -3,15 +3,19 @@ html,body {
 }
 
 @media only screen and (max-width: 500px) {
-	#current-users-list {
+	#current-users-list, #welcome-user {
 		display: none
 	}
 	
 	#user-type-form {
 		position: fixed;
-		top: 0;
-		padding-bottom: 10px;
+		bottom: 0;
+		padding-top: 10px;
 		z-index: 1000;
+	}
+	
+	#user-type-form #remaining-chars {
+		//float:right;
 	}
 }
 
