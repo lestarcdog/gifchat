@@ -6,7 +6,7 @@
 					<div class="col-sm-12">
 						<h4>Hello {{username}} !</h4>
 						<form ng-submit="sendMessage()">
-							<div class="form-group">
+							<div id="user-type-form" class="form-group">
 								<p>Type your message here</p>
 								<input id="user-txt-field" class="form-control" ng-disabled="sending" type="text" ng-keydown="typeing()" ng-model="message"
 									maxlength="{{textMaxLength}}" autofocus="autofocus">
@@ -15,7 +15,7 @@
 						</form>
 					</div>
 				</div>
-				<div class="row">
+				<div id="current-users-list" class="row">
 					<div class="col-sm-12">
 						<users-list></users-list>
 					</div>
